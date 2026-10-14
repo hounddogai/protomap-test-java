@@ -1,0 +1,267 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.expenses.v1;
+
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/expenses/v1/expenses.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Expenses.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/expenses/v1;expensesv1";
+option java_multiple_files = true;
+option java_outer_classname = "ExpenseReportWorkflowServiceProto";
+option java_package = "com.acme.expenses.v1";
+
+// Runs the long-lived workflow that takes an expense report from start to finish.
+service ExpenseReportWorkflowService {
+  // Starts an expense report.
+  rpc StartExpenseReportWorkflow(StartExpenseReportWorkflowRequest) returns (StartExpenseReportWorkflowResponse);
+
+  // Advances an expense report.
+  rpc AdvanceExpenseReportWorkflow(AdvanceExpenseReportWorkflowRequest) returns (AdvanceExpenseReportWorkflowResponse);
+
+  // Cancels an expense report.
+  rpc CancelExpenseReportWorkflow(CancelExpenseReportWorkflowRequest) returns (CancelExpenseReportWorkflowResponse);
+
+  // Retrys an expense report.
+  rpc RetryExpenseReportWorkflow(RetryExpenseReportWorkflowRequest) returns (RetryExpenseReportWorkflowResponse);
+
+  // Pauses an expense report.
+  rpc PauseExpenseReportWorkflow(PauseExpenseReportWorkflowRequest) returns (PauseExpenseReportWorkflowResponse);
+
+  // Returns an expense report.
+  rpc InspectExpenseReportWorkflow(InspectExpenseReportWorkflowRequest) returns (InspectExpenseReportWorkflowResponse);
+
+  // Signals an expense report.
+  rpc SignalExpenseReportWorkflow(SignalExpenseReportWorkflowRequest) returns (SignalExpenseReportWorkflowResponse);
+}
+
+// The request of `StartExpenseReportWorkflow`.
+message StartExpenseReportWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string expense_report_id = 2;
+  ExpenseReport expense_report = 3;
+  StartExpenseReportWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `StartExpenseReportWorkflow`.
+message StartExpenseReportWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ExpenseReport expense_report = 1;
+  StartExpenseReportWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `AdvanceExpenseReportWorkflow`.
+message AdvanceExpenseReportWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string expense_report_id = 2;
+  ExpenseReport expense_report = 3;
+  AdvanceExpenseReportWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `AdvanceExpenseReportWorkflow`.
+message AdvanceExpenseReportWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ExpenseReport expense_report = 1;
+  AdvanceExpenseReportWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CancelExpenseReportWorkflow`.
+message CancelExpenseReportWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string expense_report_id = 2;
+  ExpenseReport expense_report = 3;
+  CancelExpenseReportWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CancelExpenseReportWorkflow`.
+message CancelExpenseReportWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ExpenseReport expense_report = 1;
+  CancelExpenseReportWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RetryExpenseReportWorkflow`.
+message RetryExpenseReportWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string expense_report_id = 2;
+  ExpenseReport expense_report = 3;
+  RetryExpenseReportWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RetryExpenseReportWorkflow`.
+message RetryExpenseReportWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ExpenseReport expense_report = 1;
+  RetryExpenseReportWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PauseExpenseReportWorkflow`.
+message PauseExpenseReportWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string expense_report_id = 2;
+  ExpenseReport expense_report = 3;
+  PauseExpenseReportWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PauseExpenseReportWorkflow`.
+message PauseExpenseReportWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ExpenseReport expense_report = 1;
+  PauseExpenseReportWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `InspectExpenseReportWorkflow`.
+message InspectExpenseReportWorkflowRequest {
+  acme.common.v1.RequestContext context = 1;
+  string expense_report_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `InspectExpenseReportWorkflow`.
+message InspectExpenseReportWorkflowResponse {
+  ExpenseReport expense_report = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `SignalExpenseReportWorkflow`.
+message SignalExpenseReportWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string expense_report_id = 2;
+  ExpenseReport expense_report = 3;
+  SignalExpenseReportWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SignalExpenseReportWorkflow`.
+message SignalExpenseReportWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ExpenseReport expense_report = 1;
+  SignalExpenseReportWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

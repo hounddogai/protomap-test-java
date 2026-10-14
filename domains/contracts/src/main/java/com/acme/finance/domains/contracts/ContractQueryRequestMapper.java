@@ -1,0 +1,90 @@
+package com.acme.finance.domains.contracts;
+
+import com.acme.audit.v1.AuditTrailNotificationServiceGrpc;
+import com.acme.audit.v1.UnsubscribeAuditTrailUpdatesRequest;
+import com.acme.audit.v1.UnsubscribeAuditTrailUpdatesResponse;
+import com.acme.authorization.v1.AccessPolicyQueryServiceGrpc;
+import com.acme.authorization.v1.ExportAccessPoliciesRequest;
+import com.acme.authorization.v1.ExportAccessPoliciesResponse;
+import com.acme.broadcasts.v1.BroadcastQueryServiceGrpc;
+import com.acme.broadcasts.v1.CountBroadcastsRequest;
+import com.acme.broadcasts.v1.CountBroadcastsResponse;
+import com.acme.budgeting.v1.Budget;
+import com.acme.budgeting.v1.BudgetValidationServiceGrpc;
+import com.acme.budgeting.v1.PreviewBudgetRequest;
+import com.acme.budgeting.v1.PreviewBudgetResponse;
+import com.acme.certificates.v1.Certificate;
+import com.acme.certificates.v1.CertificateCalculationServiceGrpc;
+import com.acme.certificates.v1.CompareCertificateOptionsRequest;
+import com.acme.certificates.v1.CompareCertificateOptionsResponse;
+import com.acme.certificates.v1.CsrRef;
+import com.acme.common.v1.AuditInfo;
+import com.acme.common.v1.ContactInfo;
+import com.acme.common.v1.OperationResult;
+import com.acme.common.v1.PageInfo;
+import com.acme.common.v1.PostalAddress;
+import com.acme.contracts.v1.BrowseContractsRequest;
+import com.acme.contracts.v1.BrowseContractsResponse;
+import com.acme.contracts.v1.CheckRenewalEligibilityRequest;
+import com.acme.contracts.v1.CheckRenewalEligibilityResponse;
+import com.acme.contracts.v1.Contract;
+import com.acme.contracts.v1.CountContractsRequest;
+import com.acme.contracts.v1.CountContractsResponse;
+import com.acme.contracts.v1.ExportContractsRequest;
+import com.acme.contracts.v1.ExportContractsResponse;
+import com.acme.contracts.v1.FindContractsRequest;
+import com.acme.contracts.v1.FindContractsResponse;
+import com.acme.contracts.v1.LookupContractRequest;
+import com.acme.contracts.v1.LookupContractResponse;
+import com.acme.contracts.v1.Obligation;
+import com.acme.contracts.v1.ObligationValidationServiceGrpc;
+import com.acme.contracts.v1.PeekContractRequest;
+import com.acme.contracts.v1.PeekContractResponse;
+import com.acme.contracts.v1.PreviewObligationRequest;
+import com.acme.contracts.v1.PreviewObligationResponse;
+import com.acme.contracts.v1.PreviewRenewalRequest;
+import com.acme.contracts.v1.PreviewRenewalResponse;
+import com.acme.contracts.v1.Renewal;
+import com.acme.contracts.v1.RenewalRef;
+import com.acme.contracts.v1.RenewalValidationServiceGrpc;
+import com.acme.contracts.v1.ResolveContractsRequest;
+import com.acme.contracts.v1.ResolveContractsResponse;
+import com.acme.contracts.v1.ScoreObligationRequest;
+import com.acme.contracts.v1.ScoreObligationResponse;
+import com.acme.contracts.v1.SuggestContractsRequest;
+import com.acme.contracts.v1.SuggestContractsResponse;
+import com.acme.contracts.v1.SummarizeContractsRequest;
+import com.acme.contracts.v1.SummarizeContractsResponse;
+import com.acme.customers.v1.CustomerRef;
+import com.acme.finance.platform.ChannelRegistry;
+import com.acme.finance.platform.JsonCodec;
+import com.acme.finance.platform.RpcSupport;
+import com.acme.identity.v1.UserRef;
+import com.acme.labeling.v1.LabelingTask;
+import com.acme.labeling.v1.LabelingTaskCalculationServiceGrpc;
+import com.acme.labeling.v1.SimulateLabelingTaskRequest;
+import com.acme.labeling.v1.SimulateLabelingTaskResponse;
+import com.acme.lending.v1.Repayment;
+import com.acme.lending.v1.RepaymentCalculationServiceGrpc;
+import com.acme.lending.v1.RepaymentParticipant;
+import com.acme.lending.v1.SimulateRepaymentRequest;
+import com.acme.lending.v1.SimulateRepaymentResponse;
+import com.acme.risk.v1.ResolveRiskRegistersRequest;
+import com.acme.risk.v1.ResolveRiskRegistersResponse;
+import com.acme.risk.v1.RiskRegisterQueryServiceGrpc;
+import com.google.protobuf.Any;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+
+/**
+ * Maps workflow inputs to downstream contracts. Implementations keep wire construction explicit.
+ */
+public interface ContractQueryRequestMapper {
+    SimulateRepaymentRequest countContractsStage0(CountContractsRequest request);
+
+    CountBroadcastsRequest summarizeContractsStage0(SummarizeContractsRequest request);
+}

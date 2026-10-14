@@ -1,0 +1,333 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.assets.v1;
+
+import "acme/assets/v1/assets.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/identity/v1/refs.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Assets.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/assets/v1;assetsv1";
+option java_multiple_files = true;
+option java_outer_classname = "FixedAssetApprovalServiceProto";
+option java_package = "com.acme.assets.v1";
+
+// Routes fixed assets through approval, with escalation and delegation.
+service FixedAssetApprovalService {
+  // Submits a fixed asset.
+  rpc SubmitFixedAsset(SubmitFixedAssetRequest) returns (SubmitFixedAssetResponse);
+
+  // Approves a fixed asset.
+  rpc ApproveFixedAsset(ApproveFixedAssetRequest) returns (ApproveFixedAssetResponse);
+
+  // Rejects a fixed asset.
+  rpc RejectFixedAsset(RejectFixedAssetRequest) returns (RejectFixedAssetResponse);
+
+  // Escalates a fixed asset.
+  rpc EscalateFixedAsset(EscalateFixedAssetRequest) returns (EscalateFixedAssetResponse);
+
+  // Lists fixed assets a page at a time.
+  rpc ListPendingFixedAssets(ListPendingFixedAssetsRequest) returns (ListPendingFixedAssetsResponse);
+
+  // Delegates a fixed asset.
+  rpc DelegateFixedAssetApproval(DelegateFixedAssetApprovalRequest) returns (DelegateFixedAssetApprovalResponse);
+
+  // Recalls a fixed asset.
+  rpc RecallFixedAsset(RecallFixedAssetRequest) returns (RecallFixedAssetResponse);
+
+  // Returns a fixed asset.
+  rpc GetFixedAssetApprovalStatus(GetFixedAssetApprovalStatusRequest) returns (GetFixedAssetApprovalStatusResponse);
+
+  // Comments a fixed asset.
+  rpc CommentFixedAssetApproval(CommentFixedAssetApprovalRequest) returns (CommentFixedAssetApprovalResponse);
+}
+
+// The request of `SubmitFixedAsset`.
+message SubmitFixedAssetRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string fixed_asset_id = 2;
+  FixedAsset fixed_asset = 3;
+  SubmitFixedAssetRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SubmitFixedAsset`.
+message SubmitFixedAssetResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FixedAsset fixed_asset = 1;
+  SubmitFixedAssetResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ApproveFixedAsset`.
+message ApproveFixedAssetRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string fixed_asset_id = 2;
+  FixedAsset fixed_asset = 3;
+  ApproveFixedAssetRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ApproveFixedAsset`.
+message ApproveFixedAssetResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FixedAsset fixed_asset = 1;
+  ApproveFixedAssetResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RejectFixedAsset`.
+message RejectFixedAssetRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string fixed_asset_id = 2;
+  FixedAsset fixed_asset = 3;
+  RejectFixedAssetRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RejectFixedAsset`.
+message RejectFixedAssetResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FixedAsset fixed_asset = 1;
+  RejectFixedAssetResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `EscalateFixedAsset`.
+message EscalateFixedAssetRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string fixed_asset_id = 2;
+  FixedAsset fixed_asset = 3;
+  EscalateFixedAssetRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `EscalateFixedAsset`.
+message EscalateFixedAssetResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FixedAsset fixed_asset = 1;
+  EscalateFixedAssetResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ListPendingFixedAssets`.
+message ListPendingFixedAssetsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated FixedAssetStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListPendingFixedAssetsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListPendingFixedAssets`.
+message ListPendingFixedAssetsResponse {
+  repeated FixedAsset fixed_assets = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `DelegateFixedAssetApproval`.
+message DelegateFixedAssetApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string fixed_asset_id = 2;
+  FixedAsset fixed_asset = 3;
+  DelegateFixedAssetApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `DelegateFixedAssetApproval`.
+message DelegateFixedAssetApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FixedAsset fixed_asset = 1;
+  DelegateFixedAssetApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RecallFixedAsset`.
+message RecallFixedAssetRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string fixed_asset_id = 2;
+  FixedAsset fixed_asset = 3;
+  RecallFixedAssetRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RecallFixedAsset`.
+message RecallFixedAssetResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FixedAsset fixed_asset = 1;
+  RecallFixedAssetResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetFixedAssetApprovalStatus`.
+message GetFixedAssetApprovalStatusRequest {
+  acme.common.v1.RequestContext context = 1;
+  string fixed_asset_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetFixedAssetApprovalStatus`.
+message GetFixedAssetApprovalStatusResponse {
+  FixedAsset fixed_asset = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `CommentFixedAssetApproval`.
+message CommentFixedAssetApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string fixed_asset_id = 2;
+  FixedAsset fixed_asset = 3;
+  CommentFixedAssetApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CommentFixedAssetApproval`.
+message CommentFixedAssetApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FixedAsset fixed_asset = 1;
+  CommentFixedAssetApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

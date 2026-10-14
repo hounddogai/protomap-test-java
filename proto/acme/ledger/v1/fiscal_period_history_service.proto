@@ -1,0 +1,195 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.ledger.v1;
+
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/ledger/v1/ledger.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Ledger.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/ledger/v1;ledgerv1";
+option java_multiple_files = true;
+option java_outer_classname = "FiscalPeriodHistoryServiceProto";
+option java_package = "com.acme.ledger.v1";
+
+// Keeps every version of a fiscal period and restores earlier ones.
+service FiscalPeriodHistoryService {
+  // Records a fiscal period.
+  rpc RecordFiscalPeriodVersion(RecordFiscalPeriodVersionRequest) returns (RecordFiscalPeriodVersionResponse);
+
+  // Lists fiscal periods a page at a time.
+  rpc ListFiscalPeriodVersions(ListFiscalPeriodVersionsRequest) returns (ListFiscalPeriodVersionsResponse);
+
+  // Returns a fiscal period.
+  rpc GetFiscalPeriodVersion(GetFiscalPeriodVersionRequest) returns (GetFiscalPeriodVersionResponse);
+
+  // Compares a fiscal period.
+  rpc CompareFiscalPeriodVersions(CompareFiscalPeriodVersionsRequest) returns (CompareFiscalPeriodVersionsResponse);
+
+  // Reverts a fiscal period.
+  rpc RevertFiscalPeriod(RevertFiscalPeriodRequest) returns (RevertFiscalPeriodResponse);
+
+  // Deletes a fiscal period.
+  rpc PruneFiscalPeriodVersions(PruneFiscalPeriodVersionsRequest) returns (PruneFiscalPeriodVersionsResponse);
+}
+
+// The request of `RecordFiscalPeriodVersion`.
+message RecordFiscalPeriodVersionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    int64 version = 1;
+    int64 other_version = 2;
+    bytes snapshot = 3;
+    string author_email = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string fiscal_period_id = 2;
+  FiscalPeriod fiscal_period = 3;
+  RecordFiscalPeriodVersionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RecordFiscalPeriodVersion`.
+message RecordFiscalPeriodVersionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FiscalPeriod fiscal_period = 1;
+  RecordFiscalPeriodVersionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ListFiscalPeriodVersions`.
+message ListFiscalPeriodVersionsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated FiscalPeriodStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListFiscalPeriodVersionsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListFiscalPeriodVersions`.
+message ListFiscalPeriodVersionsResponse {
+  repeated FiscalPeriod fiscal_periods = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetFiscalPeriodVersion`.
+message GetFiscalPeriodVersionRequest {
+  acme.common.v1.RequestContext context = 1;
+  string fiscal_period_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetFiscalPeriodVersion`.
+message GetFiscalPeriodVersionResponse {
+  FiscalPeriod fiscal_period = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `CompareFiscalPeriodVersions`.
+message CompareFiscalPeriodVersionsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    int64 version = 1;
+    int64 other_version = 2;
+    bytes snapshot = 3;
+    string author_email = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string fiscal_period_id = 2;
+  FiscalPeriod fiscal_period = 3;
+  CompareFiscalPeriodVersionsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CompareFiscalPeriodVersions`.
+message CompareFiscalPeriodVersionsResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FiscalPeriod fiscal_period = 1;
+  CompareFiscalPeriodVersionsResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RevertFiscalPeriod`.
+message RevertFiscalPeriodRequest {
+  // What the operation needs besides the record.
+  message Details {
+    int64 version = 1;
+    int64 other_version = 2;
+    bytes snapshot = 3;
+    string author_email = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string fiscal_period_id = 2;
+  FiscalPeriod fiscal_period = 3;
+  RevertFiscalPeriodRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RevertFiscalPeriod`.
+message RevertFiscalPeriodResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FiscalPeriod fiscal_period = 1;
+  RevertFiscalPeriodResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PruneFiscalPeriodVersions`.
+message PruneFiscalPeriodVersionsRequest {
+  acme.common.v1.RequestContext context = 1;
+  string fiscal_period_id = 2;
+  string reason = 3;
+  string etag = 4;
+  bool force = 5;
+}
+
+// The response of `PruneFiscalPeriodVersions`.
+message PruneFiscalPeriodVersionsResponse {
+  acme.common.v1.OperationResult result = 1;
+  google.protobuf.Timestamp effective_at = 2;
+}

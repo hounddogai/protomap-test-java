@@ -1,0 +1,245 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.accounting.v1;
+
+import "acme/accounting/v1/accounting.proto";
+import "acme/common/v1/audit.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Accounting.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/accounting/v1;accountingv1";
+option java_multiple_files = true;
+option java_outer_classname = "AccrualQueryServiceProto";
+option java_package = "com.acme.accounting.v1";
+
+// Answers read-only questions about accruals, for screens and reports.
+service AccrualQueryService {
+  // Returns an accrual.
+  rpc LookupAccrual(LookupAccrualRequest) returns (LookupAccrualResponse);
+
+  // Lists accruals a page at a time.
+  rpc BrowseAccruals(BrowseAccrualsRequest) returns (BrowseAccrualsResponse);
+
+  // Lists accruals a page at a time.
+  rpc FindAccruals(FindAccrualsRequest) returns (FindAccrualsResponse);
+
+  // Counts accruals by status.
+  rpc CountAccruals(CountAccrualsRequest) returns (CountAccrualsResponse);
+
+  // Returns several accruals at once.
+  rpc ResolveAccruals(ResolveAccrualsRequest) returns (ResolveAccrualsResponse);
+
+  // Streams every matching accrual.
+  rpc ExportAccruals(ExportAccrualsRequest) returns (stream ExportAccrualsResponse);
+
+  // Summarizes an accrual.
+  rpc SummarizeAccruals(SummarizeAccrualsRequest) returns (SummarizeAccrualsResponse);
+
+  // Lists accruals a page at a time.
+  rpc SuggestAccruals(SuggestAccrualsRequest) returns (SuggestAccrualsResponse);
+
+  // Returns an accrual.
+  rpc PeekAccrual(PeekAccrualRequest) returns (PeekAccrualResponse);
+}
+
+// The request of `LookupAccrual`.
+message LookupAccrualRequest {
+  acme.common.v1.RequestContext context = 1;
+  string accrual_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `LookupAccrual`.
+message LookupAccrualResponse {
+  Accrual accrual = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `BrowseAccruals`.
+message BrowseAccrualsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated AccrualStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  BrowseAccrualsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `BrowseAccruals`.
+message BrowseAccrualsResponse {
+  repeated Accrual accruals = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `FindAccruals`.
+message FindAccrualsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated AccrualStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  FindAccrualsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `FindAccruals`.
+message FindAccrualsResponse {
+  repeated Accrual accruals = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CountAccruals`.
+message CountAccrualsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated AccrualStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  CountAccrualsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `CountAccruals`.
+message CountAccrualsResponse {
+  int64 count = 1;
+  map<string, int64> by_status = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ResolveAccruals`.
+message ResolveAccrualsRequest {
+  acme.common.v1.RequestContext context = 1;
+  repeated string accrual_ids = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `ResolveAccruals`.
+message ResolveAccrualsResponse {
+  repeated Accrual accruals = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExportAccruals`.
+message ExportAccrualsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated AccrualStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  ExportAccrualsRequest.Filter filter = 2;
+  string format = 3;
+  google.protobuf.FieldMask fields = 4;
+  string destination_uri = 5;
+}
+
+// The response of `ExportAccruals`.
+message ExportAccrualsResponse {
+  Accrual accrual = 1;
+  string change_type = 2;
+  google.protobuf.Timestamp changed_at = 3;
+  int64 sequence = 4;
+  acme.common.v1.OperationResult result = 5;
+}
+
+// The request of `SummarizeAccruals`.
+message SummarizeAccrualsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string format = 1;
+    acme.common.v1.TimeWindow period = 2;
+    repeated string recipient_emails = 3;
+    string cron = 4;
+    map<string, string> filters = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string accrual_id = 2;
+  SummarizeAccrualsRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `SummarizeAccruals`.
+message SummarizeAccrualsResponse {
+  string report_id = 1;
+  string download_uri = 2;
+  map<string, string> summary = 3;
+  acme.common.v1.TimeWindow period = 4;
+  acme.common.v1.OperationResult result = 5;
+}
+
+// The request of `SuggestAccruals`.
+message SuggestAccrualsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated AccrualStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  SuggestAccrualsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `SuggestAccruals`.
+message SuggestAccrualsResponse {
+  repeated Accrual accruals = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PeekAccrual`.
+message PeekAccrualRequest {
+  acme.common.v1.RequestContext context = 1;
+  string accrual_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `PeekAccrual`.
+message PeekAccrualResponse {
+  Accrual accrual = 1;
+  acme.common.v1.OperationResult result = 2;
+}

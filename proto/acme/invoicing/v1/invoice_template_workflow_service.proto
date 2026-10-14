@@ -1,0 +1,296 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.invoicing.v1;
+
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/invoicing/v1/invoicing.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Invoicing.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/invoicing/v1;invoicingv1";
+option java_multiple_files = true;
+option java_outer_classname = "InvoiceTemplateWorkflowServiceProto";
+option java_package = "com.acme.invoicing.v1";
+
+// Runs the long-lived workflow that takes an invoice template from start to finish.
+service InvoiceTemplateWorkflowService {
+  // Starts an invoice template.
+  rpc StartInvoiceTemplateWorkflow(StartInvoiceTemplateWorkflowRequest) returns (StartInvoiceTemplateWorkflowResponse);
+
+  // Advances an invoice template.
+  rpc AdvanceInvoiceTemplateWorkflow(AdvanceInvoiceTemplateWorkflowRequest) returns (AdvanceInvoiceTemplateWorkflowResponse);
+
+  // Retrys an invoice template.
+  rpc RetryInvoiceTemplateWorkflow(RetryInvoiceTemplateWorkflowRequest) returns (RetryInvoiceTemplateWorkflowResponse);
+
+  // Pauses an invoice template.
+  rpc PauseInvoiceTemplateWorkflow(PauseInvoiceTemplateWorkflowRequest) returns (PauseInvoiceTemplateWorkflowResponse);
+
+  // Resumes an invoice template.
+  rpc ResumeInvoiceTemplateWorkflow(ResumeInvoiceTemplateWorkflowRequest) returns (ResumeInvoiceTemplateWorkflowResponse);
+
+  // Returns an invoice template.
+  rpc InspectInvoiceTemplateWorkflow(InspectInvoiceTemplateWorkflowRequest) returns (InspectInvoiceTemplateWorkflowResponse);
+
+  // Lists invoice templates a page at a time.
+  rpc ListInvoiceTemplateWorkflows(ListInvoiceTemplateWorkflowsRequest) returns (ListInvoiceTemplateWorkflowsResponse);
+
+  // Signals an invoice template.
+  rpc SignalInvoiceTemplateWorkflow(SignalInvoiceTemplateWorkflowRequest) returns (SignalInvoiceTemplateWorkflowResponse);
+}
+
+// The request of `StartInvoiceTemplateWorkflow`.
+message StartInvoiceTemplateWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string invoice_template_id = 2;
+  InvoiceTemplate invoice_template = 3;
+  StartInvoiceTemplateWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `StartInvoiceTemplateWorkflow`.
+message StartInvoiceTemplateWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  InvoiceTemplate invoice_template = 1;
+  StartInvoiceTemplateWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `AdvanceInvoiceTemplateWorkflow`.
+message AdvanceInvoiceTemplateWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string invoice_template_id = 2;
+  InvoiceTemplate invoice_template = 3;
+  AdvanceInvoiceTemplateWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `AdvanceInvoiceTemplateWorkflow`.
+message AdvanceInvoiceTemplateWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  InvoiceTemplate invoice_template = 1;
+  AdvanceInvoiceTemplateWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RetryInvoiceTemplateWorkflow`.
+message RetryInvoiceTemplateWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string invoice_template_id = 2;
+  InvoiceTemplate invoice_template = 3;
+  RetryInvoiceTemplateWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RetryInvoiceTemplateWorkflow`.
+message RetryInvoiceTemplateWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  InvoiceTemplate invoice_template = 1;
+  RetryInvoiceTemplateWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PauseInvoiceTemplateWorkflow`.
+message PauseInvoiceTemplateWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string invoice_template_id = 2;
+  InvoiceTemplate invoice_template = 3;
+  PauseInvoiceTemplateWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PauseInvoiceTemplateWorkflow`.
+message PauseInvoiceTemplateWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  InvoiceTemplate invoice_template = 1;
+  PauseInvoiceTemplateWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ResumeInvoiceTemplateWorkflow`.
+message ResumeInvoiceTemplateWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string invoice_template_id = 2;
+  InvoiceTemplate invoice_template = 3;
+  ResumeInvoiceTemplateWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ResumeInvoiceTemplateWorkflow`.
+message ResumeInvoiceTemplateWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  InvoiceTemplate invoice_template = 1;
+  ResumeInvoiceTemplateWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `InspectInvoiceTemplateWorkflow`.
+message InspectInvoiceTemplateWorkflowRequest {
+  acme.common.v1.RequestContext context = 1;
+  string invoice_template_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `InspectInvoiceTemplateWorkflow`.
+message InspectInvoiceTemplateWorkflowResponse {
+  InvoiceTemplate invoice_template = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `ListInvoiceTemplateWorkflows`.
+message ListInvoiceTemplateWorkflowsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated InvoiceTemplateStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListInvoiceTemplateWorkflowsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListInvoiceTemplateWorkflows`.
+message ListInvoiceTemplateWorkflowsResponse {
+  repeated InvoiceTemplate invoice_templates = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SignalInvoiceTemplateWorkflow`.
+message SignalInvoiceTemplateWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string invoice_template_id = 2;
+  InvoiceTemplate invoice_template = 3;
+  SignalInvoiceTemplateWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SignalInvoiceTemplateWorkflow`.
+message SignalInvoiceTemplateWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  InvoiceTemplate invoice_template = 1;
+  SignalInvoiceTemplateWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

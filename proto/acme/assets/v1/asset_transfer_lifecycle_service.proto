@@ -1,0 +1,294 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.assets.v1;
+
+import "acme/assets/v1/assets.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/identity/v1/refs.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Assets.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/assets/v1;assetsv1";
+option java_multiple_files = true;
+option java_outer_classname = "AssetTransferLifecycleServiceProto";
+option java_package = "com.acme.assets.v1";
+
+// Moves an asset transfer between the states of its lifecycle.
+service AssetTransferLifecycleService {
+  // Activates an asset transfer.
+  rpc ActivateAssetTransfer(ActivateAssetTransferRequest) returns (ActivateAssetTransferResponse);
+
+  // Suspends an asset transfer.
+  rpc SuspendAssetTransfer(SuspendAssetTransferRequest) returns (SuspendAssetTransferResponse);
+
+  // Reinstates an asset transfer.
+  rpc ReinstateAssetTransfer(ReinstateAssetTransferRequest) returns (ReinstateAssetTransferResponse);
+
+  // Terminates an asset transfer.
+  rpc TerminateAssetTransfer(TerminateAssetTransferRequest) returns (TerminateAssetTransferResponse);
+
+  // Renews an asset transfer.
+  rpc RenewAssetTransfer(RenewAssetTransferRequest) returns (RenewAssetTransferResponse);
+
+  // Expires an asset transfer.
+  rpc ExpireAssetTransfer(ExpireAssetTransferRequest) returns (ExpireAssetTransferResponse);
+
+  // Returns an asset transfer.
+  rpc GetAssetTransferLifecycle(GetAssetTransferLifecycleRequest) returns (GetAssetTransferLifecycleResponse);
+
+  // Schedules an asset transfer.
+  rpc ScheduleAssetTransferExpiry(ScheduleAssetTransferExpiryRequest) returns (ScheduleAssetTransferExpiryResponse);
+}
+
+// The request of `ActivateAssetTransfer`.
+message ActivateAssetTransferRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string asset_transfer_id = 2;
+  ActivateAssetTransferRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ActivateAssetTransfer`.
+message ActivateAssetTransferResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  AssetTransfer asset_transfer = 1;
+  ActivateAssetTransferResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SuspendAssetTransfer`.
+message SuspendAssetTransferRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string asset_transfer_id = 2;
+  SuspendAssetTransferRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `SuspendAssetTransfer`.
+message SuspendAssetTransferResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  AssetTransfer asset_transfer = 1;
+  SuspendAssetTransferResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ReinstateAssetTransfer`.
+message ReinstateAssetTransferRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string asset_transfer_id = 2;
+  ReinstateAssetTransferRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ReinstateAssetTransfer`.
+message ReinstateAssetTransferResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  AssetTransfer asset_transfer = 1;
+  ReinstateAssetTransferResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `TerminateAssetTransfer`.
+message TerminateAssetTransferRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string asset_transfer_id = 2;
+  TerminateAssetTransferRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `TerminateAssetTransfer`.
+message TerminateAssetTransferResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  AssetTransfer asset_transfer = 1;
+  TerminateAssetTransferResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RenewAssetTransfer`.
+message RenewAssetTransferRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string asset_transfer_id = 2;
+  RenewAssetTransferRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `RenewAssetTransfer`.
+message RenewAssetTransferResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  AssetTransfer asset_transfer = 1;
+  RenewAssetTransferResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExpireAssetTransfer`.
+message ExpireAssetTransferRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string asset_transfer_id = 2;
+  ExpireAssetTransferRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ExpireAssetTransfer`.
+message ExpireAssetTransferResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  AssetTransfer asset_transfer = 1;
+  ExpireAssetTransferResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetAssetTransferLifecycle`.
+message GetAssetTransferLifecycleRequest {
+  acme.common.v1.RequestContext context = 1;
+  string asset_transfer_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetAssetTransferLifecycle`.
+message GetAssetTransferLifecycleResponse {
+  AssetTransfer asset_transfer = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `ScheduleAssetTransferExpiry`.
+message ScheduleAssetTransferExpiryRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string asset_transfer_id = 2;
+  AssetTransfer asset_transfer = 3;
+  ScheduleAssetTransferExpiryRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ScheduleAssetTransferExpiry`.
+message ScheduleAssetTransferExpiryResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  AssetTransfer asset_transfer = 1;
+  ScheduleAssetTransferExpiryResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

@@ -1,0 +1,304 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.payroll.v1;
+
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/identity/v1/refs.proto";
+import "acme/payroll/v1/payroll.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Payroll.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/payroll/v1;payrollv1";
+option java_multiple_files = true;
+option java_outer_classname = "TaxWithholdingApprovalServiceProto";
+option java_package = "com.acme.payroll.v1";
+
+// Routes tax withholdings through approval, with escalation and delegation.
+service TaxWithholdingApprovalService {
+  // Submits a tax withholding.
+  rpc SubmitTaxWithholding(SubmitTaxWithholdingRequest) returns (SubmitTaxWithholdingResponse);
+
+  // Approves a tax withholding.
+  rpc ApproveTaxWithholding(ApproveTaxWithholdingRequest) returns (ApproveTaxWithholdingResponse);
+
+  // Rejects a tax withholding.
+  rpc RejectTaxWithholding(RejectTaxWithholdingRequest) returns (RejectTaxWithholdingResponse);
+
+  // Escalates a tax withholding.
+  rpc EscalateTaxWithholding(EscalateTaxWithholdingRequest) returns (EscalateTaxWithholdingResponse);
+
+  // Delegates a tax withholding.
+  rpc DelegateTaxWithholdingApproval(DelegateTaxWithholdingApprovalRequest) returns (DelegateTaxWithholdingApprovalResponse);
+
+  // Recalls a tax withholding.
+  rpc RecallTaxWithholding(RecallTaxWithholdingRequest) returns (RecallTaxWithholdingResponse);
+
+  // Returns a tax withholding.
+  rpc GetTaxWithholdingApprovalStatus(GetTaxWithholdingApprovalStatusRequest) returns (GetTaxWithholdingApprovalStatusResponse);
+
+  // Comments a tax withholding.
+  rpc CommentTaxWithholdingApproval(CommentTaxWithholdingApprovalRequest) returns (CommentTaxWithholdingApprovalResponse);
+}
+
+// The request of `SubmitTaxWithholding`.
+message SubmitTaxWithholdingRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string tax_withholding_id = 2;
+  TaxWithholding tax_withholding = 3;
+  SubmitTaxWithholdingRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SubmitTaxWithholding`.
+message SubmitTaxWithholdingResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  TaxWithholding tax_withholding = 1;
+  SubmitTaxWithholdingResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ApproveTaxWithholding`.
+message ApproveTaxWithholdingRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string tax_withholding_id = 2;
+  TaxWithholding tax_withholding = 3;
+  ApproveTaxWithholdingRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ApproveTaxWithholding`.
+message ApproveTaxWithholdingResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  TaxWithholding tax_withholding = 1;
+  ApproveTaxWithholdingResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RejectTaxWithholding`.
+message RejectTaxWithholdingRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string tax_withholding_id = 2;
+  TaxWithholding tax_withholding = 3;
+  RejectTaxWithholdingRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RejectTaxWithholding`.
+message RejectTaxWithholdingResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  TaxWithholding tax_withholding = 1;
+  RejectTaxWithholdingResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `EscalateTaxWithholding`.
+message EscalateTaxWithholdingRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string tax_withholding_id = 2;
+  TaxWithholding tax_withholding = 3;
+  EscalateTaxWithholdingRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `EscalateTaxWithholding`.
+message EscalateTaxWithholdingResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  TaxWithholding tax_withholding = 1;
+  EscalateTaxWithholdingResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `DelegateTaxWithholdingApproval`.
+message DelegateTaxWithholdingApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string tax_withholding_id = 2;
+  TaxWithholding tax_withholding = 3;
+  DelegateTaxWithholdingApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `DelegateTaxWithholdingApproval`.
+message DelegateTaxWithholdingApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  TaxWithholding tax_withholding = 1;
+  DelegateTaxWithholdingApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RecallTaxWithholding`.
+message RecallTaxWithholdingRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string tax_withholding_id = 2;
+  TaxWithholding tax_withholding = 3;
+  RecallTaxWithholdingRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RecallTaxWithholding`.
+message RecallTaxWithholdingResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  TaxWithholding tax_withholding = 1;
+  RecallTaxWithholdingResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetTaxWithholdingApprovalStatus`.
+message GetTaxWithholdingApprovalStatusRequest {
+  acme.common.v1.RequestContext context = 1;
+  string tax_withholding_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetTaxWithholdingApprovalStatus`.
+message GetTaxWithholdingApprovalStatusResponse {
+  TaxWithholding tax_withholding = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `CommentTaxWithholdingApproval`.
+message CommentTaxWithholdingApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string tax_withholding_id = 2;
+  TaxWithholding tax_withholding = 3;
+  CommentTaxWithholdingApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CommentTaxWithholdingApproval`.
+message CommentTaxWithholdingApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  TaxWithholding tax_withholding = 1;
+  CommentTaxWithholdingApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

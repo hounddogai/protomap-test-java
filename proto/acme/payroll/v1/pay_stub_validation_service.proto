@@ -1,0 +1,305 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.payroll.v1;
+
+import "acme/common/v1/address.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/money.proto";
+import "acme/common/v1/operation.proto";
+import "acme/payroll/v1/payroll.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Payroll.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/payroll/v1;payrollv1";
+option java_multiple_files = true;
+option java_outer_classname = "PayStubValidationServiceProto";
+option java_package = "com.acme.payroll.v1";
+
+// Checks pay stubs against the rules before anything acts on them.
+service PayStubValidationService {
+  // Validates a pay stub.
+  rpc ValidatePayStub(ValidatePayStubRequest) returns (ValidatePayStubResponse);
+
+  // Previews a pay stub.
+  rpc PreviewPayStub(PreviewPayStubRequest) returns (PreviewPayStubResponse);
+
+  // Checks a pay stub.
+  rpc CheckPayStubEligibility(CheckPayStubEligibilityRequest) returns (CheckPayStubEligibilityResponse);
+
+  // Normalizes a pay stub.
+  rpc NormalizePayStub(NormalizePayStubRequest) returns (NormalizePayStubResponse);
+
+  // Explains a pay stub.
+  rpc ExplainPayStubDecision(ExplainPayStubDecisionRequest) returns (ExplainPayStubDecisionResponse);
+
+  // Scores a pay stub.
+  rpc ScorePayStub(ScorePayStubRequest) returns (ScorePayStubResponse);
+
+  // Lints a pay stub.
+  rpc LintPayStubs(LintPayStubsRequest) returns (LintPayStubsResponse);
+
+  // Returns a pay stub.
+  rpc GetPayStubRules(GetPayStubRulesRequest) returns (GetPayStubRulesResponse);
+}
+
+// The request of `ValidatePayStub`.
+message ValidatePayStubRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string pay_stub_id = 2;
+  PayStub pay_stub = 3;
+  ValidatePayStubRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ValidatePayStub`.
+message ValidatePayStubResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PayStub pay_stub = 1;
+  ValidatePayStubResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PreviewPayStub`.
+message PreviewPayStubRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string pay_stub_id = 2;
+  PayStub pay_stub = 3;
+  PreviewPayStubRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PreviewPayStub`.
+message PreviewPayStubResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PayStub pay_stub = 1;
+  PreviewPayStubResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CheckPayStubEligibility`.
+message CheckPayStubEligibilityRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string pay_stub_id = 2;
+  PayStub pay_stub = 3;
+  CheckPayStubEligibilityRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CheckPayStubEligibility`.
+message CheckPayStubEligibilityResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PayStub pay_stub = 1;
+  CheckPayStubEligibilityResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `NormalizePayStub`.
+message NormalizePayStubRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string pay_stub_id = 2;
+  PayStub pay_stub = 3;
+  NormalizePayStubRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `NormalizePayStub`.
+message NormalizePayStubResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PayStub pay_stub = 1;
+  NormalizePayStubResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExplainPayStubDecision`.
+message ExplainPayStubDecisionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string pay_stub_id = 2;
+  PayStub pay_stub = 3;
+  ExplainPayStubDecisionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ExplainPayStubDecision`.
+message ExplainPayStubDecisionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PayStub pay_stub = 1;
+  ExplainPayStubDecisionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ScorePayStub`.
+message ScorePayStubRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string pay_stub_id = 2;
+  PayStub pay_stub = 3;
+  ScorePayStubRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ScorePayStub`.
+message ScorePayStubResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated ScorePayStubResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  PayStub pay_stub = 1;
+  ScorePayStubResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `LintPayStubs`.
+message LintPayStubsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string pay_stub_id = 2;
+  PayStub pay_stub = 3;
+  LintPayStubsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `LintPayStubs`.
+message LintPayStubsResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PayStub pay_stub = 1;
+  LintPayStubsResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetPayStubRules`.
+message GetPayStubRulesRequest {
+  acme.common.v1.RequestContext context = 1;
+  string pay_stub_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetPayStubRules`.
+message GetPayStubRulesResponse {
+  PayStub pay_stub = 1;
+  acme.common.v1.OperationResult result = 2;
+}

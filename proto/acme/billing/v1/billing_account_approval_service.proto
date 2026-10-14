@@ -1,0 +1,316 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.billing.v1;
+
+import "acme/billing/v1/billing.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/identity/v1/refs.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Billing.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/billing/v1;billingv1";
+option java_multiple_files = true;
+option java_outer_classname = "BillingAccountApprovalServiceProto";
+option java_package = "com.acme.billing.v1";
+
+// Routes billing accounts through approval, with escalation and delegation.
+service BillingAccountApprovalService {
+  // Submits a billing account.
+  rpc SubmitBillingAccount(SubmitBillingAccountRequest) returns (SubmitBillingAccountResponse);
+
+  // Approves a billing account.
+  rpc ApproveBillingAccount(ApproveBillingAccountRequest) returns (ApproveBillingAccountResponse);
+
+  // Rejects a billing account.
+  rpc RejectBillingAccount(RejectBillingAccountRequest) returns (RejectBillingAccountResponse);
+
+  // Escalates a billing account.
+  rpc EscalateBillingAccount(EscalateBillingAccountRequest) returns (EscalateBillingAccountResponse);
+
+  // Lists billing accounts a page at a time.
+  rpc ListPendingBillingAccounts(ListPendingBillingAccountsRequest) returns (ListPendingBillingAccountsResponse);
+
+  // Delegates a billing account.
+  rpc DelegateBillingAccountApproval(DelegateBillingAccountApprovalRequest) returns (DelegateBillingAccountApprovalResponse);
+
+  // Recalls a billing account.
+  rpc RecallBillingAccount(RecallBillingAccountRequest) returns (RecallBillingAccountResponse);
+
+  // Comments a billing account.
+  rpc CommentBillingAccountApproval(CommentBillingAccountApprovalRequest) returns (CommentBillingAccountApprovalResponse);
+}
+
+// The request of `SubmitBillingAccount`.
+message SubmitBillingAccountRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string billing_account_id = 2;
+  BillingAccount billing_account = 3;
+  SubmitBillingAccountRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SubmitBillingAccount`.
+message SubmitBillingAccountResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  BillingAccount billing_account = 1;
+  SubmitBillingAccountResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ApproveBillingAccount`.
+message ApproveBillingAccountRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string billing_account_id = 2;
+  BillingAccount billing_account = 3;
+  ApproveBillingAccountRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ApproveBillingAccount`.
+message ApproveBillingAccountResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  BillingAccount billing_account = 1;
+  ApproveBillingAccountResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RejectBillingAccount`.
+message RejectBillingAccountRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string billing_account_id = 2;
+  BillingAccount billing_account = 3;
+  RejectBillingAccountRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RejectBillingAccount`.
+message RejectBillingAccountResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  BillingAccount billing_account = 1;
+  RejectBillingAccountResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `EscalateBillingAccount`.
+message EscalateBillingAccountRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string billing_account_id = 2;
+  BillingAccount billing_account = 3;
+  EscalateBillingAccountRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `EscalateBillingAccount`.
+message EscalateBillingAccountResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  BillingAccount billing_account = 1;
+  EscalateBillingAccountResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ListPendingBillingAccounts`.
+message ListPendingBillingAccountsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated BillingAccountStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListPendingBillingAccountsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListPendingBillingAccounts`.
+message ListPendingBillingAccountsResponse {
+  repeated BillingAccount billing_accounts = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `DelegateBillingAccountApproval`.
+message DelegateBillingAccountApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string billing_account_id = 2;
+  BillingAccount billing_account = 3;
+  DelegateBillingAccountApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `DelegateBillingAccountApproval`.
+message DelegateBillingAccountApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  BillingAccount billing_account = 1;
+  DelegateBillingAccountApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RecallBillingAccount`.
+message RecallBillingAccountRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string billing_account_id = 2;
+  BillingAccount billing_account = 3;
+  RecallBillingAccountRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RecallBillingAccount`.
+message RecallBillingAccountResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  BillingAccount billing_account = 1;
+  RecallBillingAccountResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CommentBillingAccountApproval`.
+message CommentBillingAccountApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string billing_account_id = 2;
+  BillingAccount billing_account = 3;
+  CommentBillingAccountApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CommentBillingAccountApproval`.
+message CommentBillingAccountApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  BillingAccount billing_account = 1;
+  CommentBillingAccountApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

@@ -1,0 +1,305 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.treasury.v1;
+
+import "acme/common/v1/address.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/money.proto";
+import "acme/common/v1/operation.proto";
+import "acme/treasury/v1/treasury.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Treasury.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/treasury/v1;treasuryv1";
+option java_multiple_files = true;
+option java_outer_classname = "FxHedgeValidationServiceProto";
+option java_package = "com.acme.treasury.v1";
+
+// Checks fx hedges against the rules before anything acts on them.
+service FxHedgeValidationService {
+  // Validates a fx hedge.
+  rpc ValidateFxHedge(ValidateFxHedgeRequest) returns (ValidateFxHedgeResponse);
+
+  // Previews a fx hedge.
+  rpc PreviewFxHedge(PreviewFxHedgeRequest) returns (PreviewFxHedgeResponse);
+
+  // Checks a fx hedge.
+  rpc CheckFxHedgeEligibility(CheckFxHedgeEligibilityRequest) returns (CheckFxHedgeEligibilityResponse);
+
+  // Normalizes a fx hedge.
+  rpc NormalizeFxHedge(NormalizeFxHedgeRequest) returns (NormalizeFxHedgeResponse);
+
+  // Explains a fx hedge.
+  rpc ExplainFxHedgeDecision(ExplainFxHedgeDecisionRequest) returns (ExplainFxHedgeDecisionResponse);
+
+  // Scores a fx hedge.
+  rpc ScoreFxHedge(ScoreFxHedgeRequest) returns (ScoreFxHedgeResponse);
+
+  // Lints a fx hedge.
+  rpc LintFxHedges(LintFxHedgesRequest) returns (LintFxHedgesResponse);
+
+  // Returns a fx hedge.
+  rpc GetFxHedgeRules(GetFxHedgeRulesRequest) returns (GetFxHedgeRulesResponse);
+}
+
+// The request of `ValidateFxHedge`.
+message ValidateFxHedgeRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string fx_hedge_id = 2;
+  FxHedge fx_hedge = 3;
+  ValidateFxHedgeRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ValidateFxHedge`.
+message ValidateFxHedgeResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FxHedge fx_hedge = 1;
+  ValidateFxHedgeResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PreviewFxHedge`.
+message PreviewFxHedgeRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string fx_hedge_id = 2;
+  FxHedge fx_hedge = 3;
+  PreviewFxHedgeRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PreviewFxHedge`.
+message PreviewFxHedgeResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FxHedge fx_hedge = 1;
+  PreviewFxHedgeResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CheckFxHedgeEligibility`.
+message CheckFxHedgeEligibilityRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string fx_hedge_id = 2;
+  FxHedge fx_hedge = 3;
+  CheckFxHedgeEligibilityRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CheckFxHedgeEligibility`.
+message CheckFxHedgeEligibilityResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FxHedge fx_hedge = 1;
+  CheckFxHedgeEligibilityResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `NormalizeFxHedge`.
+message NormalizeFxHedgeRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string fx_hedge_id = 2;
+  FxHedge fx_hedge = 3;
+  NormalizeFxHedgeRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `NormalizeFxHedge`.
+message NormalizeFxHedgeResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FxHedge fx_hedge = 1;
+  NormalizeFxHedgeResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExplainFxHedgeDecision`.
+message ExplainFxHedgeDecisionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string fx_hedge_id = 2;
+  FxHedge fx_hedge = 3;
+  ExplainFxHedgeDecisionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ExplainFxHedgeDecision`.
+message ExplainFxHedgeDecisionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FxHedge fx_hedge = 1;
+  ExplainFxHedgeDecisionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ScoreFxHedge`.
+message ScoreFxHedgeRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string fx_hedge_id = 2;
+  FxHedge fx_hedge = 3;
+  ScoreFxHedgeRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ScoreFxHedge`.
+message ScoreFxHedgeResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated ScoreFxHedgeResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  FxHedge fx_hedge = 1;
+  ScoreFxHedgeResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `LintFxHedges`.
+message LintFxHedgesRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string fx_hedge_id = 2;
+  FxHedge fx_hedge = 3;
+  LintFxHedgesRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `LintFxHedges`.
+message LintFxHedgesResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FxHedge fx_hedge = 1;
+  LintFxHedgesResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetFxHedgeRules`.
+message GetFxHedgeRulesRequest {
+  acme.common.v1.RequestContext context = 1;
+  string fx_hedge_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetFxHedgeRules`.
+message GetFxHedgeRulesResponse {
+  FxHedge fx_hedge = 1;
+  acme.common.v1.OperationResult result = 2;
+}

@@ -1,0 +1,335 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.assets.v1;
+
+import "acme/assets/v1/assets.proto";
+import "acme/common/v1/address.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/money.proto";
+import "acme/common/v1/operation.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Assets.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/assets/v1;assetsv1";
+option java_multiple_files = true;
+option java_outer_classname = "DisposalCalculationServiceProto";
+option java_package = "com.acme.assets.v1";
+
+// Computes the figures of a disposal, such as totals, taxes, and estimates.
+service DisposalCalculationService {
+  // Calculates a disposal.
+  rpc CalculateDisposal(CalculateDisposalRequest) returns (CalculateDisposalResponse);
+
+  // Estimates a disposal.
+  rpc EstimateDisposal(EstimateDisposalRequest) returns (EstimateDisposalResponse);
+
+  // Quotes a disposal.
+  rpc QuoteDisposal(QuoteDisposalRequest) returns (QuoteDisposalResponse);
+
+  // Compares a disposal.
+  rpc CompareDisposalOptions(CompareDisposalOptionsRequest) returns (CompareDisposalOptionsResponse);
+
+  // Recalculates a disposal.
+  rpc RecalculateDisposals(RecalculateDisposalsRequest) returns (RecalculateDisposalsResponse);
+
+  // Simulates a disposal.
+  rpc SimulateDisposal(SimulateDisposalRequest) returns (SimulateDisposalResponse);
+
+  // Explains a disposal.
+  rpc ExplainDisposalCalculation(ExplainDisposalCalculationRequest) returns (ExplainDisposalCalculationResponse);
+
+  // Returns a disposal.
+  rpc GetDisposalRates(GetDisposalRatesRequest) returns (GetDisposalRatesResponse);
+}
+
+// The request of `CalculateDisposal`.
+message CalculateDisposalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string disposal_id = 2;
+  Disposal disposal = 3;
+  CalculateDisposalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CalculateDisposal`.
+message CalculateDisposalResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated CalculateDisposalResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Disposal disposal = 1;
+  CalculateDisposalResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `EstimateDisposal`.
+message EstimateDisposalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string disposal_id = 2;
+  Disposal disposal = 3;
+  EstimateDisposalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `EstimateDisposal`.
+message EstimateDisposalResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated EstimateDisposalResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Disposal disposal = 1;
+  EstimateDisposalResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `QuoteDisposal`.
+message QuoteDisposalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string disposal_id = 2;
+  Disposal disposal = 3;
+  QuoteDisposalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `QuoteDisposal`.
+message QuoteDisposalResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated QuoteDisposalResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Disposal disposal = 1;
+  QuoteDisposalResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CompareDisposalOptions`.
+message CompareDisposalOptionsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string disposal_id = 2;
+  Disposal disposal = 3;
+  CompareDisposalOptionsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CompareDisposalOptions`.
+message CompareDisposalOptionsResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated CompareDisposalOptionsResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Disposal disposal = 1;
+  CompareDisposalOptionsResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RecalculateDisposals`.
+message RecalculateDisposalsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string disposal_id = 2;
+  Disposal disposal = 3;
+  RecalculateDisposalsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RecalculateDisposals`.
+message RecalculateDisposalsResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated RecalculateDisposalsResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Disposal disposal = 1;
+  RecalculateDisposalsResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SimulateDisposal`.
+message SimulateDisposalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string disposal_id = 2;
+  Disposal disposal = 3;
+  SimulateDisposalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SimulateDisposal`.
+message SimulateDisposalResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated SimulateDisposalResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Disposal disposal = 1;
+  SimulateDisposalResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExplainDisposalCalculation`.
+message ExplainDisposalCalculationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string disposal_id = 2;
+  Disposal disposal = 3;
+  ExplainDisposalCalculationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ExplainDisposalCalculation`.
+message ExplainDisposalCalculationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Disposal disposal = 1;
+  ExplainDisposalCalculationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetDisposalRates`.
+message GetDisposalRatesRequest {
+  acme.common.v1.RequestContext context = 1;
+  string disposal_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetDisposalRates`.
+message GetDisposalRatesResponse {
+  Disposal disposal = 1;
+  acme.common.v1.OperationResult result = 2;
+}

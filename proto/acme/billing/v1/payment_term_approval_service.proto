@@ -1,0 +1,219 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.billing.v1;
+
+import "acme/billing/v1/billing.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/identity/v1/refs.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Billing.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/billing/v1;billingv1";
+option java_multiple_files = true;
+option java_outer_classname = "PaymentTermApprovalServiceProto";
+option java_package = "com.acme.billing.v1";
+
+// Routes payment terms through approval, with escalation and delegation.
+service PaymentTermApprovalService {
+  // Submits a payment term.
+  rpc SubmitPaymentTerm(SubmitPaymentTermRequest) returns (SubmitPaymentTermResponse);
+
+  // Approves a payment term.
+  rpc ApprovePaymentTerm(ApprovePaymentTermRequest) returns (ApprovePaymentTermResponse);
+
+  // Lists payment terms a page at a time.
+  rpc ListPendingPaymentTerms(ListPendingPaymentTermsRequest) returns (ListPendingPaymentTermsResponse);
+
+  // Delegates a payment term.
+  rpc DelegatePaymentTermApproval(DelegatePaymentTermApprovalRequest) returns (DelegatePaymentTermApprovalResponse);
+
+  // Recalls a payment term.
+  rpc RecallPaymentTerm(RecallPaymentTermRequest) returns (RecallPaymentTermResponse);
+
+  // Returns a payment term.
+  rpc GetPaymentTermApprovalStatus(GetPaymentTermApprovalStatusRequest) returns (GetPaymentTermApprovalStatusResponse);
+}
+
+// The request of `SubmitPaymentTerm`.
+message SubmitPaymentTermRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string payment_term_id = 2;
+  PaymentTerm payment_term = 3;
+  SubmitPaymentTermRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SubmitPaymentTerm`.
+message SubmitPaymentTermResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PaymentTerm payment_term = 1;
+  SubmitPaymentTermResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ApprovePaymentTerm`.
+message ApprovePaymentTermRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string payment_term_id = 2;
+  PaymentTerm payment_term = 3;
+  ApprovePaymentTermRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ApprovePaymentTerm`.
+message ApprovePaymentTermResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PaymentTerm payment_term = 1;
+  ApprovePaymentTermResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ListPendingPaymentTerms`.
+message ListPendingPaymentTermsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated PaymentTermStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListPendingPaymentTermsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListPendingPaymentTerms`.
+message ListPendingPaymentTermsResponse {
+  repeated PaymentTerm payment_terms = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `DelegatePaymentTermApproval`.
+message DelegatePaymentTermApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string payment_term_id = 2;
+  PaymentTerm payment_term = 3;
+  DelegatePaymentTermApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `DelegatePaymentTermApproval`.
+message DelegatePaymentTermApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PaymentTerm payment_term = 1;
+  DelegatePaymentTermApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RecallPaymentTerm`.
+message RecallPaymentTermRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string payment_term_id = 2;
+  PaymentTerm payment_term = 3;
+  RecallPaymentTermRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RecallPaymentTerm`.
+message RecallPaymentTermResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PaymentTerm payment_term = 1;
+  RecallPaymentTermResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetPaymentTermApprovalStatus`.
+message GetPaymentTermApprovalStatusRequest {
+  acme.common.v1.RequestContext context = 1;
+  string payment_term_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetPaymentTermApprovalStatus`.
+message GetPaymentTermApprovalStatusResponse {
+  PaymentTerm payment_term = 1;
+  acme.common.v1.OperationResult result = 2;
+}

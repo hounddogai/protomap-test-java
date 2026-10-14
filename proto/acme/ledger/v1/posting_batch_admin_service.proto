@@ -1,0 +1,311 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.ledger.v1;
+
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/identity/v1/refs.proto";
+import "acme/ledger/v1/ledger.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Ledger.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/ledger/v1;ledgerv1";
+option java_multiple_files = true;
+option java_outer_classname = "PostingBatchAdminServiceProto";
+option java_package = "com.acme.ledger.v1";
+
+// Operator actions on posting batches that support staff run by hand.
+service PostingBatchAdminService {
+  // Archives a posting batch.
+  rpc ArchivePostingBatch(ArchivePostingBatchRequest) returns (ArchivePostingBatchResponse);
+
+  // Restores a posting batch.
+  rpc RestorePostingBatch(RestorePostingBatchRequest) returns (RestorePostingBatchResponse);
+
+  // Deletes a posting batch.
+  rpc PurgePostingBatch(PurgePostingBatchRequest) returns (PurgePostingBatchResponse);
+
+  // Reassigns a posting batch.
+  rpc ReassignPostingBatch(ReassignPostingBatchRequest) returns (ReassignPostingBatchResponse);
+
+  // Locks a posting batch.
+  rpc LockPostingBatch(LockPostingBatchRequest) returns (LockPostingBatchResponse);
+
+  // Unlocks a posting batch.
+  rpc UnlockPostingBatch(UnlockPostingBatchRequest) returns (UnlockPostingBatchResponse);
+
+  // Transfers a posting batch.
+  rpc TransferPostingBatch(TransferPostingBatchRequest) returns (TransferPostingBatchResponse);
+
+  // Repairs a posting batch.
+  rpc RepairPostingBatch(RepairPostingBatchRequest) returns (RepairPostingBatchResponse);
+
+  // Returns a posting batch.
+  rpc InspectPostingBatch(InspectPostingBatchRequest) returns (InspectPostingBatchResponse);
+}
+
+// The request of `ArchivePostingBatch`.
+message ArchivePostingBatchRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string posting_batch_id = 2;
+  ArchivePostingBatchRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ArchivePostingBatch`.
+message ArchivePostingBatchResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PostingBatch posting_batch = 1;
+  ArchivePostingBatchResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RestorePostingBatch`.
+message RestorePostingBatchRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string posting_batch_id = 2;
+  RestorePostingBatchRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `RestorePostingBatch`.
+message RestorePostingBatchResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PostingBatch posting_batch = 1;
+  RestorePostingBatchResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PurgePostingBatch`.
+message PurgePostingBatchRequest {
+  acme.common.v1.RequestContext context = 1;
+  string posting_batch_id = 2;
+  string reason = 3;
+  string etag = 4;
+  bool force = 5;
+}
+
+// The response of `PurgePostingBatch`.
+message PurgePostingBatchResponse {
+  acme.common.v1.OperationResult result = 1;
+  google.protobuf.Timestamp effective_at = 2;
+}
+
+// The request of `ReassignPostingBatch`.
+message ReassignPostingBatchRequest {
+  // What the operation needs besides the record.
+  message Details {
+    acme.identity.v1.UserRef assignee = 1;
+    string queue = 2;
+    int32 capacity = 3;
+    string assignee_email = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string posting_batch_id = 2;
+  ReassignPostingBatchRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ReassignPostingBatch`.
+message ReassignPostingBatchResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PostingBatch posting_batch = 1;
+  ReassignPostingBatchResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `LockPostingBatch`.
+message LockPostingBatchRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string posting_batch_id = 2;
+  LockPostingBatchRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `LockPostingBatch`.
+message LockPostingBatchResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PostingBatch posting_batch = 1;
+  LockPostingBatchResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `UnlockPostingBatch`.
+message UnlockPostingBatchRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string posting_batch_id = 2;
+  UnlockPostingBatchRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `UnlockPostingBatch`.
+message UnlockPostingBatchResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PostingBatch posting_batch = 1;
+  UnlockPostingBatchResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `TransferPostingBatch`.
+message TransferPostingBatchRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string posting_batch_id = 2;
+  TransferPostingBatchRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `TransferPostingBatch`.
+message TransferPostingBatchResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PostingBatch posting_batch = 1;
+  TransferPostingBatchResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RepairPostingBatch`.
+message RepairPostingBatchRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string cursor = 1;
+    bytes payload = 2;
+    string resolution = 3;
+    string peer_region = 4;
+    string checksum = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string posting_batch_id = 2;
+  PostingBatch posting_batch = 3;
+  RepairPostingBatchRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RepairPostingBatch`.
+message RepairPostingBatchResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PostingBatch posting_batch = 1;
+  RepairPostingBatchResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `InspectPostingBatch`.
+message InspectPostingBatchRequest {
+  acme.common.v1.RequestContext context = 1;
+  string posting_batch_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `InspectPostingBatch`.
+message InspectPostingBatchResponse {
+  PostingBatch posting_batch = 1;
+  acme.common.v1.OperationResult result = 2;
+}

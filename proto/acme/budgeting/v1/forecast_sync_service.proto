@@ -1,0 +1,284 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.budgeting.v1;
+
+import "acme/budgeting/v1/budgeting.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Budgeting.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/budgeting/v1;budgetingv1";
+option java_multiple_files = true;
+option java_outer_classname = "ForecastSyncServiceProto";
+option java_package = "com.acme.budgeting.v1";
+
+// Keeps forecasts in step with the systems of record in other regions.
+service ForecastSyncService {
+  // Syncs a forecast.
+  rpc SyncForecasts(SyncForecastsRequest) returns (SyncForecastsResponse);
+
+  // Pushs a forecast.
+  rpc PushForecast(PushForecastRequest) returns (PushForecastResponse);
+
+  // Pulls a forecast.
+  rpc PullForecasts(PullForecastsRequest) returns (PullForecastsResponse);
+
+  // Reconciles a forecast.
+  rpc ReconcileForecasts(ReconcileForecastsRequest) returns (ReconcileForecastsResponse);
+
+  // Exchanges changes of forecasts with a peer.
+  rpc StreamForecastChanges(stream StreamForecastChangesRequest) returns (stream StreamForecastChangesResponse);
+
+  // Resolves a forecast.
+  rpc ResolveForecastConflict(ResolveForecastConflictRequest) returns (ResolveForecastConflictResponse);
+
+  // Returns a forecast.
+  rpc GetForecastSyncState(GetForecastSyncStateRequest) returns (GetForecastSyncStateResponse);
+
+  // Lists forecasts a page at a time.
+  rpc ListForecastConflicts(ListForecastConflictsRequest) returns (ListForecastConflictsResponse);
+}
+
+// The request of `SyncForecasts`.
+message SyncForecastsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string cursor = 1;
+    bytes payload = 2;
+    string resolution = 3;
+    string peer_region = 4;
+    string checksum = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string forecast_id = 2;
+  Forecast forecast = 3;
+  SyncForecastsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SyncForecasts`.
+message SyncForecastsResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Forecast forecast = 1;
+  SyncForecastsResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PushForecast`.
+message PushForecastRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string cursor = 1;
+    bytes payload = 2;
+    string resolution = 3;
+    string peer_region = 4;
+    string checksum = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string forecast_id = 2;
+  Forecast forecast = 3;
+  PushForecastRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PushForecast`.
+message PushForecastResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Forecast forecast = 1;
+  PushForecastResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PullForecasts`.
+message PullForecastsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string cursor = 1;
+    bytes payload = 2;
+    string resolution = 3;
+    string peer_region = 4;
+    string checksum = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string forecast_id = 2;
+  Forecast forecast = 3;
+  PullForecastsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PullForecasts`.
+message PullForecastsResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Forecast forecast = 1;
+  PullForecastsResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ReconcileForecasts`.
+message ReconcileForecastsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string cursor = 1;
+    bytes payload = 2;
+    string resolution = 3;
+    string peer_region = 4;
+    string checksum = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string forecast_id = 2;
+  Forecast forecast = 3;
+  ReconcileForecastsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ReconcileForecasts`.
+message ReconcileForecastsResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Forecast forecast = 1;
+  ReconcileForecastsResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `StreamForecastChanges`.
+message StreamForecastChangesRequest {
+  // An acknowledgment of a change the peer sent.
+  message ChangeAck {
+    int64 sequence = 1;
+    string status = 2;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  oneof frame {
+    Forecast change = 2;
+    StreamForecastChangesRequest.ChangeAck ack = 3;
+  }
+  string cursor = 4;
+}
+
+// The response of `StreamForecastChanges`.
+message StreamForecastChangesResponse {
+  Forecast forecast = 1;
+  string change_type = 2;
+  google.protobuf.Timestamp changed_at = 3;
+  int64 sequence = 4;
+  acme.common.v1.OperationResult result = 5;
+}
+
+// The request of `ResolveForecastConflict`.
+message ResolveForecastConflictRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string cursor = 1;
+    bytes payload = 2;
+    string resolution = 3;
+    string peer_region = 4;
+    string checksum = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string forecast_id = 2;
+  Forecast forecast = 3;
+  ResolveForecastConflictRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ResolveForecastConflict`.
+message ResolveForecastConflictResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Forecast forecast = 1;
+  ResolveForecastConflictResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetForecastSyncState`.
+message GetForecastSyncStateRequest {
+  acme.common.v1.RequestContext context = 1;
+  string forecast_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetForecastSyncState`.
+message GetForecastSyncStateResponse {
+  Forecast forecast = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `ListForecastConflicts`.
+message ListForecastConflictsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated ForecastStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListForecastConflictsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListForecastConflicts`.
+message ListForecastConflictsResponse {
+  repeated Forecast forecasts = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}

@@ -1,0 +1,296 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.compliance.v1;
+
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/compliance/v1/compliance.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Compliance.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/compliance/v1;compliancev1";
+option java_multiple_files = true;
+option java_outer_classname = "ComplianceCaseWorkflowServiceProto";
+option java_package = "com.acme.compliance.v1";
+
+// Runs the long-lived workflow that takes a compliance case from start to finish.
+service ComplianceCaseWorkflowService {
+  // Starts a compliance case.
+  rpc StartComplianceCaseWorkflow(StartComplianceCaseWorkflowRequest) returns (StartComplianceCaseWorkflowResponse);
+
+  // Advances a compliance case.
+  rpc AdvanceComplianceCaseWorkflow(AdvanceComplianceCaseWorkflowRequest) returns (AdvanceComplianceCaseWorkflowResponse);
+
+  // Cancels a compliance case.
+  rpc CancelComplianceCaseWorkflow(CancelComplianceCaseWorkflowRequest) returns (CancelComplianceCaseWorkflowResponse);
+
+  // Retrys a compliance case.
+  rpc RetryComplianceCaseWorkflow(RetryComplianceCaseWorkflowRequest) returns (RetryComplianceCaseWorkflowResponse);
+
+  // Pauses a compliance case.
+  rpc PauseComplianceCaseWorkflow(PauseComplianceCaseWorkflowRequest) returns (PauseComplianceCaseWorkflowResponse);
+
+  // Resumes a compliance case.
+  rpc ResumeComplianceCaseWorkflow(ResumeComplianceCaseWorkflowRequest) returns (ResumeComplianceCaseWorkflowResponse);
+
+  // Returns a compliance case.
+  rpc InspectComplianceCaseWorkflow(InspectComplianceCaseWorkflowRequest) returns (InspectComplianceCaseWorkflowResponse);
+
+  // Lists compliance cases a page at a time.
+  rpc ListComplianceCaseWorkflows(ListComplianceCaseWorkflowsRequest) returns (ListComplianceCaseWorkflowsResponse);
+}
+
+// The request of `StartComplianceCaseWorkflow`.
+message StartComplianceCaseWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string compliance_case_id = 2;
+  ComplianceCase compliance_case = 3;
+  StartComplianceCaseWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `StartComplianceCaseWorkflow`.
+message StartComplianceCaseWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ComplianceCase compliance_case = 1;
+  StartComplianceCaseWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `AdvanceComplianceCaseWorkflow`.
+message AdvanceComplianceCaseWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string compliance_case_id = 2;
+  ComplianceCase compliance_case = 3;
+  AdvanceComplianceCaseWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `AdvanceComplianceCaseWorkflow`.
+message AdvanceComplianceCaseWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ComplianceCase compliance_case = 1;
+  AdvanceComplianceCaseWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CancelComplianceCaseWorkflow`.
+message CancelComplianceCaseWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string compliance_case_id = 2;
+  ComplianceCase compliance_case = 3;
+  CancelComplianceCaseWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CancelComplianceCaseWorkflow`.
+message CancelComplianceCaseWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ComplianceCase compliance_case = 1;
+  CancelComplianceCaseWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RetryComplianceCaseWorkflow`.
+message RetryComplianceCaseWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string compliance_case_id = 2;
+  ComplianceCase compliance_case = 3;
+  RetryComplianceCaseWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RetryComplianceCaseWorkflow`.
+message RetryComplianceCaseWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ComplianceCase compliance_case = 1;
+  RetryComplianceCaseWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PauseComplianceCaseWorkflow`.
+message PauseComplianceCaseWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string compliance_case_id = 2;
+  ComplianceCase compliance_case = 3;
+  PauseComplianceCaseWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PauseComplianceCaseWorkflow`.
+message PauseComplianceCaseWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ComplianceCase compliance_case = 1;
+  PauseComplianceCaseWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ResumeComplianceCaseWorkflow`.
+message ResumeComplianceCaseWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string compliance_case_id = 2;
+  ComplianceCase compliance_case = 3;
+  ResumeComplianceCaseWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ResumeComplianceCaseWorkflow`.
+message ResumeComplianceCaseWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ComplianceCase compliance_case = 1;
+  ResumeComplianceCaseWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `InspectComplianceCaseWorkflow`.
+message InspectComplianceCaseWorkflowRequest {
+  acme.common.v1.RequestContext context = 1;
+  string compliance_case_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `InspectComplianceCaseWorkflow`.
+message InspectComplianceCaseWorkflowResponse {
+  ComplianceCase compliance_case = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `ListComplianceCaseWorkflows`.
+message ListComplianceCaseWorkflowsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated ComplianceCaseStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListComplianceCaseWorkflowsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListComplianceCaseWorkflows`.
+message ListComplianceCaseWorkflowsResponse {
+  repeated ComplianceCase compliance_cases = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}

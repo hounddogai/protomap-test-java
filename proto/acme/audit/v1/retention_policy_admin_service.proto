@@ -1,0 +1,222 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.audit.v1;
+
+import "acme/audit/v1/audit.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/identity/v1/refs.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Audit.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/audit/v1;auditv1";
+option java_multiple_files = true;
+option java_outer_classname = "RetentionPolicyAdminServiceProto";
+option java_package = "com.acme.audit.v1";
+
+// Operator actions on retention policies that support staff run by hand.
+service RetentionPolicyAdminService {
+  // Archives a retention policy.
+  rpc ArchiveRetentionPolicy(ArchiveRetentionPolicyRequest) returns (ArchiveRetentionPolicyResponse);
+
+  // Restores a retention policy.
+  rpc RestoreRetentionPolicy(RestoreRetentionPolicyRequest) returns (RestoreRetentionPolicyResponse);
+
+  // Deletes a retention policy.
+  rpc PurgeRetentionPolicy(PurgeRetentionPolicyRequest) returns (PurgeRetentionPolicyResponse);
+
+  // Unlocks a retention policy.
+  rpc UnlockRetentionPolicy(UnlockRetentionPolicyRequest) returns (UnlockRetentionPolicyResponse);
+
+  // Transfers a retention policy.
+  rpc TransferRetentionPolicy(TransferRetentionPolicyRequest) returns (TransferRetentionPolicyResponse);
+
+  // Repairs a retention policy.
+  rpc RepairRetentionPolicy(RepairRetentionPolicyRequest) returns (RepairRetentionPolicyResponse);
+}
+
+// The request of `ArchiveRetentionPolicy`.
+message ArchiveRetentionPolicyRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string retention_policy_id = 2;
+  ArchiveRetentionPolicyRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ArchiveRetentionPolicy`.
+message ArchiveRetentionPolicyResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RetentionPolicy retention_policy = 1;
+  ArchiveRetentionPolicyResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RestoreRetentionPolicy`.
+message RestoreRetentionPolicyRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string retention_policy_id = 2;
+  RestoreRetentionPolicyRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `RestoreRetentionPolicy`.
+message RestoreRetentionPolicyResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RetentionPolicy retention_policy = 1;
+  RestoreRetentionPolicyResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PurgeRetentionPolicy`.
+message PurgeRetentionPolicyRequest {
+  acme.common.v1.RequestContext context = 1;
+  string retention_policy_id = 2;
+  string reason = 3;
+  string etag = 4;
+  bool force = 5;
+}
+
+// The response of `PurgeRetentionPolicy`.
+message PurgeRetentionPolicyResponse {
+  acme.common.v1.OperationResult result = 1;
+  google.protobuf.Timestamp effective_at = 2;
+}
+
+// The request of `UnlockRetentionPolicy`.
+message UnlockRetentionPolicyRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string retention_policy_id = 2;
+  UnlockRetentionPolicyRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `UnlockRetentionPolicy`.
+message UnlockRetentionPolicyResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RetentionPolicy retention_policy = 1;
+  UnlockRetentionPolicyResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `TransferRetentionPolicy`.
+message TransferRetentionPolicyRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string retention_policy_id = 2;
+  TransferRetentionPolicyRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `TransferRetentionPolicy`.
+message TransferRetentionPolicyResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RetentionPolicy retention_policy = 1;
+  TransferRetentionPolicyResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RepairRetentionPolicy`.
+message RepairRetentionPolicyRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string cursor = 1;
+    bytes payload = 2;
+    string resolution = 3;
+    string peer_region = 4;
+    string checksum = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string retention_policy_id = 2;
+  RetentionPolicy retention_policy = 3;
+  RepairRetentionPolicyRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RepairRetentionPolicy`.
+message RepairRetentionPolicyResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RetentionPolicy retention_policy = 1;
+  RepairRetentionPolicyResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

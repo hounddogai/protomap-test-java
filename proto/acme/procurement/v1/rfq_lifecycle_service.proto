@@ -1,0 +1,294 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.procurement.v1;
+
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/identity/v1/refs.proto";
+import "acme/procurement/v1/procurement.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Procurement.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/procurement/v1;procurementv1";
+option java_multiple_files = true;
+option java_outer_classname = "RfqLifecycleServiceProto";
+option java_package = "com.acme.procurement.v1";
+
+// Moves a rfq between the states of its lifecycle.
+service RfqLifecycleService {
+  // Activates a rfq.
+  rpc ActivateRfq(ActivateRfqRequest) returns (ActivateRfqResponse);
+
+  // Suspends a rfq.
+  rpc SuspendRfq(SuspendRfqRequest) returns (SuspendRfqResponse);
+
+  // Reinstates a rfq.
+  rpc ReinstateRfq(ReinstateRfqRequest) returns (ReinstateRfqResponse);
+
+  // Terminates a rfq.
+  rpc TerminateRfq(TerminateRfqRequest) returns (TerminateRfqResponse);
+
+  // Renews a rfq.
+  rpc RenewRfq(RenewRfqRequest) returns (RenewRfqResponse);
+
+  // Expires a rfq.
+  rpc ExpireRfq(ExpireRfqRequest) returns (ExpireRfqResponse);
+
+  // Returns a rfq.
+  rpc GetRfqLifecycle(GetRfqLifecycleRequest) returns (GetRfqLifecycleResponse);
+
+  // Schedules a rfq.
+  rpc ScheduleRfqExpiry(ScheduleRfqExpiryRequest) returns (ScheduleRfqExpiryResponse);
+}
+
+// The request of `ActivateRfq`.
+message ActivateRfqRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string rfq_id = 2;
+  ActivateRfqRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ActivateRfq`.
+message ActivateRfqResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Rfq rfq = 1;
+  ActivateRfqResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SuspendRfq`.
+message SuspendRfqRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string rfq_id = 2;
+  SuspendRfqRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `SuspendRfq`.
+message SuspendRfqResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Rfq rfq = 1;
+  SuspendRfqResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ReinstateRfq`.
+message ReinstateRfqRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string rfq_id = 2;
+  ReinstateRfqRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ReinstateRfq`.
+message ReinstateRfqResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Rfq rfq = 1;
+  ReinstateRfqResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `TerminateRfq`.
+message TerminateRfqRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string rfq_id = 2;
+  TerminateRfqRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `TerminateRfq`.
+message TerminateRfqResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Rfq rfq = 1;
+  TerminateRfqResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RenewRfq`.
+message RenewRfqRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string rfq_id = 2;
+  RenewRfqRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `RenewRfq`.
+message RenewRfqResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Rfq rfq = 1;
+  RenewRfqResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExpireRfq`.
+message ExpireRfqRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string rfq_id = 2;
+  ExpireRfqRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ExpireRfq`.
+message ExpireRfqResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Rfq rfq = 1;
+  ExpireRfqResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetRfqLifecycle`.
+message GetRfqLifecycleRequest {
+  acme.common.v1.RequestContext context = 1;
+  string rfq_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetRfqLifecycle`.
+message GetRfqLifecycleResponse {
+  Rfq rfq = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `ScheduleRfqExpiry`.
+message ScheduleRfqExpiryRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string rfq_id = 2;
+  Rfq rfq = 3;
+  ScheduleRfqExpiryRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ScheduleRfqExpiry`.
+message ScheduleRfqExpiryResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Rfq rfq = 1;
+  ScheduleRfqExpiryResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

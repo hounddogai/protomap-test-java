@@ -1,0 +1,296 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.assets.v1;
+
+import "acme/assets/v1/assets.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Assets.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/assets/v1;assetsv1";
+option java_multiple_files = true;
+option java_outer_classname = "DepreciationWorkflowServiceProto";
+option java_package = "com.acme.assets.v1";
+
+// Runs the long-lived workflow that takes a depreciation from start to finish.
+service DepreciationWorkflowService {
+  // Starts a depreciation.
+  rpc StartDepreciationWorkflow(StartDepreciationWorkflowRequest) returns (StartDepreciationWorkflowResponse);
+
+  // Advances a depreciation.
+  rpc AdvanceDepreciationWorkflow(AdvanceDepreciationWorkflowRequest) returns (AdvanceDepreciationWorkflowResponse);
+
+  // Cancels a depreciation.
+  rpc CancelDepreciationWorkflow(CancelDepreciationWorkflowRequest) returns (CancelDepreciationWorkflowResponse);
+
+  // Retrys a depreciation.
+  rpc RetryDepreciationWorkflow(RetryDepreciationWorkflowRequest) returns (RetryDepreciationWorkflowResponse);
+
+  // Pauses a depreciation.
+  rpc PauseDepreciationWorkflow(PauseDepreciationWorkflowRequest) returns (PauseDepreciationWorkflowResponse);
+
+  // Resumes a depreciation.
+  rpc ResumeDepreciationWorkflow(ResumeDepreciationWorkflowRequest) returns (ResumeDepreciationWorkflowResponse);
+
+  // Returns a depreciation.
+  rpc InspectDepreciationWorkflow(InspectDepreciationWorkflowRequest) returns (InspectDepreciationWorkflowResponse);
+
+  // Lists depreciations a page at a time.
+  rpc ListDepreciationWorkflows(ListDepreciationWorkflowsRequest) returns (ListDepreciationWorkflowsResponse);
+}
+
+// The request of `StartDepreciationWorkflow`.
+message StartDepreciationWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string depreciation_id = 2;
+  Depreciation depreciation = 3;
+  StartDepreciationWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `StartDepreciationWorkflow`.
+message StartDepreciationWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Depreciation depreciation = 1;
+  StartDepreciationWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `AdvanceDepreciationWorkflow`.
+message AdvanceDepreciationWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string depreciation_id = 2;
+  Depreciation depreciation = 3;
+  AdvanceDepreciationWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `AdvanceDepreciationWorkflow`.
+message AdvanceDepreciationWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Depreciation depreciation = 1;
+  AdvanceDepreciationWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CancelDepreciationWorkflow`.
+message CancelDepreciationWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string depreciation_id = 2;
+  Depreciation depreciation = 3;
+  CancelDepreciationWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CancelDepreciationWorkflow`.
+message CancelDepreciationWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Depreciation depreciation = 1;
+  CancelDepreciationWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RetryDepreciationWorkflow`.
+message RetryDepreciationWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string depreciation_id = 2;
+  Depreciation depreciation = 3;
+  RetryDepreciationWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RetryDepreciationWorkflow`.
+message RetryDepreciationWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Depreciation depreciation = 1;
+  RetryDepreciationWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PauseDepreciationWorkflow`.
+message PauseDepreciationWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string depreciation_id = 2;
+  Depreciation depreciation = 3;
+  PauseDepreciationWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PauseDepreciationWorkflow`.
+message PauseDepreciationWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Depreciation depreciation = 1;
+  PauseDepreciationWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ResumeDepreciationWorkflow`.
+message ResumeDepreciationWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string depreciation_id = 2;
+  Depreciation depreciation = 3;
+  ResumeDepreciationWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ResumeDepreciationWorkflow`.
+message ResumeDepreciationWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Depreciation depreciation = 1;
+  ResumeDepreciationWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `InspectDepreciationWorkflow`.
+message InspectDepreciationWorkflowRequest {
+  acme.common.v1.RequestContext context = 1;
+  string depreciation_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `InspectDepreciationWorkflow`.
+message InspectDepreciationWorkflowResponse {
+  Depreciation depreciation = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `ListDepreciationWorkflows`.
+message ListDepreciationWorkflowsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated DepreciationStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListDepreciationWorkflowsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListDepreciationWorkflows`.
+message ListDepreciationWorkflowsResponse {
+  repeated Depreciation depreciations = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}

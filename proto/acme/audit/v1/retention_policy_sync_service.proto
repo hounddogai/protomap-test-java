@@ -1,0 +1,284 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.audit.v1;
+
+import "acme/audit/v1/audit.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Audit.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/audit/v1;auditv1";
+option java_multiple_files = true;
+option java_outer_classname = "RetentionPolicySyncServiceProto";
+option java_package = "com.acme.audit.v1";
+
+// Keeps retention policies in step with the systems of record in other regions.
+service RetentionPolicySyncService {
+  // Syncs a retention policy.
+  rpc SyncRetentionPolicies(SyncRetentionPoliciesRequest) returns (SyncRetentionPoliciesResponse);
+
+  // Pushs a retention policy.
+  rpc PushRetentionPolicy(PushRetentionPolicyRequest) returns (PushRetentionPolicyResponse);
+
+  // Pulls a retention policy.
+  rpc PullRetentionPolicies(PullRetentionPoliciesRequest) returns (PullRetentionPoliciesResponse);
+
+  // Reconciles a retention policy.
+  rpc ReconcileRetentionPolicies(ReconcileRetentionPoliciesRequest) returns (ReconcileRetentionPoliciesResponse);
+
+  // Exchanges changes of retention policies with a peer.
+  rpc StreamRetentionPolicyChanges(stream StreamRetentionPolicyChangesRequest) returns (stream StreamRetentionPolicyChangesResponse);
+
+  // Resolves a retention policy.
+  rpc ResolveRetentionPolicyConflict(ResolveRetentionPolicyConflictRequest) returns (ResolveRetentionPolicyConflictResponse);
+
+  // Returns a retention policy.
+  rpc GetRetentionPolicySyncState(GetRetentionPolicySyncStateRequest) returns (GetRetentionPolicySyncStateResponse);
+
+  // Lists retention policies a page at a time.
+  rpc ListRetentionPolicyConflicts(ListRetentionPolicyConflictsRequest) returns (ListRetentionPolicyConflictsResponse);
+}
+
+// The request of `SyncRetentionPolicies`.
+message SyncRetentionPoliciesRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string cursor = 1;
+    bytes payload = 2;
+    string resolution = 3;
+    string peer_region = 4;
+    string checksum = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string retention_policy_id = 2;
+  RetentionPolicy retention_policy = 3;
+  SyncRetentionPoliciesRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SyncRetentionPolicies`.
+message SyncRetentionPoliciesResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RetentionPolicy retention_policy = 1;
+  SyncRetentionPoliciesResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PushRetentionPolicy`.
+message PushRetentionPolicyRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string cursor = 1;
+    bytes payload = 2;
+    string resolution = 3;
+    string peer_region = 4;
+    string checksum = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string retention_policy_id = 2;
+  RetentionPolicy retention_policy = 3;
+  PushRetentionPolicyRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PushRetentionPolicy`.
+message PushRetentionPolicyResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RetentionPolicy retention_policy = 1;
+  PushRetentionPolicyResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PullRetentionPolicies`.
+message PullRetentionPoliciesRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string cursor = 1;
+    bytes payload = 2;
+    string resolution = 3;
+    string peer_region = 4;
+    string checksum = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string retention_policy_id = 2;
+  RetentionPolicy retention_policy = 3;
+  PullRetentionPoliciesRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PullRetentionPolicies`.
+message PullRetentionPoliciesResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RetentionPolicy retention_policy = 1;
+  PullRetentionPoliciesResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ReconcileRetentionPolicies`.
+message ReconcileRetentionPoliciesRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string cursor = 1;
+    bytes payload = 2;
+    string resolution = 3;
+    string peer_region = 4;
+    string checksum = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string retention_policy_id = 2;
+  RetentionPolicy retention_policy = 3;
+  ReconcileRetentionPoliciesRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ReconcileRetentionPolicies`.
+message ReconcileRetentionPoliciesResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RetentionPolicy retention_policy = 1;
+  ReconcileRetentionPoliciesResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `StreamRetentionPolicyChanges`.
+message StreamRetentionPolicyChangesRequest {
+  // An acknowledgment of a change the peer sent.
+  message ChangeAck {
+    int64 sequence = 1;
+    string status = 2;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  oneof frame {
+    RetentionPolicy change = 2;
+    StreamRetentionPolicyChangesRequest.ChangeAck ack = 3;
+  }
+  string cursor = 4;
+}
+
+// The response of `StreamRetentionPolicyChanges`.
+message StreamRetentionPolicyChangesResponse {
+  RetentionPolicy retention_policy = 1;
+  string change_type = 2;
+  google.protobuf.Timestamp changed_at = 3;
+  int64 sequence = 4;
+  acme.common.v1.OperationResult result = 5;
+}
+
+// The request of `ResolveRetentionPolicyConflict`.
+message ResolveRetentionPolicyConflictRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string cursor = 1;
+    bytes payload = 2;
+    string resolution = 3;
+    string peer_region = 4;
+    string checksum = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string retention_policy_id = 2;
+  RetentionPolicy retention_policy = 3;
+  ResolveRetentionPolicyConflictRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ResolveRetentionPolicyConflict`.
+message ResolveRetentionPolicyConflictResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RetentionPolicy retention_policy = 1;
+  ResolveRetentionPolicyConflictResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetRetentionPolicySyncState`.
+message GetRetentionPolicySyncStateRequest {
+  acme.common.v1.RequestContext context = 1;
+  string retention_policy_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetRetentionPolicySyncState`.
+message GetRetentionPolicySyncStateResponse {
+  RetentionPolicy retention_policy = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `ListRetentionPolicyConflicts`.
+message ListRetentionPolicyConflictsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated RetentionPolicyStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListRetentionPolicyConflictsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListRetentionPolicyConflicts`.
+message ListRetentionPolicyConflictsResponse {
+  repeated RetentionPolicy retention_policies = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}

@@ -1,0 +1,228 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.expenses.v1;
+
+import "acme/common/v1/audit.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/expenses/v1/expenses.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Expenses.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/expenses/v1;expensesv1";
+option java_multiple_files = true;
+option java_outer_classname = "ReceiptQueryServiceProto";
+option java_package = "com.acme.expenses.v1";
+
+// Answers read-only questions about receipts, for screens and reports.
+service ReceiptQueryService {
+  // Returns a receipt.
+  rpc LookupReceipt(LookupReceiptRequest) returns (LookupReceiptResponse);
+
+  // Lists receipts a page at a time.
+  rpc BrowseReceipts(BrowseReceiptsRequest) returns (BrowseReceiptsResponse);
+
+  // Lists receipts a page at a time.
+  rpc FindReceipts(FindReceiptsRequest) returns (FindReceiptsResponse);
+
+  // Counts receipts by status.
+  rpc CountReceipts(CountReceiptsRequest) returns (CountReceiptsResponse);
+
+  // Streams every matching receipt.
+  rpc ExportReceipts(ExportReceiptsRequest) returns (stream ExportReceiptsResponse);
+
+  // Summarizes a receipt.
+  rpc SummarizeReceipts(SummarizeReceiptsRequest) returns (SummarizeReceiptsResponse);
+
+  // Lists receipts a page at a time.
+  rpc SuggestReceipts(SuggestReceiptsRequest) returns (SuggestReceiptsResponse);
+
+  // Returns a receipt.
+  rpc PeekReceipt(PeekReceiptRequest) returns (PeekReceiptResponse);
+}
+
+// The request of `LookupReceipt`.
+message LookupReceiptRequest {
+  acme.common.v1.RequestContext context = 1;
+  string receipt_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `LookupReceipt`.
+message LookupReceiptResponse {
+  Receipt receipt = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `BrowseReceipts`.
+message BrowseReceiptsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated ReceiptStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  BrowseReceiptsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `BrowseReceipts`.
+message BrowseReceiptsResponse {
+  repeated Receipt receipts = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `FindReceipts`.
+message FindReceiptsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated ReceiptStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  FindReceiptsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `FindReceipts`.
+message FindReceiptsResponse {
+  repeated Receipt receipts = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CountReceipts`.
+message CountReceiptsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated ReceiptStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  CountReceiptsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `CountReceipts`.
+message CountReceiptsResponse {
+  int64 count = 1;
+  map<string, int64> by_status = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExportReceipts`.
+message ExportReceiptsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated ReceiptStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  ExportReceiptsRequest.Filter filter = 2;
+  string format = 3;
+  google.protobuf.FieldMask fields = 4;
+  string destination_uri = 5;
+}
+
+// The response of `ExportReceipts`.
+message ExportReceiptsResponse {
+  Receipt receipt = 1;
+  string change_type = 2;
+  google.protobuf.Timestamp changed_at = 3;
+  int64 sequence = 4;
+  acme.common.v1.OperationResult result = 5;
+}
+
+// The request of `SummarizeReceipts`.
+message SummarizeReceiptsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string format = 1;
+    acme.common.v1.TimeWindow period = 2;
+    repeated string recipient_emails = 3;
+    string cron = 4;
+    map<string, string> filters = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string receipt_id = 2;
+  SummarizeReceiptsRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `SummarizeReceipts`.
+message SummarizeReceiptsResponse {
+  string report_id = 1;
+  string download_uri = 2;
+  map<string, string> summary = 3;
+  acme.common.v1.TimeWindow period = 4;
+  acme.common.v1.OperationResult result = 5;
+}
+
+// The request of `SuggestReceipts`.
+message SuggestReceiptsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated ReceiptStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  SuggestReceiptsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `SuggestReceipts`.
+message SuggestReceiptsResponse {
+  repeated Receipt receipts = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PeekReceipt`.
+message PeekReceiptRequest {
+  acme.common.v1.RequestContext context = 1;
+  string receipt_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `PeekReceipt`.
+message PeekReceiptResponse {
+  Receipt receipt = 1;
+  acme.common.v1.OperationResult result = 2;
+}

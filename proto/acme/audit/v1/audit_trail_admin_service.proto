@@ -1,0 +1,275 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.audit.v1;
+
+import "acme/audit/v1/audit.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/identity/v1/refs.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Audit.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/audit/v1;auditv1";
+option java_multiple_files = true;
+option java_outer_classname = "AuditTrailAdminServiceProto";
+option java_package = "com.acme.audit.v1";
+
+// Operator actions on audit trails that support staff run by hand.
+service AuditTrailAdminService {
+  // Archives an audit trail.
+  rpc ArchiveAuditTrail(ArchiveAuditTrailRequest) returns (ArchiveAuditTrailResponse);
+
+  // Restores an audit trail.
+  rpc RestoreAuditTrail(RestoreAuditTrailRequest) returns (RestoreAuditTrailResponse);
+
+  // Deletes an audit trail.
+  rpc PurgeAuditTrail(PurgeAuditTrailRequest) returns (PurgeAuditTrailResponse);
+
+  // Reassigns an audit trail.
+  rpc ReassignAuditTrail(ReassignAuditTrailRequest) returns (ReassignAuditTrailResponse);
+
+  // Locks an audit trail.
+  rpc LockAuditTrail(LockAuditTrailRequest) returns (LockAuditTrailResponse);
+
+  // Transfers an audit trail.
+  rpc TransferAuditTrail(TransferAuditTrailRequest) returns (TransferAuditTrailResponse);
+
+  // Repairs an audit trail.
+  rpc RepairAuditTrail(RepairAuditTrailRequest) returns (RepairAuditTrailResponse);
+
+  // Returns an audit trail.
+  rpc InspectAuditTrail(InspectAuditTrailRequest) returns (InspectAuditTrailResponse);
+}
+
+// The request of `ArchiveAuditTrail`.
+message ArchiveAuditTrailRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string audit_trail_id = 2;
+  ArchiveAuditTrailRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ArchiveAuditTrail`.
+message ArchiveAuditTrailResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  AuditTrail audit_trail = 1;
+  ArchiveAuditTrailResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RestoreAuditTrail`.
+message RestoreAuditTrailRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string audit_trail_id = 2;
+  RestoreAuditTrailRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `RestoreAuditTrail`.
+message RestoreAuditTrailResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  AuditTrail audit_trail = 1;
+  RestoreAuditTrailResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PurgeAuditTrail`.
+message PurgeAuditTrailRequest {
+  acme.common.v1.RequestContext context = 1;
+  string audit_trail_id = 2;
+  string reason = 3;
+  string etag = 4;
+  bool force = 5;
+}
+
+// The response of `PurgeAuditTrail`.
+message PurgeAuditTrailResponse {
+  acme.common.v1.OperationResult result = 1;
+  google.protobuf.Timestamp effective_at = 2;
+}
+
+// The request of `ReassignAuditTrail`.
+message ReassignAuditTrailRequest {
+  // What the operation needs besides the record.
+  message Details {
+    acme.identity.v1.UserRef assignee = 1;
+    string queue = 2;
+    int32 capacity = 3;
+    string assignee_email = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string audit_trail_id = 2;
+  ReassignAuditTrailRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ReassignAuditTrail`.
+message ReassignAuditTrailResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  AuditTrail audit_trail = 1;
+  ReassignAuditTrailResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `LockAuditTrail`.
+message LockAuditTrailRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string audit_trail_id = 2;
+  LockAuditTrailRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `LockAuditTrail`.
+message LockAuditTrailResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  AuditTrail audit_trail = 1;
+  LockAuditTrailResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `TransferAuditTrail`.
+message TransferAuditTrailRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string audit_trail_id = 2;
+  TransferAuditTrailRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `TransferAuditTrail`.
+message TransferAuditTrailResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  AuditTrail audit_trail = 1;
+  TransferAuditTrailResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RepairAuditTrail`.
+message RepairAuditTrailRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string cursor = 1;
+    bytes payload = 2;
+    string resolution = 3;
+    string peer_region = 4;
+    string checksum = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string audit_trail_id = 2;
+  AuditTrail audit_trail = 3;
+  RepairAuditTrailRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RepairAuditTrail`.
+message RepairAuditTrailResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  AuditTrail audit_trail = 1;
+  RepairAuditTrailResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `InspectAuditTrail`.
+message InspectAuditTrailRequest {
+  acme.common.v1.RequestContext context = 1;
+  string audit_trail_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `InspectAuditTrail`.
+message InspectAuditTrailResponse {
+  AuditTrail audit_trail = 1;
+  acme.common.v1.OperationResult result = 2;
+}

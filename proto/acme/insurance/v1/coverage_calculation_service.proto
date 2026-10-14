@@ -1,0 +1,318 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.insurance.v1;
+
+import "acme/common/v1/address.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/money.proto";
+import "acme/common/v1/operation.proto";
+import "acme/insurance/v1/insurance.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Insurance.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/insurance/v1;insurancev1";
+option java_multiple_files = true;
+option java_outer_classname = "CoverageCalculationServiceProto";
+option java_package = "com.acme.insurance.v1";
+
+// Computes the figures of a coverage, such as totals, taxes, and estimates.
+service CoverageCalculationService {
+  // Calculates a coverage.
+  rpc CalculateCoverage(CalculateCoverageRequest) returns (CalculateCoverageResponse);
+
+  // Estimates a coverage.
+  rpc EstimateCoverage(EstimateCoverageRequest) returns (EstimateCoverageResponse);
+
+  // Quotes a coverage.
+  rpc QuoteCoverage(QuoteCoverageRequest) returns (QuoteCoverageResponse);
+
+  // Compares a coverage.
+  rpc CompareCoverageOptions(CompareCoverageOptionsRequest) returns (CompareCoverageOptionsResponse);
+
+  // Recalculates a coverage.
+  rpc RecalculateCoverages(RecalculateCoveragesRequest) returns (RecalculateCoveragesResponse);
+
+  // Simulates a coverage.
+  rpc SimulateCoverage(SimulateCoverageRequest) returns (SimulateCoverageResponse);
+
+  // Explains a coverage.
+  rpc ExplainCoverageCalculation(ExplainCoverageCalculationRequest) returns (ExplainCoverageCalculationResponse);
+}
+
+// The request of `CalculateCoverage`.
+message CalculateCoverageRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string coverage_id = 2;
+  Coverage coverage = 3;
+  CalculateCoverageRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CalculateCoverage`.
+message CalculateCoverageResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated CalculateCoverageResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Coverage coverage = 1;
+  CalculateCoverageResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `EstimateCoverage`.
+message EstimateCoverageRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string coverage_id = 2;
+  Coverage coverage = 3;
+  EstimateCoverageRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `EstimateCoverage`.
+message EstimateCoverageResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated EstimateCoverageResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Coverage coverage = 1;
+  EstimateCoverageResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `QuoteCoverage`.
+message QuoteCoverageRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string coverage_id = 2;
+  Coverage coverage = 3;
+  QuoteCoverageRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `QuoteCoverage`.
+message QuoteCoverageResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated QuoteCoverageResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Coverage coverage = 1;
+  QuoteCoverageResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CompareCoverageOptions`.
+message CompareCoverageOptionsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string coverage_id = 2;
+  Coverage coverage = 3;
+  CompareCoverageOptionsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CompareCoverageOptions`.
+message CompareCoverageOptionsResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated CompareCoverageOptionsResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Coverage coverage = 1;
+  CompareCoverageOptionsResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RecalculateCoverages`.
+message RecalculateCoveragesRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string coverage_id = 2;
+  Coverage coverage = 3;
+  RecalculateCoveragesRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RecalculateCoverages`.
+message RecalculateCoveragesResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated RecalculateCoveragesResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Coverage coverage = 1;
+  RecalculateCoveragesResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SimulateCoverage`.
+message SimulateCoverageRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string coverage_id = 2;
+  Coverage coverage = 3;
+  SimulateCoverageRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SimulateCoverage`.
+message SimulateCoverageResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated SimulateCoverageResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Coverage coverage = 1;
+  SimulateCoverageResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExplainCoverageCalculation`.
+message ExplainCoverageCalculationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string coverage_id = 2;
+  Coverage coverage = 3;
+  ExplainCoverageCalculationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ExplainCoverageCalculation`.
+message ExplainCoverageCalculationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Coverage coverage = 1;
+  ExplainCoverageCalculationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

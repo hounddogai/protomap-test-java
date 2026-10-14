@@ -1,0 +1,305 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.accounting.v1;
+
+import "acme/accounting/v1/accounting.proto";
+import "acme/common/v1/address.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/money.proto";
+import "acme/common/v1/operation.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Accounting.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/accounting/v1;accountingv1";
+option java_multiple_files = true;
+option java_outer_classname = "AccrualValidationServiceProto";
+option java_package = "com.acme.accounting.v1";
+
+// Checks accruals against the rules before anything acts on them.
+service AccrualValidationService {
+  // Validates an accrual.
+  rpc ValidateAccrual(ValidateAccrualRequest) returns (ValidateAccrualResponse);
+
+  // Previews an accrual.
+  rpc PreviewAccrual(PreviewAccrualRequest) returns (PreviewAccrualResponse);
+
+  // Checks an accrual.
+  rpc CheckAccrualEligibility(CheckAccrualEligibilityRequest) returns (CheckAccrualEligibilityResponse);
+
+  // Normalizes an accrual.
+  rpc NormalizeAccrual(NormalizeAccrualRequest) returns (NormalizeAccrualResponse);
+
+  // Explains an accrual.
+  rpc ExplainAccrualDecision(ExplainAccrualDecisionRequest) returns (ExplainAccrualDecisionResponse);
+
+  // Scores an accrual.
+  rpc ScoreAccrual(ScoreAccrualRequest) returns (ScoreAccrualResponse);
+
+  // Lints an accrual.
+  rpc LintAccruals(LintAccrualsRequest) returns (LintAccrualsResponse);
+
+  // Returns an accrual.
+  rpc GetAccrualRules(GetAccrualRulesRequest) returns (GetAccrualRulesResponse);
+}
+
+// The request of `ValidateAccrual`.
+message ValidateAccrualRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string accrual_id = 2;
+  Accrual accrual = 3;
+  ValidateAccrualRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ValidateAccrual`.
+message ValidateAccrualResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Accrual accrual = 1;
+  ValidateAccrualResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PreviewAccrual`.
+message PreviewAccrualRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string accrual_id = 2;
+  Accrual accrual = 3;
+  PreviewAccrualRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PreviewAccrual`.
+message PreviewAccrualResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Accrual accrual = 1;
+  PreviewAccrualResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CheckAccrualEligibility`.
+message CheckAccrualEligibilityRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string accrual_id = 2;
+  Accrual accrual = 3;
+  CheckAccrualEligibilityRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CheckAccrualEligibility`.
+message CheckAccrualEligibilityResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Accrual accrual = 1;
+  CheckAccrualEligibilityResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `NormalizeAccrual`.
+message NormalizeAccrualRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string accrual_id = 2;
+  Accrual accrual = 3;
+  NormalizeAccrualRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `NormalizeAccrual`.
+message NormalizeAccrualResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Accrual accrual = 1;
+  NormalizeAccrualResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExplainAccrualDecision`.
+message ExplainAccrualDecisionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string accrual_id = 2;
+  Accrual accrual = 3;
+  ExplainAccrualDecisionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ExplainAccrualDecision`.
+message ExplainAccrualDecisionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Accrual accrual = 1;
+  ExplainAccrualDecisionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ScoreAccrual`.
+message ScoreAccrualRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string accrual_id = 2;
+  Accrual accrual = 3;
+  ScoreAccrualRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ScoreAccrual`.
+message ScoreAccrualResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated ScoreAccrualResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Accrual accrual = 1;
+  ScoreAccrualResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `LintAccruals`.
+message LintAccrualsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string accrual_id = 2;
+  Accrual accrual = 3;
+  LintAccrualsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `LintAccruals`.
+message LintAccrualsResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Accrual accrual = 1;
+  LintAccrualsResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetAccrualRules`.
+message GetAccrualRulesRequest {
+  acme.common.v1.RequestContext context = 1;
+  string accrual_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetAccrualRules`.
+message GetAccrualRulesResponse {
+  Accrual accrual = 1;
+  acme.common.v1.OperationResult result = 2;
+}

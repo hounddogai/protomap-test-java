@@ -1,0 +1,292 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.expenses.v1;
+
+import "acme/common/v1/address.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/money.proto";
+import "acme/common/v1/operation.proto";
+import "acme/expenses/v1/expenses.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Expenses.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/expenses/v1;expensesv1";
+option java_multiple_files = true;
+option java_outer_classname = "MileageClaimCalculationServiceProto";
+option java_package = "com.acme.expenses.v1";
+
+// Computes the figures of a mileage claim, such as totals, taxes, and estimates.
+service MileageClaimCalculationService {
+  // Calculates a mileage claim.
+  rpc CalculateMileageClaim(CalculateMileageClaimRequest) returns (CalculateMileageClaimResponse);
+
+  // Estimates a mileage claim.
+  rpc EstimateMileageClaim(EstimateMileageClaimRequest) returns (EstimateMileageClaimResponse);
+
+  // Quotes a mileage claim.
+  rpc QuoteMileageClaim(QuoteMileageClaimRequest) returns (QuoteMileageClaimResponse);
+
+  // Compares a mileage claim.
+  rpc CompareMileageClaimOptions(CompareMileageClaimOptionsRequest) returns (CompareMileageClaimOptionsResponse);
+
+  // Recalculates a mileage claim.
+  rpc RecalculateMileageClaims(RecalculateMileageClaimsRequest) returns (RecalculateMileageClaimsResponse);
+
+  // Explains a mileage claim.
+  rpc ExplainMileageClaimCalculation(ExplainMileageClaimCalculationRequest) returns (ExplainMileageClaimCalculationResponse);
+
+  // Returns a mileage claim.
+  rpc GetMileageClaimRates(GetMileageClaimRatesRequest) returns (GetMileageClaimRatesResponse);
+}
+
+// The request of `CalculateMileageClaim`.
+message CalculateMileageClaimRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string mileage_claim_id = 2;
+  MileageClaim mileage_claim = 3;
+  CalculateMileageClaimRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CalculateMileageClaim`.
+message CalculateMileageClaimResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated CalculateMileageClaimResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  MileageClaim mileage_claim = 1;
+  CalculateMileageClaimResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `EstimateMileageClaim`.
+message EstimateMileageClaimRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string mileage_claim_id = 2;
+  MileageClaim mileage_claim = 3;
+  EstimateMileageClaimRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `EstimateMileageClaim`.
+message EstimateMileageClaimResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated EstimateMileageClaimResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  MileageClaim mileage_claim = 1;
+  EstimateMileageClaimResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `QuoteMileageClaim`.
+message QuoteMileageClaimRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string mileage_claim_id = 2;
+  MileageClaim mileage_claim = 3;
+  QuoteMileageClaimRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `QuoteMileageClaim`.
+message QuoteMileageClaimResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated QuoteMileageClaimResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  MileageClaim mileage_claim = 1;
+  QuoteMileageClaimResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CompareMileageClaimOptions`.
+message CompareMileageClaimOptionsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string mileage_claim_id = 2;
+  MileageClaim mileage_claim = 3;
+  CompareMileageClaimOptionsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CompareMileageClaimOptions`.
+message CompareMileageClaimOptionsResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated CompareMileageClaimOptionsResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  MileageClaim mileage_claim = 1;
+  CompareMileageClaimOptionsResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RecalculateMileageClaims`.
+message RecalculateMileageClaimsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string mileage_claim_id = 2;
+  MileageClaim mileage_claim = 3;
+  RecalculateMileageClaimsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RecalculateMileageClaims`.
+message RecalculateMileageClaimsResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated RecalculateMileageClaimsResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  MileageClaim mileage_claim = 1;
+  RecalculateMileageClaimsResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExplainMileageClaimCalculation`.
+message ExplainMileageClaimCalculationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string mileage_claim_id = 2;
+  MileageClaim mileage_claim = 3;
+  ExplainMileageClaimCalculationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ExplainMileageClaimCalculation`.
+message ExplainMileageClaimCalculationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  MileageClaim mileage_claim = 1;
+  ExplainMileageClaimCalculationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetMileageClaimRates`.
+message GetMileageClaimRatesRequest {
+  acme.common.v1.RequestContext context = 1;
+  string mileage_claim_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetMileageClaimRates`.
+message GetMileageClaimRatesResponse {
+  MileageClaim mileage_claim = 1;
+  acme.common.v1.OperationResult result = 2;
+}

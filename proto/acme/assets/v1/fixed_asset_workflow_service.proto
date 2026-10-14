@@ -1,0 +1,258 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.assets.v1;
+
+import "acme/assets/v1/assets.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Assets.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/assets/v1;assetsv1";
+option java_multiple_files = true;
+option java_outer_classname = "FixedAssetWorkflowServiceProto";
+option java_package = "com.acme.assets.v1";
+
+// Runs the long-lived workflow that takes a fixed asset from start to finish.
+service FixedAssetWorkflowService {
+  // Starts a fixed asset.
+  rpc StartFixedAssetWorkflow(StartFixedAssetWorkflowRequest) returns (StartFixedAssetWorkflowResponse);
+
+  // Advances a fixed asset.
+  rpc AdvanceFixedAssetWorkflow(AdvanceFixedAssetWorkflowRequest) returns (AdvanceFixedAssetWorkflowResponse);
+
+  // Retrys a fixed asset.
+  rpc RetryFixedAssetWorkflow(RetryFixedAssetWorkflowRequest) returns (RetryFixedAssetWorkflowResponse);
+
+  // Resumes a fixed asset.
+  rpc ResumeFixedAssetWorkflow(ResumeFixedAssetWorkflowRequest) returns (ResumeFixedAssetWorkflowResponse);
+
+  // Returns a fixed asset.
+  rpc InspectFixedAssetWorkflow(InspectFixedAssetWorkflowRequest) returns (InspectFixedAssetWorkflowResponse);
+
+  // Lists fixed assets a page at a time.
+  rpc ListFixedAssetWorkflows(ListFixedAssetWorkflowsRequest) returns (ListFixedAssetWorkflowsResponse);
+
+  // Signals a fixed asset.
+  rpc SignalFixedAssetWorkflow(SignalFixedAssetWorkflowRequest) returns (SignalFixedAssetWorkflowResponse);
+}
+
+// The request of `StartFixedAssetWorkflow`.
+message StartFixedAssetWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string fixed_asset_id = 2;
+  FixedAsset fixed_asset = 3;
+  StartFixedAssetWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `StartFixedAssetWorkflow`.
+message StartFixedAssetWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FixedAsset fixed_asset = 1;
+  StartFixedAssetWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `AdvanceFixedAssetWorkflow`.
+message AdvanceFixedAssetWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string fixed_asset_id = 2;
+  FixedAsset fixed_asset = 3;
+  AdvanceFixedAssetWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `AdvanceFixedAssetWorkflow`.
+message AdvanceFixedAssetWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FixedAsset fixed_asset = 1;
+  AdvanceFixedAssetWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RetryFixedAssetWorkflow`.
+message RetryFixedAssetWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string fixed_asset_id = 2;
+  FixedAsset fixed_asset = 3;
+  RetryFixedAssetWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RetryFixedAssetWorkflow`.
+message RetryFixedAssetWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FixedAsset fixed_asset = 1;
+  RetryFixedAssetWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ResumeFixedAssetWorkflow`.
+message ResumeFixedAssetWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string fixed_asset_id = 2;
+  FixedAsset fixed_asset = 3;
+  ResumeFixedAssetWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ResumeFixedAssetWorkflow`.
+message ResumeFixedAssetWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FixedAsset fixed_asset = 1;
+  ResumeFixedAssetWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `InspectFixedAssetWorkflow`.
+message InspectFixedAssetWorkflowRequest {
+  acme.common.v1.RequestContext context = 1;
+  string fixed_asset_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `InspectFixedAssetWorkflow`.
+message InspectFixedAssetWorkflowResponse {
+  FixedAsset fixed_asset = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `ListFixedAssetWorkflows`.
+message ListFixedAssetWorkflowsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated FixedAssetStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListFixedAssetWorkflowsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListFixedAssetWorkflows`.
+message ListFixedAssetWorkflowsResponse {
+  repeated FixedAsset fixed_assets = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SignalFixedAssetWorkflow`.
+message SignalFixedAssetWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string fixed_asset_id = 2;
+  FixedAsset fixed_asset = 3;
+  SignalFixedAssetWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SignalFixedAssetWorkflow`.
+message SignalFixedAssetWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FixedAsset fixed_asset = 1;
+  SignalFixedAssetWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

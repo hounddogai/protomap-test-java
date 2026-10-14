@@ -1,0 +1,292 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.invoicing.v1;
+
+import "acme/common/v1/address.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/money.proto";
+import "acme/common/v1/operation.proto";
+import "acme/invoicing/v1/invoicing.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Invoicing.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/invoicing/v1;invoicingv1";
+option java_multiple_files = true;
+option java_outer_classname = "InvoiceTemplateCalculationServiceProto";
+option java_package = "com.acme.invoicing.v1";
+
+// Computes the figures of an invoice template, such as totals, taxes, and estimates.
+service InvoiceTemplateCalculationService {
+  // Calculates an invoice template.
+  rpc CalculateInvoiceTemplate(CalculateInvoiceTemplateRequest) returns (CalculateInvoiceTemplateResponse);
+
+  // Estimates an invoice template.
+  rpc EstimateInvoiceTemplate(EstimateInvoiceTemplateRequest) returns (EstimateInvoiceTemplateResponse);
+
+  // Quotes an invoice template.
+  rpc QuoteInvoiceTemplate(QuoteInvoiceTemplateRequest) returns (QuoteInvoiceTemplateResponse);
+
+  // Compares an invoice template.
+  rpc CompareInvoiceTemplateOptions(CompareInvoiceTemplateOptionsRequest) returns (CompareInvoiceTemplateOptionsResponse);
+
+  // Simulates an invoice template.
+  rpc SimulateInvoiceTemplate(SimulateInvoiceTemplateRequest) returns (SimulateInvoiceTemplateResponse);
+
+  // Explains an invoice template.
+  rpc ExplainInvoiceTemplateCalculation(ExplainInvoiceTemplateCalculationRequest) returns (ExplainInvoiceTemplateCalculationResponse);
+
+  // Returns an invoice template.
+  rpc GetInvoiceTemplateRates(GetInvoiceTemplateRatesRequest) returns (GetInvoiceTemplateRatesResponse);
+}
+
+// The request of `CalculateInvoiceTemplate`.
+message CalculateInvoiceTemplateRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string invoice_template_id = 2;
+  InvoiceTemplate invoice_template = 3;
+  CalculateInvoiceTemplateRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CalculateInvoiceTemplate`.
+message CalculateInvoiceTemplateResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated CalculateInvoiceTemplateResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  InvoiceTemplate invoice_template = 1;
+  CalculateInvoiceTemplateResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `EstimateInvoiceTemplate`.
+message EstimateInvoiceTemplateRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string invoice_template_id = 2;
+  InvoiceTemplate invoice_template = 3;
+  EstimateInvoiceTemplateRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `EstimateInvoiceTemplate`.
+message EstimateInvoiceTemplateResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated EstimateInvoiceTemplateResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  InvoiceTemplate invoice_template = 1;
+  EstimateInvoiceTemplateResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `QuoteInvoiceTemplate`.
+message QuoteInvoiceTemplateRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string invoice_template_id = 2;
+  InvoiceTemplate invoice_template = 3;
+  QuoteInvoiceTemplateRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `QuoteInvoiceTemplate`.
+message QuoteInvoiceTemplateResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated QuoteInvoiceTemplateResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  InvoiceTemplate invoice_template = 1;
+  QuoteInvoiceTemplateResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CompareInvoiceTemplateOptions`.
+message CompareInvoiceTemplateOptionsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string invoice_template_id = 2;
+  InvoiceTemplate invoice_template = 3;
+  CompareInvoiceTemplateOptionsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CompareInvoiceTemplateOptions`.
+message CompareInvoiceTemplateOptionsResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated CompareInvoiceTemplateOptionsResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  InvoiceTemplate invoice_template = 1;
+  CompareInvoiceTemplateOptionsResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SimulateInvoiceTemplate`.
+message SimulateInvoiceTemplateRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string invoice_template_id = 2;
+  InvoiceTemplate invoice_template = 3;
+  SimulateInvoiceTemplateRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SimulateInvoiceTemplate`.
+message SimulateInvoiceTemplateResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated SimulateInvoiceTemplateResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  InvoiceTemplate invoice_template = 1;
+  SimulateInvoiceTemplateResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExplainInvoiceTemplateCalculation`.
+message ExplainInvoiceTemplateCalculationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string invoice_template_id = 2;
+  InvoiceTemplate invoice_template = 3;
+  ExplainInvoiceTemplateCalculationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ExplainInvoiceTemplateCalculation`.
+message ExplainInvoiceTemplateCalculationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  InvoiceTemplate invoice_template = 1;
+  ExplainInvoiceTemplateCalculationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetInvoiceTemplateRates`.
+message GetInvoiceTemplateRatesRequest {
+  acme.common.v1.RequestContext context = 1;
+  string invoice_template_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetInvoiceTemplateRates`.
+message GetInvoiceTemplateRatesResponse {
+  InvoiceTemplate invoice_template = 1;
+  acme.common.v1.OperationResult result = 2;
+}

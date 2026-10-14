@@ -1,0 +1,279 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.insurance.v1;
+
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/insurance/v1/insurance.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Insurance.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/insurance/v1;insurancev1";
+option java_multiple_files = true;
+option java_outer_classname = "PolicyWorkflowServiceProto";
+option java_package = "com.acme.insurance.v1";
+
+// Runs the long-lived workflow that takes a policy from start to finish.
+service PolicyWorkflowService {
+  // Starts a policy.
+  rpc StartPolicyWorkflow(StartPolicyWorkflowRequest) returns (StartPolicyWorkflowResponse);
+
+  // Advances a policy.
+  rpc AdvancePolicyWorkflow(AdvancePolicyWorkflowRequest) returns (AdvancePolicyWorkflowResponse);
+
+  // Cancels a policy.
+  rpc CancelPolicyWorkflow(CancelPolicyWorkflowRequest) returns (CancelPolicyWorkflowResponse);
+
+  // Pauses a policy.
+  rpc PausePolicyWorkflow(PausePolicyWorkflowRequest) returns (PausePolicyWorkflowResponse);
+
+  // Resumes a policy.
+  rpc ResumePolicyWorkflow(ResumePolicyWorkflowRequest) returns (ResumePolicyWorkflowResponse);
+
+  // Lists policies a page at a time.
+  rpc ListPolicyWorkflows(ListPolicyWorkflowsRequest) returns (ListPolicyWorkflowsResponse);
+
+  // Signals a policy.
+  rpc SignalPolicyWorkflow(SignalPolicyWorkflowRequest) returns (SignalPolicyWorkflowResponse);
+}
+
+// The request of `StartPolicyWorkflow`.
+message StartPolicyWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string policy_id = 2;
+  Policy policy = 3;
+  StartPolicyWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `StartPolicyWorkflow`.
+message StartPolicyWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Policy policy = 1;
+  StartPolicyWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `AdvancePolicyWorkflow`.
+message AdvancePolicyWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string policy_id = 2;
+  Policy policy = 3;
+  AdvancePolicyWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `AdvancePolicyWorkflow`.
+message AdvancePolicyWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Policy policy = 1;
+  AdvancePolicyWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CancelPolicyWorkflow`.
+message CancelPolicyWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string policy_id = 2;
+  Policy policy = 3;
+  CancelPolicyWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CancelPolicyWorkflow`.
+message CancelPolicyWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Policy policy = 1;
+  CancelPolicyWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PausePolicyWorkflow`.
+message PausePolicyWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string policy_id = 2;
+  Policy policy = 3;
+  PausePolicyWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PausePolicyWorkflow`.
+message PausePolicyWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Policy policy = 1;
+  PausePolicyWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ResumePolicyWorkflow`.
+message ResumePolicyWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string policy_id = 2;
+  Policy policy = 3;
+  ResumePolicyWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ResumePolicyWorkflow`.
+message ResumePolicyWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Policy policy = 1;
+  ResumePolicyWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ListPolicyWorkflows`.
+message ListPolicyWorkflowsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated PolicyStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListPolicyWorkflowsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListPolicyWorkflows`.
+message ListPolicyWorkflowsResponse {
+  repeated Policy policies = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SignalPolicyWorkflow`.
+message SignalPolicyWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string policy_id = 2;
+  Policy policy = 3;
+  SignalPolicyWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SignalPolicyWorkflow`.
+message SignalPolicyWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Policy policy = 1;
+  SignalPolicyWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

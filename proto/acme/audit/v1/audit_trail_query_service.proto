@@ -1,0 +1,201 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.audit.v1;
+
+import "acme/audit/v1/audit.proto";
+import "acme/common/v1/audit.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Audit.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/audit/v1;auditv1";
+option java_multiple_files = true;
+option java_outer_classname = "AuditTrailQueryServiceProto";
+option java_package = "com.acme.audit.v1";
+
+// Answers read-only questions about audit trails, for screens and reports.
+service AuditTrailQueryService {
+  // Returns an audit trail.
+  rpc LookupAuditTrail(LookupAuditTrailRequest) returns (LookupAuditTrailResponse);
+
+  // Lists audit trails a page at a time.
+  rpc BrowseAuditTrails(BrowseAuditTrailsRequest) returns (BrowseAuditTrailsResponse);
+
+  // Lists audit trails a page at a time.
+  rpc FindAuditTrails(FindAuditTrailsRequest) returns (FindAuditTrailsResponse);
+
+  // Returns several audit trails at once.
+  rpc ResolveAuditTrails(ResolveAuditTrailsRequest) returns (ResolveAuditTrailsResponse);
+
+  // Streams every matching audit trail.
+  rpc ExportAuditTrails(ExportAuditTrailsRequest) returns (stream ExportAuditTrailsResponse);
+
+  // Summarizes an audit trail.
+  rpc SummarizeAuditTrails(SummarizeAuditTrailsRequest) returns (SummarizeAuditTrailsResponse);
+
+  // Lists audit trails a page at a time.
+  rpc SuggestAuditTrails(SuggestAuditTrailsRequest) returns (SuggestAuditTrailsResponse);
+}
+
+// The request of `LookupAuditTrail`.
+message LookupAuditTrailRequest {
+  acme.common.v1.RequestContext context = 1;
+  string audit_trail_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `LookupAuditTrail`.
+message LookupAuditTrailResponse {
+  AuditTrail audit_trail = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `BrowseAuditTrails`.
+message BrowseAuditTrailsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated AuditTrailStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  BrowseAuditTrailsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `BrowseAuditTrails`.
+message BrowseAuditTrailsResponse {
+  repeated AuditTrail audit_trails = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `FindAuditTrails`.
+message FindAuditTrailsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated AuditTrailStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  FindAuditTrailsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `FindAuditTrails`.
+message FindAuditTrailsResponse {
+  repeated AuditTrail audit_trails = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ResolveAuditTrails`.
+message ResolveAuditTrailsRequest {
+  acme.common.v1.RequestContext context = 1;
+  repeated string audit_trail_ids = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `ResolveAuditTrails`.
+message ResolveAuditTrailsResponse {
+  repeated AuditTrail audit_trails = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExportAuditTrails`.
+message ExportAuditTrailsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated AuditTrailStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  ExportAuditTrailsRequest.Filter filter = 2;
+  string format = 3;
+  google.protobuf.FieldMask fields = 4;
+  string destination_uri = 5;
+}
+
+// The response of `ExportAuditTrails`.
+message ExportAuditTrailsResponse {
+  AuditTrail audit_trail = 1;
+  string change_type = 2;
+  google.protobuf.Timestamp changed_at = 3;
+  int64 sequence = 4;
+  acme.common.v1.OperationResult result = 5;
+}
+
+// The request of `SummarizeAuditTrails`.
+message SummarizeAuditTrailsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string format = 1;
+    acme.common.v1.TimeWindow period = 2;
+    repeated string recipient_emails = 3;
+    string cron = 4;
+    map<string, string> filters = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string audit_trail_id = 2;
+  SummarizeAuditTrailsRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `SummarizeAuditTrails`.
+message SummarizeAuditTrailsResponse {
+  string report_id = 1;
+  string download_uri = 2;
+  map<string, string> summary = 3;
+  acme.common.v1.TimeWindow period = 4;
+  acme.common.v1.OperationResult result = 5;
+}
+
+// The request of `SuggestAuditTrails`.
+message SuggestAuditTrailsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated AuditTrailStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  SuggestAuditTrailsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `SuggestAuditTrails`.
+message SuggestAuditTrailsResponse {
+  repeated AuditTrail audit_trails = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}

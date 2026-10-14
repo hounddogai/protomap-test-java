@@ -1,0 +1,335 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.budgeting.v1;
+
+import "acme/budgeting/v1/budgeting.proto";
+import "acme/common/v1/address.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/money.proto";
+import "acme/common/v1/operation.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Budgeting.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/budgeting/v1;budgetingv1";
+option java_multiple_files = true;
+option java_outer_classname = "VarianceCalculationServiceProto";
+option java_package = "com.acme.budgeting.v1";
+
+// Computes the figures of a variance, such as totals, taxes, and estimates.
+service VarianceCalculationService {
+  // Calculates a variance.
+  rpc CalculateVariance(CalculateVarianceRequest) returns (CalculateVarianceResponse);
+
+  // Estimates a variance.
+  rpc EstimateVariance(EstimateVarianceRequest) returns (EstimateVarianceResponse);
+
+  // Quotes a variance.
+  rpc QuoteVariance(QuoteVarianceRequest) returns (QuoteVarianceResponse);
+
+  // Compares a variance.
+  rpc CompareVarianceOptions(CompareVarianceOptionsRequest) returns (CompareVarianceOptionsResponse);
+
+  // Recalculates a variance.
+  rpc RecalculateVariances(RecalculateVariancesRequest) returns (RecalculateVariancesResponse);
+
+  // Simulates a variance.
+  rpc SimulateVariance(SimulateVarianceRequest) returns (SimulateVarianceResponse);
+
+  // Explains a variance.
+  rpc ExplainVarianceCalculation(ExplainVarianceCalculationRequest) returns (ExplainVarianceCalculationResponse);
+
+  // Returns a variance.
+  rpc GetVarianceRates(GetVarianceRatesRequest) returns (GetVarianceRatesResponse);
+}
+
+// The request of `CalculateVariance`.
+message CalculateVarianceRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string variance_id = 2;
+  Variance variance = 3;
+  CalculateVarianceRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CalculateVariance`.
+message CalculateVarianceResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated CalculateVarianceResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Variance variance = 1;
+  CalculateVarianceResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `EstimateVariance`.
+message EstimateVarianceRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string variance_id = 2;
+  Variance variance = 3;
+  EstimateVarianceRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `EstimateVariance`.
+message EstimateVarianceResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated EstimateVarianceResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Variance variance = 1;
+  EstimateVarianceResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `QuoteVariance`.
+message QuoteVarianceRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string variance_id = 2;
+  Variance variance = 3;
+  QuoteVarianceRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `QuoteVariance`.
+message QuoteVarianceResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated QuoteVarianceResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Variance variance = 1;
+  QuoteVarianceResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CompareVarianceOptions`.
+message CompareVarianceOptionsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string variance_id = 2;
+  Variance variance = 3;
+  CompareVarianceOptionsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CompareVarianceOptions`.
+message CompareVarianceOptionsResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated CompareVarianceOptionsResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Variance variance = 1;
+  CompareVarianceOptionsResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RecalculateVariances`.
+message RecalculateVariancesRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string variance_id = 2;
+  Variance variance = 3;
+  RecalculateVariancesRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RecalculateVariances`.
+message RecalculateVariancesResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated RecalculateVariancesResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Variance variance = 1;
+  RecalculateVariancesResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SimulateVariance`.
+message SimulateVarianceRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string variance_id = 2;
+  Variance variance = 3;
+  SimulateVarianceRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SimulateVariance`.
+message SimulateVarianceResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated SimulateVarianceResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Variance variance = 1;
+  SimulateVarianceResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExplainVarianceCalculation`.
+message ExplainVarianceCalculationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string variance_id = 2;
+  Variance variance = 3;
+  ExplainVarianceCalculationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ExplainVarianceCalculation`.
+message ExplainVarianceCalculationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Variance variance = 1;
+  ExplainVarianceCalculationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetVarianceRates`.
+message GetVarianceRatesRequest {
+  acme.common.v1.RequestContext context = 1;
+  string variance_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetVarianceRates`.
+message GetVarianceRatesResponse {
+  Variance variance = 1;
+  acme.common.v1.OperationResult result = 2;
+}

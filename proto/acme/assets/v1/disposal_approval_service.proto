@@ -1,0 +1,295 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.assets.v1;
+
+import "acme/assets/v1/assets.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/identity/v1/refs.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Assets.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/assets/v1;assetsv1";
+option java_multiple_files = true;
+option java_outer_classname = "DisposalApprovalServiceProto";
+option java_package = "com.acme.assets.v1";
+
+// Routes disposals through approval, with escalation and delegation.
+service DisposalApprovalService {
+  // Submits a disposal.
+  rpc SubmitDisposal(SubmitDisposalRequest) returns (SubmitDisposalResponse);
+
+  // Approves a disposal.
+  rpc ApproveDisposal(ApproveDisposalRequest) returns (ApproveDisposalResponse);
+
+  // Rejects a disposal.
+  rpc RejectDisposal(RejectDisposalRequest) returns (RejectDisposalResponse);
+
+  // Lists disposals a page at a time.
+  rpc ListPendingDisposals(ListPendingDisposalsRequest) returns (ListPendingDisposalsResponse);
+
+  // Delegates a disposal.
+  rpc DelegateDisposalApproval(DelegateDisposalApprovalRequest) returns (DelegateDisposalApprovalResponse);
+
+  // Recalls a disposal.
+  rpc RecallDisposal(RecallDisposalRequest) returns (RecallDisposalResponse);
+
+  // Returns a disposal.
+  rpc GetDisposalApprovalStatus(GetDisposalApprovalStatusRequest) returns (GetDisposalApprovalStatusResponse);
+
+  // Comments a disposal.
+  rpc CommentDisposalApproval(CommentDisposalApprovalRequest) returns (CommentDisposalApprovalResponse);
+}
+
+// The request of `SubmitDisposal`.
+message SubmitDisposalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string disposal_id = 2;
+  Disposal disposal = 3;
+  SubmitDisposalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SubmitDisposal`.
+message SubmitDisposalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Disposal disposal = 1;
+  SubmitDisposalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ApproveDisposal`.
+message ApproveDisposalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string disposal_id = 2;
+  Disposal disposal = 3;
+  ApproveDisposalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ApproveDisposal`.
+message ApproveDisposalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Disposal disposal = 1;
+  ApproveDisposalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RejectDisposal`.
+message RejectDisposalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string disposal_id = 2;
+  Disposal disposal = 3;
+  RejectDisposalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RejectDisposal`.
+message RejectDisposalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Disposal disposal = 1;
+  RejectDisposalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ListPendingDisposals`.
+message ListPendingDisposalsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated DisposalStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListPendingDisposalsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListPendingDisposals`.
+message ListPendingDisposalsResponse {
+  repeated Disposal disposals = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `DelegateDisposalApproval`.
+message DelegateDisposalApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string disposal_id = 2;
+  Disposal disposal = 3;
+  DelegateDisposalApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `DelegateDisposalApproval`.
+message DelegateDisposalApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Disposal disposal = 1;
+  DelegateDisposalApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RecallDisposal`.
+message RecallDisposalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string disposal_id = 2;
+  Disposal disposal = 3;
+  RecallDisposalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RecallDisposal`.
+message RecallDisposalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Disposal disposal = 1;
+  RecallDisposalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetDisposalApprovalStatus`.
+message GetDisposalApprovalStatusRequest {
+  acme.common.v1.RequestContext context = 1;
+  string disposal_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetDisposalApprovalStatus`.
+message GetDisposalApprovalStatusResponse {
+  Disposal disposal = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `CommentDisposalApproval`.
+message CommentDisposalApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string disposal_id = 2;
+  Disposal disposal = 3;
+  CommentDisposalApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CommentDisposalApproval`.
+message CommentDisposalApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Disposal disposal = 1;
+  CommentDisposalApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

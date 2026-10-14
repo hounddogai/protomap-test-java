@@ -1,0 +1,266 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.contracts.v1;
+
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/contracts/v1/contracts.proto";
+import "acme/identity/v1/refs.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Contracts.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/contracts/v1;contractsv1";
+option java_multiple_files = true;
+option java_outer_classname = "ObligationApprovalServiceProto";
+option java_package = "com.acme.contracts.v1";
+
+// Routes obligations through approval, with escalation and delegation.
+service ObligationApprovalService {
+  // Submits an obligation.
+  rpc SubmitObligation(SubmitObligationRequest) returns (SubmitObligationResponse);
+
+  // Approves an obligation.
+  rpc ApproveObligation(ApproveObligationRequest) returns (ApproveObligationResponse);
+
+  // Rejects an obligation.
+  rpc RejectObligation(RejectObligationRequest) returns (RejectObligationResponse);
+
+  // Escalates an obligation.
+  rpc EscalateObligation(EscalateObligationRequest) returns (EscalateObligationResponse);
+
+  // Recalls an obligation.
+  rpc RecallObligation(RecallObligationRequest) returns (RecallObligationResponse);
+
+  // Returns an obligation.
+  rpc GetObligationApprovalStatus(GetObligationApprovalStatusRequest) returns (GetObligationApprovalStatusResponse);
+
+  // Comments an obligation.
+  rpc CommentObligationApproval(CommentObligationApprovalRequest) returns (CommentObligationApprovalResponse);
+}
+
+// The request of `SubmitObligation`.
+message SubmitObligationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string obligation_id = 2;
+  Obligation obligation = 3;
+  SubmitObligationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SubmitObligation`.
+message SubmitObligationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Obligation obligation = 1;
+  SubmitObligationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ApproveObligation`.
+message ApproveObligationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string obligation_id = 2;
+  Obligation obligation = 3;
+  ApproveObligationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ApproveObligation`.
+message ApproveObligationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Obligation obligation = 1;
+  ApproveObligationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RejectObligation`.
+message RejectObligationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string obligation_id = 2;
+  Obligation obligation = 3;
+  RejectObligationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RejectObligation`.
+message RejectObligationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Obligation obligation = 1;
+  RejectObligationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `EscalateObligation`.
+message EscalateObligationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string obligation_id = 2;
+  Obligation obligation = 3;
+  EscalateObligationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `EscalateObligation`.
+message EscalateObligationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Obligation obligation = 1;
+  EscalateObligationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RecallObligation`.
+message RecallObligationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string obligation_id = 2;
+  Obligation obligation = 3;
+  RecallObligationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RecallObligation`.
+message RecallObligationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Obligation obligation = 1;
+  RecallObligationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetObligationApprovalStatus`.
+message GetObligationApprovalStatusRequest {
+  acme.common.v1.RequestContext context = 1;
+  string obligation_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetObligationApprovalStatus`.
+message GetObligationApprovalStatusResponse {
+  Obligation obligation = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `CommentObligationApproval`.
+message CommentObligationApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string obligation_id = 2;
+  Obligation obligation = 3;
+  CommentObligationApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CommentObligationApproval`.
+message CommentObligationApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Obligation obligation = 1;
+  CommentObligationApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

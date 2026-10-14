@@ -1,0 +1,334 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.banking.v1;
+
+import "acme/banking/v1/banking.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Banking.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/banking/v1;bankingv1";
+option java_multiple_files = true;
+option java_outer_classname = "StatementWorkflowServiceProto";
+option java_package = "com.acme.banking.v1";
+
+// Runs the long-lived workflow that takes a statement from start to finish.
+service StatementWorkflowService {
+  // Starts a statement.
+  rpc StartStatementWorkflow(StartStatementWorkflowRequest) returns (StartStatementWorkflowResponse);
+
+  // Advances a statement.
+  rpc AdvanceStatementWorkflow(AdvanceStatementWorkflowRequest) returns (AdvanceStatementWorkflowResponse);
+
+  // Cancels a statement.
+  rpc CancelStatementWorkflow(CancelStatementWorkflowRequest) returns (CancelStatementWorkflowResponse);
+
+  // Retrys a statement.
+  rpc RetryStatementWorkflow(RetryStatementWorkflowRequest) returns (RetryStatementWorkflowResponse);
+
+  // Pauses a statement.
+  rpc PauseStatementWorkflow(PauseStatementWorkflowRequest) returns (PauseStatementWorkflowResponse);
+
+  // Resumes a statement.
+  rpc ResumeStatementWorkflow(ResumeStatementWorkflowRequest) returns (ResumeStatementWorkflowResponse);
+
+  // Returns a statement.
+  rpc InspectStatementWorkflow(InspectStatementWorkflowRequest) returns (InspectStatementWorkflowResponse);
+
+  // Lists statements a page at a time.
+  rpc ListStatementWorkflows(ListStatementWorkflowsRequest) returns (ListStatementWorkflowsResponse);
+
+  // Signals a statement.
+  rpc SignalStatementWorkflow(SignalStatementWorkflowRequest) returns (SignalStatementWorkflowResponse);
+}
+
+// The request of `StartStatementWorkflow`.
+message StartStatementWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string statement_id = 2;
+  Statement statement = 3;
+  StartStatementWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `StartStatementWorkflow`.
+message StartStatementWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Statement statement = 1;
+  StartStatementWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `AdvanceStatementWorkflow`.
+message AdvanceStatementWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string statement_id = 2;
+  Statement statement = 3;
+  AdvanceStatementWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `AdvanceStatementWorkflow`.
+message AdvanceStatementWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Statement statement = 1;
+  AdvanceStatementWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CancelStatementWorkflow`.
+message CancelStatementWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string statement_id = 2;
+  Statement statement = 3;
+  CancelStatementWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CancelStatementWorkflow`.
+message CancelStatementWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Statement statement = 1;
+  CancelStatementWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RetryStatementWorkflow`.
+message RetryStatementWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string statement_id = 2;
+  Statement statement = 3;
+  RetryStatementWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RetryStatementWorkflow`.
+message RetryStatementWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Statement statement = 1;
+  RetryStatementWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PauseStatementWorkflow`.
+message PauseStatementWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string statement_id = 2;
+  Statement statement = 3;
+  PauseStatementWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PauseStatementWorkflow`.
+message PauseStatementWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Statement statement = 1;
+  PauseStatementWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ResumeStatementWorkflow`.
+message ResumeStatementWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string statement_id = 2;
+  Statement statement = 3;
+  ResumeStatementWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ResumeStatementWorkflow`.
+message ResumeStatementWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Statement statement = 1;
+  ResumeStatementWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `InspectStatementWorkflow`.
+message InspectStatementWorkflowRequest {
+  acme.common.v1.RequestContext context = 1;
+  string statement_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `InspectStatementWorkflow`.
+message InspectStatementWorkflowResponse {
+  Statement statement = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `ListStatementWorkflows`.
+message ListStatementWorkflowsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated StatementStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListStatementWorkflowsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListStatementWorkflows`.
+message ListStatementWorkflowsResponse {
+  repeated Statement statements = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SignalStatementWorkflow`.
+message SignalStatementWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string statement_id = 2;
+  Statement statement = 3;
+  SignalStatementWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SignalStatementWorkflow`.
+message SignalStatementWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Statement statement = 1;
+  SignalStatementWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

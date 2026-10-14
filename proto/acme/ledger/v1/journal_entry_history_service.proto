@@ -1,0 +1,215 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.ledger.v1;
+
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/ledger/v1/ledger.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Ledger.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/ledger/v1;ledgerv1";
+option java_multiple_files = true;
+option java_outer_classname = "JournalEntryHistoryServiceProto";
+option java_package = "com.acme.ledger.v1";
+
+// Keeps every version of a journal entry and restores earlier ones.
+service JournalEntryHistoryService {
+  // Records a journal entry.
+  rpc RecordJournalEntryVersion(RecordJournalEntryVersionRequest) returns (RecordJournalEntryVersionResponse);
+
+  // Lists journal entries a page at a time.
+  rpc ListJournalEntryVersions(ListJournalEntryVersionsRequest) returns (ListJournalEntryVersionsResponse);
+
+  // Compares a journal entry.
+  rpc CompareJournalEntryVersions(CompareJournalEntryVersionsRequest) returns (CompareJournalEntryVersionsResponse);
+
+  // Reverts a journal entry.
+  rpc RevertJournalEntry(RevertJournalEntryRequest) returns (RevertJournalEntryResponse);
+
+  // Annotates a journal entry.
+  rpc AnnotateJournalEntryVersion(AnnotateJournalEntryVersionRequest) returns (AnnotateJournalEntryVersionResponse);
+
+  // Deletes a journal entry.
+  rpc PruneJournalEntryVersions(PruneJournalEntryVersionsRequest) returns (PruneJournalEntryVersionsResponse);
+}
+
+// The request of `RecordJournalEntryVersion`.
+message RecordJournalEntryVersionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    int64 version = 1;
+    int64 other_version = 2;
+    bytes snapshot = 3;
+    string author_email = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string journal_entry_id = 2;
+  JournalEntry journal_entry = 3;
+  RecordJournalEntryVersionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RecordJournalEntryVersion`.
+message RecordJournalEntryVersionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  JournalEntry journal_entry = 1;
+  RecordJournalEntryVersionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ListJournalEntryVersions`.
+message ListJournalEntryVersionsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated JournalEntryStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListJournalEntryVersionsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListJournalEntryVersions`.
+message ListJournalEntryVersionsResponse {
+  repeated JournalEntry journal_entries = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CompareJournalEntryVersions`.
+message CompareJournalEntryVersionsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    int64 version = 1;
+    int64 other_version = 2;
+    bytes snapshot = 3;
+    string author_email = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string journal_entry_id = 2;
+  JournalEntry journal_entry = 3;
+  CompareJournalEntryVersionsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CompareJournalEntryVersions`.
+message CompareJournalEntryVersionsResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  JournalEntry journal_entry = 1;
+  CompareJournalEntryVersionsResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RevertJournalEntry`.
+message RevertJournalEntryRequest {
+  // What the operation needs besides the record.
+  message Details {
+    int64 version = 1;
+    int64 other_version = 2;
+    bytes snapshot = 3;
+    string author_email = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string journal_entry_id = 2;
+  JournalEntry journal_entry = 3;
+  RevertJournalEntryRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RevertJournalEntry`.
+message RevertJournalEntryResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  JournalEntry journal_entry = 1;
+  RevertJournalEntryResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `AnnotateJournalEntryVersion`.
+message AnnotateJournalEntryVersionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    int64 version = 1;
+    int64 other_version = 2;
+    bytes snapshot = 3;
+    string author_email = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string journal_entry_id = 2;
+  JournalEntry journal_entry = 3;
+  AnnotateJournalEntryVersionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `AnnotateJournalEntryVersion`.
+message AnnotateJournalEntryVersionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  JournalEntry journal_entry = 1;
+  AnnotateJournalEntryVersionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PruneJournalEntryVersions`.
+message PruneJournalEntryVersionsRequest {
+  acme.common.v1.RequestContext context = 1;
+  string journal_entry_id = 2;
+  string reason = 3;
+  string etag = 4;
+  bool force = 5;
+}
+
+// The response of `PruneJournalEntryVersions`.
+message PruneJournalEntryVersionsResponse {
+  acme.common.v1.OperationResult result = 1;
+  google.protobuf.Timestamp effective_at = 2;
+}

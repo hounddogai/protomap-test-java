@@ -1,0 +1,288 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.risk.v1;
+
+import "acme/common/v1/address.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/money.proto";
+import "acme/common/v1/operation.proto";
+import "acme/risk/v1/risk.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Risk.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/risk/v1;riskv1";
+option java_multiple_files = true;
+option java_outer_classname = "StressTestValidationServiceProto";
+option java_package = "com.acme.risk.v1";
+
+// Checks stress tests against the rules before anything acts on them.
+service StressTestValidationService {
+  // Validates a stress test.
+  rpc ValidateStressTest(ValidateStressTestRequest) returns (ValidateStressTestResponse);
+
+  // Previews a stress test.
+  rpc PreviewStressTest(PreviewStressTestRequest) returns (PreviewStressTestResponse);
+
+  // Checks a stress test.
+  rpc CheckStressTestEligibility(CheckStressTestEligibilityRequest) returns (CheckStressTestEligibilityResponse);
+
+  // Normalizes a stress test.
+  rpc NormalizeStressTest(NormalizeStressTestRequest) returns (NormalizeStressTestResponse);
+
+  // Explains a stress test.
+  rpc ExplainStressTestDecision(ExplainStressTestDecisionRequest) returns (ExplainStressTestDecisionResponse);
+
+  // Scores a stress test.
+  rpc ScoreStressTest(ScoreStressTestRequest) returns (ScoreStressTestResponse);
+
+  // Lints a stress test.
+  rpc LintStressTests(LintStressTestsRequest) returns (LintStressTestsResponse);
+}
+
+// The request of `ValidateStressTest`.
+message ValidateStressTestRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string stress_test_id = 2;
+  StressTest stress_test = 3;
+  ValidateStressTestRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ValidateStressTest`.
+message ValidateStressTestResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  StressTest stress_test = 1;
+  ValidateStressTestResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PreviewStressTest`.
+message PreviewStressTestRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string stress_test_id = 2;
+  StressTest stress_test = 3;
+  PreviewStressTestRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PreviewStressTest`.
+message PreviewStressTestResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  StressTest stress_test = 1;
+  PreviewStressTestResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CheckStressTestEligibility`.
+message CheckStressTestEligibilityRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string stress_test_id = 2;
+  StressTest stress_test = 3;
+  CheckStressTestEligibilityRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CheckStressTestEligibility`.
+message CheckStressTestEligibilityResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  StressTest stress_test = 1;
+  CheckStressTestEligibilityResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `NormalizeStressTest`.
+message NormalizeStressTestRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string stress_test_id = 2;
+  StressTest stress_test = 3;
+  NormalizeStressTestRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `NormalizeStressTest`.
+message NormalizeStressTestResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  StressTest stress_test = 1;
+  NormalizeStressTestResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExplainStressTestDecision`.
+message ExplainStressTestDecisionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string stress_test_id = 2;
+  StressTest stress_test = 3;
+  ExplainStressTestDecisionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ExplainStressTestDecision`.
+message ExplainStressTestDecisionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  StressTest stress_test = 1;
+  ExplainStressTestDecisionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ScoreStressTest`.
+message ScoreStressTestRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string stress_test_id = 2;
+  StressTest stress_test = 3;
+  ScoreStressTestRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ScoreStressTest`.
+message ScoreStressTestResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated ScoreStressTestResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  StressTest stress_test = 1;
+  ScoreStressTestResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `LintStressTests`.
+message LintStressTestsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string stress_test_id = 2;
+  StressTest stress_test = 3;
+  LintStressTestsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `LintStressTests`.
+message LintStressTestsResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  StressTest stress_test = 1;
+  LintStressTestsResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

@@ -1,0 +1,145 @@
+package com.acme.finance.domains.invoicing;
+
+import com.acme.audiences.v1.AudienceServiceGrpc;
+import com.acme.audiences.v1.BatchGetAudiencesRequest;
+import com.acme.audiences.v1.BatchGetAudiencesResponse;
+import com.acme.audit.v1.AuditTrail;
+import com.acme.audit.v1.AuditTrailCardSettlement;
+import com.acme.audit.v1.AuditTrailHistoryServiceGrpc;
+import com.acme.audit.v1.RevertAuditTrailRequest;
+import com.acme.audit.v1.RevertAuditTrailResponse;
+import com.acme.collections.v1.PaymentPromise;
+import com.acme.collections.v1.PaymentPromiseWorkflowServiceGrpc;
+import com.acme.collections.v1.RetryPaymentPromiseWorkflowRequest;
+import com.acme.collections.v1.RetryPaymentPromiseWorkflowResponse;
+import com.acme.common.v1.AuditInfo;
+import com.acme.common.v1.ContactInfo;
+import com.acme.common.v1.OperationResult;
+import com.acme.common.v1.PostalAddress;
+import com.acme.customers.v1.CalculatePreferenceRequest;
+import com.acme.customers.v1.CalculatePreferenceResponse;
+import com.acme.customers.v1.CreateCustomerRequest;
+import com.acme.customers.v1.CreateCustomerResponse;
+import com.acme.customers.v1.Customer;
+import com.acme.customers.v1.CustomerRef;
+import com.acme.customers.v1.CustomerServiceGrpc;
+import com.acme.customers.v1.CustomerValidationServiceGrpc;
+import com.acme.customers.v1.FindHouseholdsRequest;
+import com.acme.customers.v1.FindHouseholdsResponse;
+import com.acme.customers.v1.HouseholdQueryServiceGrpc;
+import com.acme.customers.v1.ScoreCustomerRequest;
+import com.acme.customers.v1.ScoreCustomerResponse;
+import com.acme.documents.v1.CountDocumentsRequest;
+import com.acme.documents.v1.CountDocumentsResponse;
+import com.acme.documents.v1.DocumentQueryServiceGrpc;
+import com.acme.finance.platform.ChannelRegistry;
+import com.acme.finance.platform.JsonCodec;
+import com.acme.finance.platform.RpcSupport;
+import com.acme.identity.v1.UserRef;
+import com.acme.invoicing.v1.ApproveInvoiceBatchRequest;
+import com.acme.invoicing.v1.ApproveInvoiceBatchResponse;
+import com.acme.invoicing.v1.CommentInvoiceBatchApprovalRequest;
+import com.acme.invoicing.v1.CommentInvoiceBatchApprovalResponse;
+import com.acme.invoicing.v1.CountEInvoiceTotalsRequest;
+import com.acme.invoicing.v1.CountEInvoiceTotalsResponse;
+import com.acme.invoicing.v1.DelegateInvoiceBatchApprovalRequest;
+import com.acme.invoicing.v1.DelegateInvoiceBatchApprovalResponse;
+import com.acme.invoicing.v1.EInvoiceReportingServiceGrpc;
+import com.acme.invoicing.v1.EscalateInvoiceBatchRequest;
+import com.acme.invoicing.v1.EscalateInvoiceBatchResponse;
+import com.acme.invoicing.v1.ExplainInvoiceBatchDecisionRequest;
+import com.acme.invoicing.v1.ExplainInvoiceBatchDecisionResponse;
+import com.acme.invoicing.v1.ExportInvoiceBatchesRequest;
+import com.acme.invoicing.v1.ExportInvoiceBatchesResponse;
+import com.acme.invoicing.v1.GetInvoiceBatchRequest;
+import com.acme.invoicing.v1.GetInvoiceBatchResponse;
+import com.acme.invoicing.v1.InvoiceBatch;
+import com.acme.invoicing.v1.InvoiceBatchBankSettlement;
+import com.acme.invoicing.v1.InvoiceBatchQueryServiceGrpc;
+import com.acme.invoicing.v1.InvoiceBatchServiceGrpc;
+import com.acme.invoicing.v1.InvoiceBatchValidationServiceGrpc;
+import com.acme.invoicing.v1.InvoiceTemplate;
+import com.acme.invoicing.v1.InvoiceTemplateCalculationServiceGrpc;
+import com.acme.invoicing.v1.RecallInvoiceBatchRequest;
+import com.acme.invoicing.v1.RecallInvoiceBatchResponse;
+import com.acme.invoicing.v1.RejectInvoiceBatchRequest;
+import com.acme.invoicing.v1.RejectInvoiceBatchResponse;
+import com.acme.invoicing.v1.SimulateInvoiceTemplateRequest;
+import com.acme.invoicing.v1.SimulateInvoiceTemplateResponse;
+import com.acme.invoicing.v1.SubmitInvoiceBatchRequest;
+import com.acme.invoicing.v1.SubmitInvoiceBatchResponse;
+import com.acme.ledger.v1.PostingBatchNotificationServiceGrpc;
+import com.acme.ledger.v1.SendLedgerAccountTestNoticeRequest;
+import com.acme.ledger.v1.SendLedgerAccountTestNoticeResponse;
+import com.acme.ledger.v1.SubscribePostingBatchUpdatesRequest;
+import com.acme.ledger.v1.SubscribePostingBatchUpdatesResponse;
+import com.acme.payroll.v1.SubmitTaxWithholdingRequest;
+import com.acme.payroll.v1.SubmitTaxWithholdingResponse;
+import com.acme.payroll.v1.TaxWithholding;
+import com.acme.payroll.v1.TaxWithholdingApprovalServiceGrpc;
+import com.acme.suppliers.v1.RetrySupplierContractWorkflowRequest;
+import com.acme.suppliers.v1.RetrySupplierContractWorkflowResponse;
+import com.acme.suppliers.v1.SupplierContract;
+import com.acme.suppliers.v1.SupplierContractAttachment;
+import com.acme.suppliers.v1.SupplierContractWorkflowServiceGrpc;
+import com.acme.treasury.v1.BankTransfer;
+import com.acme.treasury.v1.CancelBankTransferWorkflowRequest;
+import com.acme.treasury.v1.CancelBankTransferWorkflowResponse;
+import com.google.protobuf.Any;
+import io.grpc.CallOptions;
+import io.grpc.MethodDescriptor;
+import io.grpc.protobuf.ProtoUtils;
+import io.grpc.stub.ClientCalls;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
+import java.util.concurrent.TimeUnit;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+
+@Component
+public final class InvoiceBatchApprovalRequestMapperImpl implements InvoiceBatchApprovalRequestMapper {
+    @Override
+    public CountDocumentsRequest submitInvoiceBatchStage0(SubmitInvoiceBatchRequest request) {
+        return CountDocumentsRequest.newBuilder()
+                .setContext(request.getContext())
+                .setFilter(CountDocumentsRequest.Filter.newBuilder()
+                        .setCreatedAfter(request.getInvoiceBatch().getAudit().getCreatedAt())
+                        .putAllLabels(request.getInvoiceBatch().getMetadataMap())
+                        .setOwnerId(request.getInvoiceBatchId())
+                        .setRegion(request.getInvoiceBatch().getBillingAddress().getRegion())
+                        .build())
+                .build();
+    }
+
+    @Override
+    public RetryPaymentPromiseWorkflowRequest escalateInvoiceBatchStage2(EscalateInvoiceBatchRequest request, RetrySupplierContractWorkflowResponse reply0) {
+        return RetryPaymentPromiseWorkflowRequest.newBuilder()
+                .setContext(request.getContext())
+                .setPaymentPromise(PaymentPromise.newBuilder()
+                        .setLocation(PostalAddress.newBuilder()
+                                .setPostalCode(reply0.getSupplierContract().getBillingAddress().getPostalCode())
+                                .build())
+                        .setOrganizer(UserRef.newBuilder()
+                                .setDisplayName(reply0.getSupplierContract().getCounterparty().getDisplayName())
+                                .build())
+                        .build())
+                .build();
+    }
+
+    @Override
+    public GetInvoiceBatchRequest delegateInvoiceBatchApprovalStage0(DelegateInvoiceBatchApprovalRequest request) {
+        return GetInvoiceBatchRequest.newBuilder()
+                .setContext(request.getContext())
+                .setInvoiceBatchId(request.getInvoiceBatch().getInvoiceBatchId())
+                .build();
+    }
+}

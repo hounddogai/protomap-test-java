@@ -1,0 +1,253 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.lending.v1;
+
+import "acme/common/v1/address.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/money.proto";
+import "acme/common/v1/operation.proto";
+import "acme/lending/v1/lending.proto";
+import "google/protobuf/field_mask.proto";
+
+option csharp_namespace = "Acme.Lending.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/lending/v1;lendingv1";
+option java_multiple_files = true;
+option java_outer_classname = "CollateralCalculationServiceProto";
+option java_package = "com.acme.lending.v1";
+
+// Computes the figures of a collateral, such as totals, taxes, and estimates.
+service CollateralCalculationService {
+  // Calculates a collateral.
+  rpc CalculateCollateral(CalculateCollateralRequest) returns (CalculateCollateralResponse);
+
+  // Estimates a collateral.
+  rpc EstimateCollateral(EstimateCollateralRequest) returns (EstimateCollateralResponse);
+
+  // Quotes a collateral.
+  rpc QuoteCollateral(QuoteCollateralRequest) returns (QuoteCollateralResponse);
+
+  // Compares a collateral.
+  rpc CompareCollateralOptions(CompareCollateralOptionsRequest) returns (CompareCollateralOptionsResponse);
+
+  // Simulates a collateral.
+  rpc SimulateCollateral(SimulateCollateralRequest) returns (SimulateCollateralResponse);
+
+  // Returns a collateral.
+  rpc GetCollateralRates(GetCollateralRatesRequest) returns (GetCollateralRatesResponse);
+}
+
+// The request of `CalculateCollateral`.
+message CalculateCollateralRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string collateral_id = 2;
+  Collateral collateral = 3;
+  CalculateCollateralRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CalculateCollateral`.
+message CalculateCollateralResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated CalculateCollateralResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Collateral collateral = 1;
+  CalculateCollateralResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `EstimateCollateral`.
+message EstimateCollateralRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string collateral_id = 2;
+  Collateral collateral = 3;
+  EstimateCollateralRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `EstimateCollateral`.
+message EstimateCollateralResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated EstimateCollateralResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Collateral collateral = 1;
+  EstimateCollateralResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `QuoteCollateral`.
+message QuoteCollateralRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string collateral_id = 2;
+  Collateral collateral = 3;
+  QuoteCollateralRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `QuoteCollateral`.
+message QuoteCollateralResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated QuoteCollateralResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Collateral collateral = 1;
+  QuoteCollateralResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CompareCollateralOptions`.
+message CompareCollateralOptionsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string collateral_id = 2;
+  Collateral collateral = 3;
+  CompareCollateralOptionsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CompareCollateralOptions`.
+message CompareCollateralOptionsResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated CompareCollateralOptionsResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Collateral collateral = 1;
+  CompareCollateralOptionsResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SimulateCollateral`.
+message SimulateCollateralRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string collateral_id = 2;
+  Collateral collateral = 3;
+  SimulateCollateralRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SimulateCollateral`.
+message SimulateCollateralResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated SimulateCollateralResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Collateral collateral = 1;
+  SimulateCollateralResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetCollateralRates`.
+message GetCollateralRatesRequest {
+  acme.common.v1.RequestContext context = 1;
+  string collateral_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetCollateralRates`.
+message GetCollateralRatesResponse {
+  Collateral collateral = 1;
+  acme.common.v1.OperationResult result = 2;
+}

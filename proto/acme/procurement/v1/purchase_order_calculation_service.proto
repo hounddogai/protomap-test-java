@@ -1,0 +1,253 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.procurement.v1;
+
+import "acme/common/v1/address.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/money.proto";
+import "acme/common/v1/operation.proto";
+import "acme/procurement/v1/procurement.proto";
+import "google/protobuf/field_mask.proto";
+
+option csharp_namespace = "Acme.Procurement.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/procurement/v1;procurementv1";
+option java_multiple_files = true;
+option java_outer_classname = "PurchaseOrderCalculationServiceProto";
+option java_package = "com.acme.procurement.v1";
+
+// Computes the figures of a purchase order, such as totals, taxes, and estimates.
+service PurchaseOrderCalculationService {
+  // Calculates a purchase order.
+  rpc CalculatePurchaseOrder(CalculatePurchaseOrderRequest) returns (CalculatePurchaseOrderResponse);
+
+  // Estimates a purchase order.
+  rpc EstimatePurchaseOrder(EstimatePurchaseOrderRequest) returns (EstimatePurchaseOrderResponse);
+
+  // Quotes a purchase order.
+  rpc QuotePurchaseOrder(QuotePurchaseOrderRequest) returns (QuotePurchaseOrderResponse);
+
+  // Compares a purchase order.
+  rpc ComparePurchaseOrderOptions(ComparePurchaseOrderOptionsRequest) returns (ComparePurchaseOrderOptionsResponse);
+
+  // Simulates a purchase order.
+  rpc SimulatePurchaseOrder(SimulatePurchaseOrderRequest) returns (SimulatePurchaseOrderResponse);
+
+  // Returns a purchase order.
+  rpc GetPurchaseOrderRates(GetPurchaseOrderRatesRequest) returns (GetPurchaseOrderRatesResponse);
+}
+
+// The request of `CalculatePurchaseOrder`.
+message CalculatePurchaseOrderRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string purchase_order_id = 2;
+  PurchaseOrder purchase_order = 3;
+  CalculatePurchaseOrderRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CalculatePurchaseOrder`.
+message CalculatePurchaseOrderResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated CalculatePurchaseOrderResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  PurchaseOrder purchase_order = 1;
+  CalculatePurchaseOrderResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `EstimatePurchaseOrder`.
+message EstimatePurchaseOrderRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string purchase_order_id = 2;
+  PurchaseOrder purchase_order = 3;
+  EstimatePurchaseOrderRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `EstimatePurchaseOrder`.
+message EstimatePurchaseOrderResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated EstimatePurchaseOrderResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  PurchaseOrder purchase_order = 1;
+  EstimatePurchaseOrderResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `QuotePurchaseOrder`.
+message QuotePurchaseOrderRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string purchase_order_id = 2;
+  PurchaseOrder purchase_order = 3;
+  QuotePurchaseOrderRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `QuotePurchaseOrder`.
+message QuotePurchaseOrderResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated QuotePurchaseOrderResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  PurchaseOrder purchase_order = 1;
+  QuotePurchaseOrderResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ComparePurchaseOrderOptions`.
+message ComparePurchaseOrderOptionsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string purchase_order_id = 2;
+  PurchaseOrder purchase_order = 3;
+  ComparePurchaseOrderOptionsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ComparePurchaseOrderOptions`.
+message ComparePurchaseOrderOptionsResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated ComparePurchaseOrderOptionsResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  PurchaseOrder purchase_order = 1;
+  ComparePurchaseOrderOptionsResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SimulatePurchaseOrder`.
+message SimulatePurchaseOrderRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string purchase_order_id = 2;
+  PurchaseOrder purchase_order = 3;
+  SimulatePurchaseOrderRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SimulatePurchaseOrder`.
+message SimulatePurchaseOrderResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated SimulatePurchaseOrderResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  PurchaseOrder purchase_order = 1;
+  SimulatePurchaseOrderResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetPurchaseOrderRates`.
+message GetPurchaseOrderRatesRequest {
+  acme.common.v1.RequestContext context = 1;
+  string purchase_order_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetPurchaseOrderRates`.
+message GetPurchaseOrderRatesResponse {
+  PurchaseOrder purchase_order = 1;
+  acme.common.v1.OperationResult result = 2;
+}

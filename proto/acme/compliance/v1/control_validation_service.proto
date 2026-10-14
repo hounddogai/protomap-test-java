@@ -1,0 +1,268 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.compliance.v1;
+
+import "acme/common/v1/address.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/money.proto";
+import "acme/common/v1/operation.proto";
+import "acme/compliance/v1/compliance.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Compliance.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/compliance/v1;compliancev1";
+option java_multiple_files = true;
+option java_outer_classname = "ControlValidationServiceProto";
+option java_package = "com.acme.compliance.v1";
+
+// Checks controls against the rules before anything acts on them.
+service ControlValidationService {
+  // Validates a control.
+  rpc ValidateControl(ValidateControlRequest) returns (ValidateControlResponse);
+
+  // Previews a control.
+  rpc PreviewControl(PreviewControlRequest) returns (PreviewControlResponse);
+
+  // Checks a control.
+  rpc CheckControlEligibility(CheckControlEligibilityRequest) returns (CheckControlEligibilityResponse);
+
+  // Normalizes a control.
+  rpc NormalizeControl(NormalizeControlRequest) returns (NormalizeControlResponse);
+
+  // Scores a control.
+  rpc ScoreControl(ScoreControlRequest) returns (ScoreControlResponse);
+
+  // Lints a control.
+  rpc LintControls(LintControlsRequest) returns (LintControlsResponse);
+
+  // Returns a control.
+  rpc GetControlRules(GetControlRulesRequest) returns (GetControlRulesResponse);
+}
+
+// The request of `ValidateControl`.
+message ValidateControlRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string control_id = 2;
+  Control control = 3;
+  ValidateControlRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ValidateControl`.
+message ValidateControlResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Control control = 1;
+  ValidateControlResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PreviewControl`.
+message PreviewControlRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string control_id = 2;
+  Control control = 3;
+  PreviewControlRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PreviewControl`.
+message PreviewControlResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Control control = 1;
+  PreviewControlResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CheckControlEligibility`.
+message CheckControlEligibilityRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string control_id = 2;
+  Control control = 3;
+  CheckControlEligibilityRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CheckControlEligibility`.
+message CheckControlEligibilityResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Control control = 1;
+  CheckControlEligibilityResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `NormalizeControl`.
+message NormalizeControlRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string control_id = 2;
+  Control control = 3;
+  NormalizeControlRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `NormalizeControl`.
+message NormalizeControlResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Control control = 1;
+  NormalizeControlResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ScoreControl`.
+message ScoreControlRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string control_id = 2;
+  Control control = 3;
+  ScoreControlRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ScoreControl`.
+message ScoreControlResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated ScoreControlResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Control control = 1;
+  ScoreControlResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `LintControls`.
+message LintControlsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string control_id = 2;
+  Control control = 3;
+  LintControlsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `LintControls`.
+message LintControlsResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Control control = 1;
+  LintControlsResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetControlRules`.
+message GetControlRulesRequest {
+  acme.common.v1.RequestContext context = 1;
+  string control_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetControlRules`.
+message GetControlRulesResponse {
+  Control control = 1;
+  acme.common.v1.OperationResult result = 2;
+}

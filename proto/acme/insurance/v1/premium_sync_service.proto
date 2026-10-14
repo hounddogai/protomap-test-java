@@ -1,0 +1,229 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.insurance.v1;
+
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/insurance/v1/insurance.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Insurance.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/insurance/v1;insurancev1";
+option java_multiple_files = true;
+option java_outer_classname = "PremiumSyncServiceProto";
+option java_package = "com.acme.insurance.v1";
+
+// Keeps premiums in step with the systems of record in other regions.
+service PremiumSyncService {
+  // Syncs a premium.
+  rpc SyncPremiums(SyncPremiumsRequest) returns (SyncPremiumsResponse);
+
+  // Pushs a premium.
+  rpc PushPremium(PushPremiumRequest) returns (PushPremiumResponse);
+
+  // Pulls a premium.
+  rpc PullPremiums(PullPremiumsRequest) returns (PullPremiumsResponse);
+
+  // Exchanges changes of premiums with a peer.
+  rpc StreamPremiumChanges(stream StreamPremiumChangesRequest) returns (stream StreamPremiumChangesResponse);
+
+  // Resolves a premium.
+  rpc ResolvePremiumConflict(ResolvePremiumConflictRequest) returns (ResolvePremiumConflictResponse);
+
+  // Lists premiums a page at a time.
+  rpc ListPremiumConflicts(ListPremiumConflictsRequest) returns (ListPremiumConflictsResponse);
+}
+
+// The request of `SyncPremiums`.
+message SyncPremiumsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string cursor = 1;
+    bytes payload = 2;
+    string resolution = 3;
+    string peer_region = 4;
+    string checksum = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string premium_id = 2;
+  Premium premium = 3;
+  SyncPremiumsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SyncPremiums`.
+message SyncPremiumsResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Premium premium = 1;
+  SyncPremiumsResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PushPremium`.
+message PushPremiumRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string cursor = 1;
+    bytes payload = 2;
+    string resolution = 3;
+    string peer_region = 4;
+    string checksum = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string premium_id = 2;
+  Premium premium = 3;
+  PushPremiumRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PushPremium`.
+message PushPremiumResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Premium premium = 1;
+  PushPremiumResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PullPremiums`.
+message PullPremiumsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string cursor = 1;
+    bytes payload = 2;
+    string resolution = 3;
+    string peer_region = 4;
+    string checksum = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string premium_id = 2;
+  Premium premium = 3;
+  PullPremiumsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PullPremiums`.
+message PullPremiumsResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Premium premium = 1;
+  PullPremiumsResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `StreamPremiumChanges`.
+message StreamPremiumChangesRequest {
+  // An acknowledgment of a change the peer sent.
+  message ChangeAck {
+    int64 sequence = 1;
+    string status = 2;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  oneof frame {
+    Premium change = 2;
+    StreamPremiumChangesRequest.ChangeAck ack = 3;
+  }
+  string cursor = 4;
+}
+
+// The response of `StreamPremiumChanges`.
+message StreamPremiumChangesResponse {
+  Premium premium = 1;
+  string change_type = 2;
+  google.protobuf.Timestamp changed_at = 3;
+  int64 sequence = 4;
+  acme.common.v1.OperationResult result = 5;
+}
+
+// The request of `ResolvePremiumConflict`.
+message ResolvePremiumConflictRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string cursor = 1;
+    bytes payload = 2;
+    string resolution = 3;
+    string peer_region = 4;
+    string checksum = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string premium_id = 2;
+  Premium premium = 3;
+  ResolvePremiumConflictRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ResolvePremiumConflict`.
+message ResolvePremiumConflictResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Premium premium = 1;
+  ResolvePremiumConflictResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ListPremiumConflicts`.
+message ListPremiumConflictsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated PremiumStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListPremiumConflictsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListPremiumConflicts`.
+message ListPremiumConflictsResponse {
+  repeated Premium premiums = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}

@@ -1,0 +1,335 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.billing.v1;
+
+import "acme/billing/v1/billing.proto";
+import "acme/common/v1/address.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/money.proto";
+import "acme/common/v1/operation.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Billing.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/billing/v1;billingv1";
+option java_multiple_files = true;
+option java_outer_classname = "DunningCalculationServiceProto";
+option java_package = "com.acme.billing.v1";
+
+// Computes the figures of a dunning, such as totals, taxes, and estimates.
+service DunningCalculationService {
+  // Calculates a dunning.
+  rpc CalculateDunning(CalculateDunningRequest) returns (CalculateDunningResponse);
+
+  // Estimates a dunning.
+  rpc EstimateDunning(EstimateDunningRequest) returns (EstimateDunningResponse);
+
+  // Quotes a dunning.
+  rpc QuoteDunning(QuoteDunningRequest) returns (QuoteDunningResponse);
+
+  // Compares a dunning.
+  rpc CompareDunningOptions(CompareDunningOptionsRequest) returns (CompareDunningOptionsResponse);
+
+  // Recalculates a dunning.
+  rpc RecalculateDunnings(RecalculateDunningsRequest) returns (RecalculateDunningsResponse);
+
+  // Simulates a dunning.
+  rpc SimulateDunning(SimulateDunningRequest) returns (SimulateDunningResponse);
+
+  // Explains a dunning.
+  rpc ExplainDunningCalculation(ExplainDunningCalculationRequest) returns (ExplainDunningCalculationResponse);
+
+  // Returns a dunning.
+  rpc GetDunningRates(GetDunningRatesRequest) returns (GetDunningRatesResponse);
+}
+
+// The request of `CalculateDunning`.
+message CalculateDunningRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string dunning_id = 2;
+  Dunning dunning = 3;
+  CalculateDunningRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CalculateDunning`.
+message CalculateDunningResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated CalculateDunningResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Dunning dunning = 1;
+  CalculateDunningResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `EstimateDunning`.
+message EstimateDunningRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string dunning_id = 2;
+  Dunning dunning = 3;
+  EstimateDunningRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `EstimateDunning`.
+message EstimateDunningResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated EstimateDunningResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Dunning dunning = 1;
+  EstimateDunningResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `QuoteDunning`.
+message QuoteDunningRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string dunning_id = 2;
+  Dunning dunning = 3;
+  QuoteDunningRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `QuoteDunning`.
+message QuoteDunningResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated QuoteDunningResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Dunning dunning = 1;
+  QuoteDunningResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CompareDunningOptions`.
+message CompareDunningOptionsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string dunning_id = 2;
+  Dunning dunning = 3;
+  CompareDunningOptionsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CompareDunningOptions`.
+message CompareDunningOptionsResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated CompareDunningOptionsResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Dunning dunning = 1;
+  CompareDunningOptionsResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RecalculateDunnings`.
+message RecalculateDunningsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string dunning_id = 2;
+  Dunning dunning = 3;
+  RecalculateDunningsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RecalculateDunnings`.
+message RecalculateDunningsResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated RecalculateDunningsResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Dunning dunning = 1;
+  RecalculateDunningsResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SimulateDunning`.
+message SimulateDunningRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string dunning_id = 2;
+  Dunning dunning = 3;
+  SimulateDunningRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SimulateDunning`.
+message SimulateDunningResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated SimulateDunningResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Dunning dunning = 1;
+  SimulateDunningResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExplainDunningCalculation`.
+message ExplainDunningCalculationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string dunning_id = 2;
+  Dunning dunning = 3;
+  ExplainDunningCalculationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ExplainDunningCalculation`.
+message ExplainDunningCalculationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Dunning dunning = 1;
+  ExplainDunningCalculationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetDunningRates`.
+message GetDunningRatesRequest {
+  acme.common.v1.RequestContext context = 1;
+  string dunning_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetDunningRates`.
+message GetDunningRatesResponse {
+  Dunning dunning = 1;
+  acme.common.v1.OperationResult result = 2;
+}

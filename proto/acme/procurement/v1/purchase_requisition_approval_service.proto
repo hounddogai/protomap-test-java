@@ -1,0 +1,333 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.procurement.v1;
+
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/identity/v1/refs.proto";
+import "acme/procurement/v1/procurement.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Procurement.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/procurement/v1;procurementv1";
+option java_multiple_files = true;
+option java_outer_classname = "PurchaseRequisitionApprovalServiceProto";
+option java_package = "com.acme.procurement.v1";
+
+// Routes purchase requisitions through approval, with escalation and delegation.
+service PurchaseRequisitionApprovalService {
+  // Submits a purchase requisition.
+  rpc SubmitPurchaseRequisition(SubmitPurchaseRequisitionRequest) returns (SubmitPurchaseRequisitionResponse);
+
+  // Approves a purchase requisition.
+  rpc ApprovePurchaseRequisition(ApprovePurchaseRequisitionRequest) returns (ApprovePurchaseRequisitionResponse);
+
+  // Rejects a purchase requisition.
+  rpc RejectPurchaseRequisition(RejectPurchaseRequisitionRequest) returns (RejectPurchaseRequisitionResponse);
+
+  // Escalates a purchase requisition.
+  rpc EscalatePurchaseRequisition(EscalatePurchaseRequisitionRequest) returns (EscalatePurchaseRequisitionResponse);
+
+  // Lists purchase requisitions a page at a time.
+  rpc ListPendingPurchaseRequisitions(ListPendingPurchaseRequisitionsRequest) returns (ListPendingPurchaseRequisitionsResponse);
+
+  // Delegates a purchase requisition.
+  rpc DelegatePurchaseRequisitionApproval(DelegatePurchaseRequisitionApprovalRequest) returns (DelegatePurchaseRequisitionApprovalResponse);
+
+  // Recalls a purchase requisition.
+  rpc RecallPurchaseRequisition(RecallPurchaseRequisitionRequest) returns (RecallPurchaseRequisitionResponse);
+
+  // Returns a purchase requisition.
+  rpc GetPurchaseRequisitionApprovalStatus(GetPurchaseRequisitionApprovalStatusRequest) returns (GetPurchaseRequisitionApprovalStatusResponse);
+
+  // Comments a purchase requisition.
+  rpc CommentPurchaseRequisitionApproval(CommentPurchaseRequisitionApprovalRequest) returns (CommentPurchaseRequisitionApprovalResponse);
+}
+
+// The request of `SubmitPurchaseRequisition`.
+message SubmitPurchaseRequisitionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string purchase_requisition_id = 2;
+  PurchaseRequisition purchase_requisition = 3;
+  SubmitPurchaseRequisitionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SubmitPurchaseRequisition`.
+message SubmitPurchaseRequisitionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PurchaseRequisition purchase_requisition = 1;
+  SubmitPurchaseRequisitionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ApprovePurchaseRequisition`.
+message ApprovePurchaseRequisitionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string purchase_requisition_id = 2;
+  PurchaseRequisition purchase_requisition = 3;
+  ApprovePurchaseRequisitionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ApprovePurchaseRequisition`.
+message ApprovePurchaseRequisitionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PurchaseRequisition purchase_requisition = 1;
+  ApprovePurchaseRequisitionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RejectPurchaseRequisition`.
+message RejectPurchaseRequisitionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string purchase_requisition_id = 2;
+  PurchaseRequisition purchase_requisition = 3;
+  RejectPurchaseRequisitionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RejectPurchaseRequisition`.
+message RejectPurchaseRequisitionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PurchaseRequisition purchase_requisition = 1;
+  RejectPurchaseRequisitionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `EscalatePurchaseRequisition`.
+message EscalatePurchaseRequisitionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string purchase_requisition_id = 2;
+  PurchaseRequisition purchase_requisition = 3;
+  EscalatePurchaseRequisitionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `EscalatePurchaseRequisition`.
+message EscalatePurchaseRequisitionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PurchaseRequisition purchase_requisition = 1;
+  EscalatePurchaseRequisitionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ListPendingPurchaseRequisitions`.
+message ListPendingPurchaseRequisitionsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated PurchaseRequisitionStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListPendingPurchaseRequisitionsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListPendingPurchaseRequisitions`.
+message ListPendingPurchaseRequisitionsResponse {
+  repeated PurchaseRequisition purchase_requisitions = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `DelegatePurchaseRequisitionApproval`.
+message DelegatePurchaseRequisitionApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string purchase_requisition_id = 2;
+  PurchaseRequisition purchase_requisition = 3;
+  DelegatePurchaseRequisitionApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `DelegatePurchaseRequisitionApproval`.
+message DelegatePurchaseRequisitionApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PurchaseRequisition purchase_requisition = 1;
+  DelegatePurchaseRequisitionApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RecallPurchaseRequisition`.
+message RecallPurchaseRequisitionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string purchase_requisition_id = 2;
+  PurchaseRequisition purchase_requisition = 3;
+  RecallPurchaseRequisitionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RecallPurchaseRequisition`.
+message RecallPurchaseRequisitionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PurchaseRequisition purchase_requisition = 1;
+  RecallPurchaseRequisitionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetPurchaseRequisitionApprovalStatus`.
+message GetPurchaseRequisitionApprovalStatusRequest {
+  acme.common.v1.RequestContext context = 1;
+  string purchase_requisition_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetPurchaseRequisitionApprovalStatus`.
+message GetPurchaseRequisitionApprovalStatusResponse {
+  PurchaseRequisition purchase_requisition = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `CommentPurchaseRequisitionApproval`.
+message CommentPurchaseRequisitionApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string purchase_requisition_id = 2;
+  PurchaseRequisition purchase_requisition = 3;
+  CommentPurchaseRequisitionApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CommentPurchaseRequisitionApproval`.
+message CommentPurchaseRequisitionApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PurchaseRequisition purchase_requisition = 1;
+  CommentPurchaseRequisitionApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

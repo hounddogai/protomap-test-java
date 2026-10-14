@@ -1,0 +1,219 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.collections.v1;
+
+import "acme/collections/v1/collections.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/identity/v1/refs.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Collections.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/collections/v1;collectionsv1";
+option java_multiple_files = true;
+option java_outer_classname = "CollectionCaseApprovalServiceProto";
+option java_package = "com.acme.collections.v1";
+
+// Routes collection cases through approval, with escalation and delegation.
+service CollectionCaseApprovalService {
+  // Submits a collection case.
+  rpc SubmitCollectionCase(SubmitCollectionCaseRequest) returns (SubmitCollectionCaseResponse);
+
+  // Approves a collection case.
+  rpc ApproveCollectionCase(ApproveCollectionCaseRequest) returns (ApproveCollectionCaseResponse);
+
+  // Rejects a collection case.
+  rpc RejectCollectionCase(RejectCollectionCaseRequest) returns (RejectCollectionCaseResponse);
+
+  // Escalates a collection case.
+  rpc EscalateCollectionCase(EscalateCollectionCaseRequest) returns (EscalateCollectionCaseResponse);
+
+  // Lists collection cases a page at a time.
+  rpc ListPendingCollectionCases(ListPendingCollectionCasesRequest) returns (ListPendingCollectionCasesResponse);
+
+  // Returns a collection case.
+  rpc GetCollectionCaseApprovalStatus(GetCollectionCaseApprovalStatusRequest) returns (GetCollectionCaseApprovalStatusResponse);
+}
+
+// The request of `SubmitCollectionCase`.
+message SubmitCollectionCaseRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string collection_case_id = 2;
+  CollectionCase collection_case = 3;
+  SubmitCollectionCaseRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SubmitCollectionCase`.
+message SubmitCollectionCaseResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  CollectionCase collection_case = 1;
+  SubmitCollectionCaseResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ApproveCollectionCase`.
+message ApproveCollectionCaseRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string collection_case_id = 2;
+  CollectionCase collection_case = 3;
+  ApproveCollectionCaseRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ApproveCollectionCase`.
+message ApproveCollectionCaseResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  CollectionCase collection_case = 1;
+  ApproveCollectionCaseResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RejectCollectionCase`.
+message RejectCollectionCaseRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string collection_case_id = 2;
+  CollectionCase collection_case = 3;
+  RejectCollectionCaseRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RejectCollectionCase`.
+message RejectCollectionCaseResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  CollectionCase collection_case = 1;
+  RejectCollectionCaseResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `EscalateCollectionCase`.
+message EscalateCollectionCaseRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string collection_case_id = 2;
+  CollectionCase collection_case = 3;
+  EscalateCollectionCaseRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `EscalateCollectionCase`.
+message EscalateCollectionCaseResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  CollectionCase collection_case = 1;
+  EscalateCollectionCaseResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ListPendingCollectionCases`.
+message ListPendingCollectionCasesRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated CollectionCaseStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListPendingCollectionCasesRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListPendingCollectionCases`.
+message ListPendingCollectionCasesResponse {
+  repeated CollectionCase collection_cases = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetCollectionCaseApprovalStatus`.
+message GetCollectionCaseApprovalStatusRequest {
+  acme.common.v1.RequestContext context = 1;
+  string collection_case_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetCollectionCaseApprovalStatus`.
+message GetCollectionCaseApprovalStatusResponse {
+  CollectionCase collection_case = 1;
+  acme.common.v1.OperationResult result = 2;
+}

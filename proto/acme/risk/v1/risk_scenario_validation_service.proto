@@ -1,0 +1,305 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.risk.v1;
+
+import "acme/common/v1/address.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/money.proto";
+import "acme/common/v1/operation.proto";
+import "acme/risk/v1/risk.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Risk.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/risk/v1;riskv1";
+option java_multiple_files = true;
+option java_outer_classname = "RiskScenarioValidationServiceProto";
+option java_package = "com.acme.risk.v1";
+
+// Checks risk scenarios against the rules before anything acts on them.
+service RiskScenarioValidationService {
+  // Validates a risk scenario.
+  rpc ValidateRiskScenario(ValidateRiskScenarioRequest) returns (ValidateRiskScenarioResponse);
+
+  // Previews a risk scenario.
+  rpc PreviewRiskScenario(PreviewRiskScenarioRequest) returns (PreviewRiskScenarioResponse);
+
+  // Checks a risk scenario.
+  rpc CheckRiskScenarioEligibility(CheckRiskScenarioEligibilityRequest) returns (CheckRiskScenarioEligibilityResponse);
+
+  // Normalizes a risk scenario.
+  rpc NormalizeRiskScenario(NormalizeRiskScenarioRequest) returns (NormalizeRiskScenarioResponse);
+
+  // Explains a risk scenario.
+  rpc ExplainRiskScenarioDecision(ExplainRiskScenarioDecisionRequest) returns (ExplainRiskScenarioDecisionResponse);
+
+  // Scores a risk scenario.
+  rpc ScoreRiskScenario(ScoreRiskScenarioRequest) returns (ScoreRiskScenarioResponse);
+
+  // Lints a risk scenario.
+  rpc LintRiskScenarios(LintRiskScenariosRequest) returns (LintRiskScenariosResponse);
+
+  // Returns a risk scenario.
+  rpc GetRiskScenarioRules(GetRiskScenarioRulesRequest) returns (GetRiskScenarioRulesResponse);
+}
+
+// The request of `ValidateRiskScenario`.
+message ValidateRiskScenarioRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string risk_scenario_id = 2;
+  RiskScenario risk_scenario = 3;
+  ValidateRiskScenarioRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ValidateRiskScenario`.
+message ValidateRiskScenarioResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RiskScenario risk_scenario = 1;
+  ValidateRiskScenarioResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PreviewRiskScenario`.
+message PreviewRiskScenarioRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string risk_scenario_id = 2;
+  RiskScenario risk_scenario = 3;
+  PreviewRiskScenarioRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PreviewRiskScenario`.
+message PreviewRiskScenarioResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RiskScenario risk_scenario = 1;
+  PreviewRiskScenarioResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CheckRiskScenarioEligibility`.
+message CheckRiskScenarioEligibilityRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string risk_scenario_id = 2;
+  RiskScenario risk_scenario = 3;
+  CheckRiskScenarioEligibilityRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CheckRiskScenarioEligibility`.
+message CheckRiskScenarioEligibilityResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RiskScenario risk_scenario = 1;
+  CheckRiskScenarioEligibilityResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `NormalizeRiskScenario`.
+message NormalizeRiskScenarioRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string risk_scenario_id = 2;
+  RiskScenario risk_scenario = 3;
+  NormalizeRiskScenarioRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `NormalizeRiskScenario`.
+message NormalizeRiskScenarioResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RiskScenario risk_scenario = 1;
+  NormalizeRiskScenarioResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExplainRiskScenarioDecision`.
+message ExplainRiskScenarioDecisionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string risk_scenario_id = 2;
+  RiskScenario risk_scenario = 3;
+  ExplainRiskScenarioDecisionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ExplainRiskScenarioDecision`.
+message ExplainRiskScenarioDecisionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RiskScenario risk_scenario = 1;
+  ExplainRiskScenarioDecisionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ScoreRiskScenario`.
+message ScoreRiskScenarioRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string risk_scenario_id = 2;
+  RiskScenario risk_scenario = 3;
+  ScoreRiskScenarioRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ScoreRiskScenario`.
+message ScoreRiskScenarioResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated ScoreRiskScenarioResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  RiskScenario risk_scenario = 1;
+  ScoreRiskScenarioResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `LintRiskScenarios`.
+message LintRiskScenariosRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string risk_scenario_id = 2;
+  RiskScenario risk_scenario = 3;
+  LintRiskScenariosRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `LintRiskScenarios`.
+message LintRiskScenariosResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RiskScenario risk_scenario = 1;
+  LintRiskScenariosResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetRiskScenarioRules`.
+message GetRiskScenarioRulesRequest {
+  acme.common.v1.RequestContext context = 1;
+  string risk_scenario_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetRiskScenarioRules`.
+message GetRiskScenarioRulesResponse {
+  RiskScenario risk_scenario = 1;
+  acme.common.v1.OperationResult result = 2;
+}

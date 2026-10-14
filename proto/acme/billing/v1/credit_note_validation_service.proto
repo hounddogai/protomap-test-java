@@ -1,0 +1,305 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.billing.v1;
+
+import "acme/billing/v1/billing.proto";
+import "acme/common/v1/address.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/money.proto";
+import "acme/common/v1/operation.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Billing.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/billing/v1;billingv1";
+option java_multiple_files = true;
+option java_outer_classname = "CreditNoteValidationServiceProto";
+option java_package = "com.acme.billing.v1";
+
+// Checks credit notes against the rules before anything acts on them.
+service CreditNoteValidationService {
+  // Validates a credit note.
+  rpc ValidateCreditNote(ValidateCreditNoteRequest) returns (ValidateCreditNoteResponse);
+
+  // Previews a credit note.
+  rpc PreviewCreditNote(PreviewCreditNoteRequest) returns (PreviewCreditNoteResponse);
+
+  // Checks a credit note.
+  rpc CheckCreditNoteEligibility(CheckCreditNoteEligibilityRequest) returns (CheckCreditNoteEligibilityResponse);
+
+  // Normalizes a credit note.
+  rpc NormalizeCreditNote(NormalizeCreditNoteRequest) returns (NormalizeCreditNoteResponse);
+
+  // Explains a credit note.
+  rpc ExplainCreditNoteDecision(ExplainCreditNoteDecisionRequest) returns (ExplainCreditNoteDecisionResponse);
+
+  // Scores a credit note.
+  rpc ScoreCreditNote(ScoreCreditNoteRequest) returns (ScoreCreditNoteResponse);
+
+  // Lints a credit note.
+  rpc LintCreditNotes(LintCreditNotesRequest) returns (LintCreditNotesResponse);
+
+  // Returns a credit note.
+  rpc GetCreditNoteRules(GetCreditNoteRulesRequest) returns (GetCreditNoteRulesResponse);
+}
+
+// The request of `ValidateCreditNote`.
+message ValidateCreditNoteRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string credit_note_id = 2;
+  CreditNote credit_note = 3;
+  ValidateCreditNoteRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ValidateCreditNote`.
+message ValidateCreditNoteResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  CreditNote credit_note = 1;
+  ValidateCreditNoteResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PreviewCreditNote`.
+message PreviewCreditNoteRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string credit_note_id = 2;
+  CreditNote credit_note = 3;
+  PreviewCreditNoteRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PreviewCreditNote`.
+message PreviewCreditNoteResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  CreditNote credit_note = 1;
+  PreviewCreditNoteResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CheckCreditNoteEligibility`.
+message CheckCreditNoteEligibilityRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string credit_note_id = 2;
+  CreditNote credit_note = 3;
+  CheckCreditNoteEligibilityRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CheckCreditNoteEligibility`.
+message CheckCreditNoteEligibilityResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  CreditNote credit_note = 1;
+  CheckCreditNoteEligibilityResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `NormalizeCreditNote`.
+message NormalizeCreditNoteRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string credit_note_id = 2;
+  CreditNote credit_note = 3;
+  NormalizeCreditNoteRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `NormalizeCreditNote`.
+message NormalizeCreditNoteResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  CreditNote credit_note = 1;
+  NormalizeCreditNoteResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExplainCreditNoteDecision`.
+message ExplainCreditNoteDecisionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string credit_note_id = 2;
+  CreditNote credit_note = 3;
+  ExplainCreditNoteDecisionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ExplainCreditNoteDecision`.
+message ExplainCreditNoteDecisionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  CreditNote credit_note = 1;
+  ExplainCreditNoteDecisionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ScoreCreditNote`.
+message ScoreCreditNoteRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string credit_note_id = 2;
+  CreditNote credit_note = 3;
+  ScoreCreditNoteRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ScoreCreditNote`.
+message ScoreCreditNoteResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated ScoreCreditNoteResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  CreditNote credit_note = 1;
+  ScoreCreditNoteResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `LintCreditNotes`.
+message LintCreditNotesRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string credit_note_id = 2;
+  CreditNote credit_note = 3;
+  LintCreditNotesRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `LintCreditNotes`.
+message LintCreditNotesResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  CreditNote credit_note = 1;
+  LintCreditNotesResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetCreditNoteRules`.
+message GetCreditNoteRulesRequest {
+  acme.common.v1.RequestContext context = 1;
+  string credit_note_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetCreditNoteRules`.
+message GetCreditNoteRulesResponse {
+  CreditNote credit_note = 1;
+  acme.common.v1.OperationResult result = 2;
+}

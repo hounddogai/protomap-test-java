@@ -1,0 +1,257 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.accounting.v1;
+
+import "acme/accounting/v1/accounting.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/identity/v1/refs.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Accounting.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/accounting/v1;accountingv1";
+option java_multiple_files = true;
+option java_outer_classname = "AllocationApprovalServiceProto";
+option java_package = "com.acme.accounting.v1";
+
+// Routes allocations through approval, with escalation and delegation.
+service AllocationApprovalService {
+  // Submits an allocation.
+  rpc SubmitAllocation(SubmitAllocationRequest) returns (SubmitAllocationResponse);
+
+  // Approves an allocation.
+  rpc ApproveAllocation(ApproveAllocationRequest) returns (ApproveAllocationResponse);
+
+  // Lists allocations a page at a time.
+  rpc ListPendingAllocations(ListPendingAllocationsRequest) returns (ListPendingAllocationsResponse);
+
+  // Delegates an allocation.
+  rpc DelegateAllocationApproval(DelegateAllocationApprovalRequest) returns (DelegateAllocationApprovalResponse);
+
+  // Recalls an allocation.
+  rpc RecallAllocation(RecallAllocationRequest) returns (RecallAllocationResponse);
+
+  // Returns an allocation.
+  rpc GetAllocationApprovalStatus(GetAllocationApprovalStatusRequest) returns (GetAllocationApprovalStatusResponse);
+
+  // Comments an allocation.
+  rpc CommentAllocationApproval(CommentAllocationApprovalRequest) returns (CommentAllocationApprovalResponse);
+}
+
+// The request of `SubmitAllocation`.
+message SubmitAllocationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string allocation_id = 2;
+  Allocation allocation = 3;
+  SubmitAllocationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SubmitAllocation`.
+message SubmitAllocationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Allocation allocation = 1;
+  SubmitAllocationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ApproveAllocation`.
+message ApproveAllocationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string allocation_id = 2;
+  Allocation allocation = 3;
+  ApproveAllocationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ApproveAllocation`.
+message ApproveAllocationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Allocation allocation = 1;
+  ApproveAllocationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ListPendingAllocations`.
+message ListPendingAllocationsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated AllocationStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListPendingAllocationsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListPendingAllocations`.
+message ListPendingAllocationsResponse {
+  repeated Allocation allocations = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `DelegateAllocationApproval`.
+message DelegateAllocationApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string allocation_id = 2;
+  Allocation allocation = 3;
+  DelegateAllocationApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `DelegateAllocationApproval`.
+message DelegateAllocationApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Allocation allocation = 1;
+  DelegateAllocationApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RecallAllocation`.
+message RecallAllocationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string allocation_id = 2;
+  Allocation allocation = 3;
+  RecallAllocationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RecallAllocation`.
+message RecallAllocationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Allocation allocation = 1;
+  RecallAllocationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetAllocationApprovalStatus`.
+message GetAllocationApprovalStatusRequest {
+  acme.common.v1.RequestContext context = 1;
+  string allocation_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetAllocationApprovalStatus`.
+message GetAllocationApprovalStatusResponse {
+  Allocation allocation = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `CommentAllocationApproval`.
+message CommentAllocationApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string allocation_id = 2;
+  Allocation allocation = 3;
+  CommentAllocationApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CommentAllocationApproval`.
+message CommentAllocationApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Allocation allocation = 1;
+  CommentAllocationApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

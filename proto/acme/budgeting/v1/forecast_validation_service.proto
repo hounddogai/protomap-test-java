@@ -1,0 +1,251 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.budgeting.v1;
+
+import "acme/budgeting/v1/budgeting.proto";
+import "acme/common/v1/address.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/money.proto";
+import "acme/common/v1/operation.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Budgeting.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/budgeting/v1;budgetingv1";
+option java_multiple_files = true;
+option java_outer_classname = "ForecastValidationServiceProto";
+option java_package = "com.acme.budgeting.v1";
+
+// Checks forecasts against the rules before anything acts on them.
+service ForecastValidationService {
+  // Validates a forecast.
+  rpc ValidateForecast(ValidateForecastRequest) returns (ValidateForecastResponse);
+
+  // Previews a forecast.
+  rpc PreviewForecast(PreviewForecastRequest) returns (PreviewForecastResponse);
+
+  // Checks a forecast.
+  rpc CheckForecastEligibility(CheckForecastEligibilityRequest) returns (CheckForecastEligibilityResponse);
+
+  // Normalizes a forecast.
+  rpc NormalizeForecast(NormalizeForecastRequest) returns (NormalizeForecastResponse);
+
+  // Explains a forecast.
+  rpc ExplainForecastDecision(ExplainForecastDecisionRequest) returns (ExplainForecastDecisionResponse);
+
+  // Scores a forecast.
+  rpc ScoreForecast(ScoreForecastRequest) returns (ScoreForecastResponse);
+}
+
+// The request of `ValidateForecast`.
+message ValidateForecastRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string forecast_id = 2;
+  Forecast forecast = 3;
+  ValidateForecastRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ValidateForecast`.
+message ValidateForecastResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Forecast forecast = 1;
+  ValidateForecastResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PreviewForecast`.
+message PreviewForecastRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string forecast_id = 2;
+  Forecast forecast = 3;
+  PreviewForecastRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PreviewForecast`.
+message PreviewForecastResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Forecast forecast = 1;
+  PreviewForecastResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CheckForecastEligibility`.
+message CheckForecastEligibilityRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string forecast_id = 2;
+  Forecast forecast = 3;
+  CheckForecastEligibilityRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CheckForecastEligibility`.
+message CheckForecastEligibilityResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Forecast forecast = 1;
+  CheckForecastEligibilityResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `NormalizeForecast`.
+message NormalizeForecastRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string forecast_id = 2;
+  Forecast forecast = 3;
+  NormalizeForecastRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `NormalizeForecast`.
+message NormalizeForecastResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Forecast forecast = 1;
+  NormalizeForecastResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExplainForecastDecision`.
+message ExplainForecastDecisionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string forecast_id = 2;
+  Forecast forecast = 3;
+  ExplainForecastDecisionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ExplainForecastDecision`.
+message ExplainForecastDecisionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Forecast forecast = 1;
+  ExplainForecastDecisionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ScoreForecast`.
+message ScoreForecastRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string forecast_id = 2;
+  Forecast forecast = 3;
+  ScoreForecastRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ScoreForecast`.
+message ScoreForecastResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated ScoreForecastResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Forecast forecast = 1;
+  ScoreForecastResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}

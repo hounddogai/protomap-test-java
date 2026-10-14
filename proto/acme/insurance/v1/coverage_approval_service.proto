@@ -1,0 +1,278 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.insurance.v1;
+
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/identity/v1/refs.proto";
+import "acme/insurance/v1/insurance.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Insurance.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/insurance/v1;insurancev1";
+option java_multiple_files = true;
+option java_outer_classname = "CoverageApprovalServiceProto";
+option java_package = "com.acme.insurance.v1";
+
+// Routes coverages through approval, with escalation and delegation.
+service CoverageApprovalService {
+  // Submits a coverage.
+  rpc SubmitCoverage(SubmitCoverageRequest) returns (SubmitCoverageResponse);
+
+  // Approves a coverage.
+  rpc ApproveCoverage(ApproveCoverageRequest) returns (ApproveCoverageResponse);
+
+  // Rejects a coverage.
+  rpc RejectCoverage(RejectCoverageRequest) returns (RejectCoverageResponse);
+
+  // Escalates a coverage.
+  rpc EscalateCoverage(EscalateCoverageRequest) returns (EscalateCoverageResponse);
+
+  // Lists coverages a page at a time.
+  rpc ListPendingCoverages(ListPendingCoveragesRequest) returns (ListPendingCoveragesResponse);
+
+  // Delegates a coverage.
+  rpc DelegateCoverageApproval(DelegateCoverageApprovalRequest) returns (DelegateCoverageApprovalResponse);
+
+  // Recalls a coverage.
+  rpc RecallCoverage(RecallCoverageRequest) returns (RecallCoverageResponse);
+}
+
+// The request of `SubmitCoverage`.
+message SubmitCoverageRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string coverage_id = 2;
+  Coverage coverage = 3;
+  SubmitCoverageRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SubmitCoverage`.
+message SubmitCoverageResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Coverage coverage = 1;
+  SubmitCoverageResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ApproveCoverage`.
+message ApproveCoverageRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string coverage_id = 2;
+  Coverage coverage = 3;
+  ApproveCoverageRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ApproveCoverage`.
+message ApproveCoverageResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Coverage coverage = 1;
+  ApproveCoverageResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RejectCoverage`.
+message RejectCoverageRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string coverage_id = 2;
+  Coverage coverage = 3;
+  RejectCoverageRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RejectCoverage`.
+message RejectCoverageResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Coverage coverage = 1;
+  RejectCoverageResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `EscalateCoverage`.
+message EscalateCoverageRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string coverage_id = 2;
+  Coverage coverage = 3;
+  EscalateCoverageRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `EscalateCoverage`.
+message EscalateCoverageResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Coverage coverage = 1;
+  EscalateCoverageResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ListPendingCoverages`.
+message ListPendingCoveragesRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated CoverageStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListPendingCoveragesRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListPendingCoverages`.
+message ListPendingCoveragesResponse {
+  repeated Coverage coverages = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `DelegateCoverageApproval`.
+message DelegateCoverageApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string coverage_id = 2;
+  Coverage coverage = 3;
+  DelegateCoverageApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `DelegateCoverageApproval`.
+message DelegateCoverageApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Coverage coverage = 1;
+  DelegateCoverageApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RecallCoverage`.
+message RecallCoverageRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string coverage_id = 2;
+  Coverage coverage = 3;
+  RecallCoverageRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RecallCoverage`.
+message RecallCoverageResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Coverage coverage = 1;
+  RecallCoverageResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

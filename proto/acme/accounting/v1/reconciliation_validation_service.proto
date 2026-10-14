@@ -1,0 +1,305 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.accounting.v1;
+
+import "acme/accounting/v1/accounting.proto";
+import "acme/common/v1/address.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/money.proto";
+import "acme/common/v1/operation.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Accounting.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/accounting/v1;accountingv1";
+option java_multiple_files = true;
+option java_outer_classname = "ReconciliationValidationServiceProto";
+option java_package = "com.acme.accounting.v1";
+
+// Checks reconciliations against the rules before anything acts on them.
+service ReconciliationValidationService {
+  // Validates a reconciliation.
+  rpc ValidateReconciliation(ValidateReconciliationRequest) returns (ValidateReconciliationResponse);
+
+  // Previews a reconciliation.
+  rpc PreviewReconciliation(PreviewReconciliationRequest) returns (PreviewReconciliationResponse);
+
+  // Checks a reconciliation.
+  rpc CheckReconciliationEligibility(CheckReconciliationEligibilityRequest) returns (CheckReconciliationEligibilityResponse);
+
+  // Normalizes a reconciliation.
+  rpc NormalizeReconciliation(NormalizeReconciliationRequest) returns (NormalizeReconciliationResponse);
+
+  // Explains a reconciliation.
+  rpc ExplainReconciliationDecision(ExplainReconciliationDecisionRequest) returns (ExplainReconciliationDecisionResponse);
+
+  // Scores a reconciliation.
+  rpc ScoreReconciliation(ScoreReconciliationRequest) returns (ScoreReconciliationResponse);
+
+  // Lints a reconciliation.
+  rpc LintReconciliations(LintReconciliationsRequest) returns (LintReconciliationsResponse);
+
+  // Returns a reconciliation.
+  rpc GetReconciliationRules(GetReconciliationRulesRequest) returns (GetReconciliationRulesResponse);
+}
+
+// The request of `ValidateReconciliation`.
+message ValidateReconciliationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string reconciliation_id = 2;
+  Reconciliation reconciliation = 3;
+  ValidateReconciliationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ValidateReconciliation`.
+message ValidateReconciliationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Reconciliation reconciliation = 1;
+  ValidateReconciliationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PreviewReconciliation`.
+message PreviewReconciliationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string reconciliation_id = 2;
+  Reconciliation reconciliation = 3;
+  PreviewReconciliationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PreviewReconciliation`.
+message PreviewReconciliationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Reconciliation reconciliation = 1;
+  PreviewReconciliationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CheckReconciliationEligibility`.
+message CheckReconciliationEligibilityRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string reconciliation_id = 2;
+  Reconciliation reconciliation = 3;
+  CheckReconciliationEligibilityRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CheckReconciliationEligibility`.
+message CheckReconciliationEligibilityResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Reconciliation reconciliation = 1;
+  CheckReconciliationEligibilityResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `NormalizeReconciliation`.
+message NormalizeReconciliationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string reconciliation_id = 2;
+  Reconciliation reconciliation = 3;
+  NormalizeReconciliationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `NormalizeReconciliation`.
+message NormalizeReconciliationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Reconciliation reconciliation = 1;
+  NormalizeReconciliationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExplainReconciliationDecision`.
+message ExplainReconciliationDecisionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string reconciliation_id = 2;
+  Reconciliation reconciliation = 3;
+  ExplainReconciliationDecisionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ExplainReconciliationDecision`.
+message ExplainReconciliationDecisionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Reconciliation reconciliation = 1;
+  ExplainReconciliationDecisionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ScoreReconciliation`.
+message ScoreReconciliationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string reconciliation_id = 2;
+  Reconciliation reconciliation = 3;
+  ScoreReconciliationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ScoreReconciliation`.
+message ScoreReconciliationResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated ScoreReconciliationResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Reconciliation reconciliation = 1;
+  ScoreReconciliationResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `LintReconciliations`.
+message LintReconciliationsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string reconciliation_id = 2;
+  Reconciliation reconciliation = 3;
+  LintReconciliationsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `LintReconciliations`.
+message LintReconciliationsResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Reconciliation reconciliation = 1;
+  LintReconciliationsResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetReconciliationRules`.
+message GetReconciliationRulesRequest {
+  acme.common.v1.RequestContext context = 1;
+  string reconciliation_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetReconciliationRules`.
+message GetReconciliationRulesResponse {
+  Reconciliation reconciliation = 1;
+  acme.common.v1.OperationResult result = 2;
+}

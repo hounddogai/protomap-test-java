@@ -1,0 +1,273 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.audit.v1;
+
+import "acme/audit/v1/audit.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/identity/v1/refs.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Audit.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/audit/v1;auditv1";
+option java_multiple_files = true;
+option java_outer_classname = "AuditEventAdminServiceProto";
+option java_package = "com.acme.audit.v1";
+
+// Operator actions on audit events that support staff run by hand.
+service AuditEventAdminService {
+  // Archives an audit event.
+  rpc ArchiveAuditEvent(ArchiveAuditEventRequest) returns (ArchiveAuditEventResponse);
+
+  // Restores an audit event.
+  rpc RestoreAuditEvent(RestoreAuditEventRequest) returns (RestoreAuditEventResponse);
+
+  // Deletes an audit event.
+  rpc PurgeAuditEvent(PurgeAuditEventRequest) returns (PurgeAuditEventResponse);
+
+  // Reassigns an audit event.
+  rpc ReassignAuditEvent(ReassignAuditEventRequest) returns (ReassignAuditEventResponse);
+
+  // Locks an audit event.
+  rpc LockAuditEvent(LockAuditEventRequest) returns (LockAuditEventResponse);
+
+  // Unlocks an audit event.
+  rpc UnlockAuditEvent(UnlockAuditEventRequest) returns (UnlockAuditEventResponse);
+
+  // Transfers an audit event.
+  rpc TransferAuditEvent(TransferAuditEventRequest) returns (TransferAuditEventResponse);
+
+  // Returns an audit event.
+  rpc InspectAuditEvent(InspectAuditEventRequest) returns (InspectAuditEventResponse);
+}
+
+// The request of `ArchiveAuditEvent`.
+message ArchiveAuditEventRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string audit_event_id = 2;
+  ArchiveAuditEventRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ArchiveAuditEvent`.
+message ArchiveAuditEventResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  AuditEvent audit_event = 1;
+  ArchiveAuditEventResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RestoreAuditEvent`.
+message RestoreAuditEventRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string audit_event_id = 2;
+  RestoreAuditEventRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `RestoreAuditEvent`.
+message RestoreAuditEventResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  AuditEvent audit_event = 1;
+  RestoreAuditEventResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PurgeAuditEvent`.
+message PurgeAuditEventRequest {
+  acme.common.v1.RequestContext context = 1;
+  string audit_event_id = 2;
+  string reason = 3;
+  string etag = 4;
+  bool force = 5;
+}
+
+// The response of `PurgeAuditEvent`.
+message PurgeAuditEventResponse {
+  acme.common.v1.OperationResult result = 1;
+  google.protobuf.Timestamp effective_at = 2;
+}
+
+// The request of `ReassignAuditEvent`.
+message ReassignAuditEventRequest {
+  // What the operation needs besides the record.
+  message Details {
+    acme.identity.v1.UserRef assignee = 1;
+    string queue = 2;
+    int32 capacity = 3;
+    string assignee_email = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string audit_event_id = 2;
+  ReassignAuditEventRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ReassignAuditEvent`.
+message ReassignAuditEventResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  AuditEvent audit_event = 1;
+  ReassignAuditEventResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `LockAuditEvent`.
+message LockAuditEventRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string audit_event_id = 2;
+  LockAuditEventRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `LockAuditEvent`.
+message LockAuditEventResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  AuditEvent audit_event = 1;
+  LockAuditEventResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `UnlockAuditEvent`.
+message UnlockAuditEventRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string audit_event_id = 2;
+  UnlockAuditEventRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `UnlockAuditEvent`.
+message UnlockAuditEventResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  AuditEvent audit_event = 1;
+  UnlockAuditEventResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `TransferAuditEvent`.
+message TransferAuditEventRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string audit_event_id = 2;
+  TransferAuditEventRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `TransferAuditEvent`.
+message TransferAuditEventResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  AuditEvent audit_event = 1;
+  TransferAuditEventResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `InspectAuditEvent`.
+message InspectAuditEventRequest {
+  acme.common.v1.RequestContext context = 1;
+  string audit_event_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `InspectAuditEvent`.
+message InspectAuditEventResponse {
+  AuditEvent audit_event = 1;
+  acme.common.v1.OperationResult result = 2;
+}

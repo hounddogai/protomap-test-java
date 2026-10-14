@@ -1,0 +1,212 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.financeportal.v1;
+
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/financeportal/v1/financeportal.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Financeportal.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/financeportal/v1;financeportalv1";
+option java_multiple_files = true;
+option java_outer_classname = "ApprovalInboxServiceProto";
+option java_package = "com.acme.financeportal.v1";
+
+// Manages approval inboxes: creates, reads, changes, and lists them.
+service ApprovalInboxService {
+  // Creates an approval inbox.
+  rpc CreateApprovalInbox(CreateApprovalInboxRequest) returns (CreateApprovalInboxResponse);
+
+  // Returns an approval inbox.
+  rpc GetApprovalInbox(GetApprovalInboxRequest) returns (GetApprovalInboxResponse);
+
+  // Changes an approval inbox.
+  rpc UpdateApprovalInbox(UpdateApprovalInboxRequest) returns (UpdateApprovalInboxResponse);
+
+  // Deletes an approval inbox.
+  rpc DeleteApprovalInbox(DeleteApprovalInboxRequest) returns (DeleteApprovalInboxResponse);
+
+  // Lists approval inboxes a page at a time.
+  rpc ListApprovalInboxes(ListApprovalInboxesRequest) returns (ListApprovalInboxesResponse);
+
+  // Returns several approval inboxes at once.
+  rpc BatchGetApprovalInboxes(BatchGetApprovalInboxesRequest) returns (BatchGetApprovalInboxesResponse);
+
+  // Lists approval inboxes a page at a time.
+  rpc SearchApprovalInboxes(SearchApprovalInboxesRequest) returns (SearchApprovalInboxesResponse);
+
+  // Streams the changes of approval inboxes as they happen.
+  rpc WatchApprovalInboxes(WatchApprovalInboxesRequest) returns (stream WatchApprovalInboxesResponse);
+
+  // Creates an approval inbox.
+  rpc CloneApprovalInbox(CloneApprovalInboxRequest) returns (CloneApprovalInboxResponse);
+}
+
+// The request of `CreateApprovalInbox`.
+message CreateApprovalInboxRequest {
+  acme.common.v1.RequestContext context = 1;
+  ApprovalInbox approval_inbox = 2;
+  string request_id = 3;
+  bool validate_only = 4;
+}
+
+// The response of `CreateApprovalInbox`.
+message CreateApprovalInboxResponse {
+  ApprovalInbox approval_inbox = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `GetApprovalInbox`.
+message GetApprovalInboxRequest {
+  acme.common.v1.RequestContext context = 1;
+  string approval_inbox_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetApprovalInbox`.
+message GetApprovalInboxResponse {
+  ApprovalInbox approval_inbox = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `UpdateApprovalInbox`.
+message UpdateApprovalInboxRequest {
+  acme.common.v1.RequestContext context = 1;
+  ApprovalInbox approval_inbox = 2;
+  google.protobuf.FieldMask update_mask = 3;
+  bool allow_missing = 4;
+}
+
+// The response of `UpdateApprovalInbox`.
+message UpdateApprovalInboxResponse {
+  ApprovalInbox approval_inbox = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `DeleteApprovalInbox`.
+message DeleteApprovalInboxRequest {
+  acme.common.v1.RequestContext context = 1;
+  string approval_inbox_id = 2;
+  string reason = 3;
+  string etag = 4;
+  bool force = 5;
+}
+
+// The response of `DeleteApprovalInbox`.
+message DeleteApprovalInboxResponse {
+  acme.common.v1.OperationResult result = 1;
+  google.protobuf.Timestamp effective_at = 2;
+}
+
+// The request of `ListApprovalInboxes`.
+message ListApprovalInboxesRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated ApprovalInboxStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListApprovalInboxesRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListApprovalInboxes`.
+message ListApprovalInboxesResponse {
+  repeated ApprovalInbox approval_inboxes = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `BatchGetApprovalInboxes`.
+message BatchGetApprovalInboxesRequest {
+  acme.common.v1.RequestContext context = 1;
+  repeated string approval_inbox_ids = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `BatchGetApprovalInboxes`.
+message BatchGetApprovalInboxesResponse {
+  repeated ApprovalInbox approval_inboxes = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SearchApprovalInboxes`.
+message SearchApprovalInboxesRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated ApprovalInboxStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  SearchApprovalInboxesRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `SearchApprovalInboxes`.
+message SearchApprovalInboxesResponse {
+  repeated ApprovalInbox approval_inboxes = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `WatchApprovalInboxes`.
+message WatchApprovalInboxesRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated ApprovalInboxStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  WatchApprovalInboxesRequest.Filter filter = 2;
+  google.protobuf.Timestamp since = 3;
+  int32 max_events = 4;
+  acme.common.v1.ContactInfo subscriber = 5;
+}
+
+// The response of `WatchApprovalInboxes`.
+message WatchApprovalInboxesResponse {
+  ApprovalInbox approval_inbox = 1;
+  string change_type = 2;
+  google.protobuf.Timestamp changed_at = 3;
+  int64 sequence = 4;
+  acme.common.v1.OperationResult result = 5;
+}
+
+// The request of `CloneApprovalInbox`.
+message CloneApprovalInboxRequest {
+  acme.common.v1.RequestContext context = 1;
+  ApprovalInbox approval_inbox = 2;
+  string request_id = 3;
+  bool validate_only = 4;
+}
+
+// The response of `CloneApprovalInbox`.
+message CloneApprovalInboxResponse {
+  ApprovalInbox approval_inbox = 1;
+  acme.common.v1.OperationResult result = 2;
+}

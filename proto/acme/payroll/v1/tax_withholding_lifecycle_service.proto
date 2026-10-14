@@ -1,0 +1,294 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.payroll.v1;
+
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/identity/v1/refs.proto";
+import "acme/payroll/v1/payroll.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Payroll.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/payroll/v1;payrollv1";
+option java_multiple_files = true;
+option java_outer_classname = "TaxWithholdingLifecycleServiceProto";
+option java_package = "com.acme.payroll.v1";
+
+// Moves a tax withholding between the states of its lifecycle.
+service TaxWithholdingLifecycleService {
+  // Activates a tax withholding.
+  rpc ActivateTaxWithholding(ActivateTaxWithholdingRequest) returns (ActivateTaxWithholdingResponse);
+
+  // Suspends a tax withholding.
+  rpc SuspendTaxWithholding(SuspendTaxWithholdingRequest) returns (SuspendTaxWithholdingResponse);
+
+  // Reinstates a tax withholding.
+  rpc ReinstateTaxWithholding(ReinstateTaxWithholdingRequest) returns (ReinstateTaxWithholdingResponse);
+
+  // Terminates a tax withholding.
+  rpc TerminateTaxWithholding(TerminateTaxWithholdingRequest) returns (TerminateTaxWithholdingResponse);
+
+  // Renews a tax withholding.
+  rpc RenewTaxWithholding(RenewTaxWithholdingRequest) returns (RenewTaxWithholdingResponse);
+
+  // Expires a tax withholding.
+  rpc ExpireTaxWithholding(ExpireTaxWithholdingRequest) returns (ExpireTaxWithholdingResponse);
+
+  // Returns a tax withholding.
+  rpc GetTaxWithholdingLifecycle(GetTaxWithholdingLifecycleRequest) returns (GetTaxWithholdingLifecycleResponse);
+
+  // Schedules a tax withholding.
+  rpc ScheduleTaxWithholdingExpiry(ScheduleTaxWithholdingExpiryRequest) returns (ScheduleTaxWithholdingExpiryResponse);
+}
+
+// The request of `ActivateTaxWithholding`.
+message ActivateTaxWithholdingRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string tax_withholding_id = 2;
+  ActivateTaxWithholdingRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ActivateTaxWithholding`.
+message ActivateTaxWithholdingResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  TaxWithholding tax_withholding = 1;
+  ActivateTaxWithholdingResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SuspendTaxWithholding`.
+message SuspendTaxWithholdingRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string tax_withholding_id = 2;
+  SuspendTaxWithholdingRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `SuspendTaxWithholding`.
+message SuspendTaxWithholdingResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  TaxWithholding tax_withholding = 1;
+  SuspendTaxWithholdingResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ReinstateTaxWithholding`.
+message ReinstateTaxWithholdingRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string tax_withholding_id = 2;
+  ReinstateTaxWithholdingRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ReinstateTaxWithholding`.
+message ReinstateTaxWithholdingResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  TaxWithholding tax_withholding = 1;
+  ReinstateTaxWithholdingResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `TerminateTaxWithholding`.
+message TerminateTaxWithholdingRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string tax_withholding_id = 2;
+  TerminateTaxWithholdingRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `TerminateTaxWithholding`.
+message TerminateTaxWithholdingResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  TaxWithholding tax_withholding = 1;
+  TerminateTaxWithholdingResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RenewTaxWithholding`.
+message RenewTaxWithholdingRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string tax_withholding_id = 2;
+  RenewTaxWithholdingRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `RenewTaxWithholding`.
+message RenewTaxWithholdingResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  TaxWithholding tax_withholding = 1;
+  RenewTaxWithholdingResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExpireTaxWithholding`.
+message ExpireTaxWithholdingRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string tax_withholding_id = 2;
+  ExpireTaxWithholdingRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ExpireTaxWithholding`.
+message ExpireTaxWithholdingResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  TaxWithholding tax_withholding = 1;
+  ExpireTaxWithholdingResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetTaxWithholdingLifecycle`.
+message GetTaxWithholdingLifecycleRequest {
+  acme.common.v1.RequestContext context = 1;
+  string tax_withholding_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetTaxWithholdingLifecycle`.
+message GetTaxWithholdingLifecycleResponse {
+  TaxWithholding tax_withholding = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `ScheduleTaxWithholdingExpiry`.
+message ScheduleTaxWithholdingExpiryRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string tax_withholding_id = 2;
+  TaxWithholding tax_withholding = 3;
+  ScheduleTaxWithholdingExpiryRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ScheduleTaxWithholdingExpiry`.
+message ScheduleTaxWithholdingExpiryResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  TaxWithholding tax_withholding = 1;
+  ScheduleTaxWithholdingExpiryResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

@@ -1,0 +1,294 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.payroll.v1;
+
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/identity/v1/refs.proto";
+import "acme/payroll/v1/payroll.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Payroll.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/payroll/v1;payrollv1";
+option java_multiple_files = true;
+option java_outer_classname = "PayStubLifecycleServiceProto";
+option java_package = "com.acme.payroll.v1";
+
+// Moves a pay stub between the states of its lifecycle.
+service PayStubLifecycleService {
+  // Activates a pay stub.
+  rpc ActivatePayStub(ActivatePayStubRequest) returns (ActivatePayStubResponse);
+
+  // Suspends a pay stub.
+  rpc SuspendPayStub(SuspendPayStubRequest) returns (SuspendPayStubResponse);
+
+  // Reinstates a pay stub.
+  rpc ReinstatePayStub(ReinstatePayStubRequest) returns (ReinstatePayStubResponse);
+
+  // Terminates a pay stub.
+  rpc TerminatePayStub(TerminatePayStubRequest) returns (TerminatePayStubResponse);
+
+  // Renews a pay stub.
+  rpc RenewPayStub(RenewPayStubRequest) returns (RenewPayStubResponse);
+
+  // Expires a pay stub.
+  rpc ExpirePayStub(ExpirePayStubRequest) returns (ExpirePayStubResponse);
+
+  // Returns a pay stub.
+  rpc GetPayStubLifecycle(GetPayStubLifecycleRequest) returns (GetPayStubLifecycleResponse);
+
+  // Schedules a pay stub.
+  rpc SchedulePayStubExpiry(SchedulePayStubExpiryRequest) returns (SchedulePayStubExpiryResponse);
+}
+
+// The request of `ActivatePayStub`.
+message ActivatePayStubRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string pay_stub_id = 2;
+  ActivatePayStubRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ActivatePayStub`.
+message ActivatePayStubResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PayStub pay_stub = 1;
+  ActivatePayStubResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SuspendPayStub`.
+message SuspendPayStubRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string pay_stub_id = 2;
+  SuspendPayStubRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `SuspendPayStub`.
+message SuspendPayStubResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PayStub pay_stub = 1;
+  SuspendPayStubResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ReinstatePayStub`.
+message ReinstatePayStubRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string pay_stub_id = 2;
+  ReinstatePayStubRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ReinstatePayStub`.
+message ReinstatePayStubResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PayStub pay_stub = 1;
+  ReinstatePayStubResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `TerminatePayStub`.
+message TerminatePayStubRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string pay_stub_id = 2;
+  TerminatePayStubRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `TerminatePayStub`.
+message TerminatePayStubResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PayStub pay_stub = 1;
+  TerminatePayStubResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RenewPayStub`.
+message RenewPayStubRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string pay_stub_id = 2;
+  RenewPayStubRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `RenewPayStub`.
+message RenewPayStubResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PayStub pay_stub = 1;
+  RenewPayStubResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExpirePayStub`.
+message ExpirePayStubRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string pay_stub_id = 2;
+  ExpirePayStubRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ExpirePayStub`.
+message ExpirePayStubResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PayStub pay_stub = 1;
+  ExpirePayStubResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetPayStubLifecycle`.
+message GetPayStubLifecycleRequest {
+  acme.common.v1.RequestContext context = 1;
+  string pay_stub_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetPayStubLifecycle`.
+message GetPayStubLifecycleResponse {
+  PayStub pay_stub = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `SchedulePayStubExpiry`.
+message SchedulePayStubExpiryRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string pay_stub_id = 2;
+  PayStub pay_stub = 3;
+  SchedulePayStubExpiryRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SchedulePayStubExpiry`.
+message SchedulePayStubExpiryResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PayStub pay_stub = 1;
+  SchedulePayStubExpiryResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

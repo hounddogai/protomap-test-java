@@ -1,0 +1,295 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.budgeting.v1;
+
+import "acme/budgeting/v1/budgeting.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/identity/v1/refs.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Budgeting.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/budgeting/v1;budgetingv1";
+option java_multiple_files = true;
+option java_outer_classname = "VarianceApprovalServiceProto";
+option java_package = "com.acme.budgeting.v1";
+
+// Routes variances through approval, with escalation and delegation.
+service VarianceApprovalService {
+  // Submits a variance.
+  rpc SubmitVariance(SubmitVarianceRequest) returns (SubmitVarianceResponse);
+
+  // Approves a variance.
+  rpc ApproveVariance(ApproveVarianceRequest) returns (ApproveVarianceResponse);
+
+  // Escalates a variance.
+  rpc EscalateVariance(EscalateVarianceRequest) returns (EscalateVarianceResponse);
+
+  // Lists variances a page at a time.
+  rpc ListPendingVariances(ListPendingVariancesRequest) returns (ListPendingVariancesResponse);
+
+  // Delegates a variance.
+  rpc DelegateVarianceApproval(DelegateVarianceApprovalRequest) returns (DelegateVarianceApprovalResponse);
+
+  // Recalls a variance.
+  rpc RecallVariance(RecallVarianceRequest) returns (RecallVarianceResponse);
+
+  // Returns a variance.
+  rpc GetVarianceApprovalStatus(GetVarianceApprovalStatusRequest) returns (GetVarianceApprovalStatusResponse);
+
+  // Comments a variance.
+  rpc CommentVarianceApproval(CommentVarianceApprovalRequest) returns (CommentVarianceApprovalResponse);
+}
+
+// The request of `SubmitVariance`.
+message SubmitVarianceRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string variance_id = 2;
+  Variance variance = 3;
+  SubmitVarianceRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SubmitVariance`.
+message SubmitVarianceResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Variance variance = 1;
+  SubmitVarianceResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ApproveVariance`.
+message ApproveVarianceRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string variance_id = 2;
+  Variance variance = 3;
+  ApproveVarianceRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ApproveVariance`.
+message ApproveVarianceResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Variance variance = 1;
+  ApproveVarianceResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `EscalateVariance`.
+message EscalateVarianceRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string variance_id = 2;
+  Variance variance = 3;
+  EscalateVarianceRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `EscalateVariance`.
+message EscalateVarianceResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Variance variance = 1;
+  EscalateVarianceResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ListPendingVariances`.
+message ListPendingVariancesRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated VarianceStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListPendingVariancesRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListPendingVariances`.
+message ListPendingVariancesResponse {
+  repeated Variance variances = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `DelegateVarianceApproval`.
+message DelegateVarianceApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string variance_id = 2;
+  Variance variance = 3;
+  DelegateVarianceApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `DelegateVarianceApproval`.
+message DelegateVarianceApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Variance variance = 1;
+  DelegateVarianceApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RecallVariance`.
+message RecallVarianceRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string variance_id = 2;
+  Variance variance = 3;
+  RecallVarianceRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RecallVariance`.
+message RecallVarianceResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Variance variance = 1;
+  RecallVarianceResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetVarianceApprovalStatus`.
+message GetVarianceApprovalStatusRequest {
+  acme.common.v1.RequestContext context = 1;
+  string variance_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetVarianceApprovalStatus`.
+message GetVarianceApprovalStatusResponse {
+  Variance variance = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `CommentVarianceApproval`.
+message CommentVarianceApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string variance_id = 2;
+  Variance variance = 3;
+  CommentVarianceApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CommentVarianceApproval`.
+message CommentVarianceApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Variance variance = 1;
+  CommentVarianceApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

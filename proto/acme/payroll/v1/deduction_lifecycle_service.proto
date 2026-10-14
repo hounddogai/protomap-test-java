@@ -1,0 +1,258 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.payroll.v1;
+
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/identity/v1/refs.proto";
+import "acme/payroll/v1/payroll.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Payroll.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/payroll/v1;payrollv1";
+option java_multiple_files = true;
+option java_outer_classname = "DeductionLifecycleServiceProto";
+option java_package = "com.acme.payroll.v1";
+
+// Moves a deduction between the states of its lifecycle.
+service DeductionLifecycleService {
+  // Activates a deduction.
+  rpc ActivateDeduction(ActivateDeductionRequest) returns (ActivateDeductionResponse);
+
+  // Suspends a deduction.
+  rpc SuspendDeduction(SuspendDeductionRequest) returns (SuspendDeductionResponse);
+
+  // Reinstates a deduction.
+  rpc ReinstateDeduction(ReinstateDeductionRequest) returns (ReinstateDeductionResponse);
+
+  // Terminates a deduction.
+  rpc TerminateDeduction(TerminateDeductionRequest) returns (TerminateDeductionResponse);
+
+  // Renews a deduction.
+  rpc RenewDeduction(RenewDeductionRequest) returns (RenewDeductionResponse);
+
+  // Returns a deduction.
+  rpc GetDeductionLifecycle(GetDeductionLifecycleRequest) returns (GetDeductionLifecycleResponse);
+
+  // Schedules a deduction.
+  rpc ScheduleDeductionExpiry(ScheduleDeductionExpiryRequest) returns (ScheduleDeductionExpiryResponse);
+}
+
+// The request of `ActivateDeduction`.
+message ActivateDeductionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string deduction_id = 2;
+  ActivateDeductionRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ActivateDeduction`.
+message ActivateDeductionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Deduction deduction = 1;
+  ActivateDeductionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SuspendDeduction`.
+message SuspendDeductionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string deduction_id = 2;
+  SuspendDeductionRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `SuspendDeduction`.
+message SuspendDeductionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Deduction deduction = 1;
+  SuspendDeductionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ReinstateDeduction`.
+message ReinstateDeductionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string deduction_id = 2;
+  ReinstateDeductionRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ReinstateDeduction`.
+message ReinstateDeductionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Deduction deduction = 1;
+  ReinstateDeductionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `TerminateDeduction`.
+message TerminateDeductionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string deduction_id = 2;
+  TerminateDeductionRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `TerminateDeduction`.
+message TerminateDeductionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Deduction deduction = 1;
+  TerminateDeductionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RenewDeduction`.
+message RenewDeductionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string deduction_id = 2;
+  RenewDeductionRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `RenewDeduction`.
+message RenewDeductionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Deduction deduction = 1;
+  RenewDeductionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetDeductionLifecycle`.
+message GetDeductionLifecycleRequest {
+  acme.common.v1.RequestContext context = 1;
+  string deduction_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetDeductionLifecycle`.
+message GetDeductionLifecycleResponse {
+  Deduction deduction = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `ScheduleDeductionExpiry`.
+message ScheduleDeductionExpiryRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string deduction_id = 2;
+  Deduction deduction = 3;
+  ScheduleDeductionExpiryRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ScheduleDeductionExpiry`.
+message ScheduleDeductionExpiryResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Deduction deduction = 1;
+  ScheduleDeductionExpiryResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

@@ -1,0 +1,257 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.treasury.v1;
+
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/identity/v1/refs.proto";
+import "acme/treasury/v1/treasury.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Treasury.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/treasury/v1;treasuryv1";
+option java_multiple_files = true;
+option java_outer_classname = "CashPositionApprovalServiceProto";
+option java_package = "com.acme.treasury.v1";
+
+// Routes cash positions through approval, with escalation and delegation.
+service CashPositionApprovalService {
+  // Submits a cash position.
+  rpc SubmitCashPosition(SubmitCashPositionRequest) returns (SubmitCashPositionResponse);
+
+  // Approves a cash position.
+  rpc ApproveCashPosition(ApproveCashPositionRequest) returns (ApproveCashPositionResponse);
+
+  // Lists cash positions a page at a time.
+  rpc ListPendingCashPositions(ListPendingCashPositionsRequest) returns (ListPendingCashPositionsResponse);
+
+  // Delegates a cash position.
+  rpc DelegateCashPositionApproval(DelegateCashPositionApprovalRequest) returns (DelegateCashPositionApprovalResponse);
+
+  // Recalls a cash position.
+  rpc RecallCashPosition(RecallCashPositionRequest) returns (RecallCashPositionResponse);
+
+  // Returns a cash position.
+  rpc GetCashPositionApprovalStatus(GetCashPositionApprovalStatusRequest) returns (GetCashPositionApprovalStatusResponse);
+
+  // Comments a cash position.
+  rpc CommentCashPositionApproval(CommentCashPositionApprovalRequest) returns (CommentCashPositionApprovalResponse);
+}
+
+// The request of `SubmitCashPosition`.
+message SubmitCashPositionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string cash_position_id = 2;
+  CashPosition cash_position = 3;
+  SubmitCashPositionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SubmitCashPosition`.
+message SubmitCashPositionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  CashPosition cash_position = 1;
+  SubmitCashPositionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ApproveCashPosition`.
+message ApproveCashPositionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string cash_position_id = 2;
+  CashPosition cash_position = 3;
+  ApproveCashPositionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ApproveCashPosition`.
+message ApproveCashPositionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  CashPosition cash_position = 1;
+  ApproveCashPositionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ListPendingCashPositions`.
+message ListPendingCashPositionsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated CashPositionStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListPendingCashPositionsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListPendingCashPositions`.
+message ListPendingCashPositionsResponse {
+  repeated CashPosition cash_positions = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `DelegateCashPositionApproval`.
+message DelegateCashPositionApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string cash_position_id = 2;
+  CashPosition cash_position = 3;
+  DelegateCashPositionApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `DelegateCashPositionApproval`.
+message DelegateCashPositionApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  CashPosition cash_position = 1;
+  DelegateCashPositionApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RecallCashPosition`.
+message RecallCashPositionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string cash_position_id = 2;
+  CashPosition cash_position = 3;
+  RecallCashPositionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RecallCashPosition`.
+message RecallCashPositionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  CashPosition cash_position = 1;
+  RecallCashPositionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetCashPositionApprovalStatus`.
+message GetCashPositionApprovalStatusRequest {
+  acme.common.v1.RequestContext context = 1;
+  string cash_position_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetCashPositionApprovalStatus`.
+message GetCashPositionApprovalStatusResponse {
+  CashPosition cash_position = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `CommentCashPositionApproval`.
+message CommentCashPositionApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string cash_position_id = 2;
+  CashPosition cash_position = 3;
+  CommentCashPositionApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CommentCashPositionApproval`.
+message CommentCashPositionApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  CashPosition cash_position = 1;
+  CommentCashPositionApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

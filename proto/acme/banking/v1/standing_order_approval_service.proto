@@ -1,0 +1,240 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.banking.v1;
+
+import "acme/banking/v1/banking.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/identity/v1/refs.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Banking.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/banking/v1;bankingv1";
+option java_multiple_files = true;
+option java_outer_classname = "StandingOrderApprovalServiceProto";
+option java_package = "com.acme.banking.v1";
+
+// Routes standing orders through approval, with escalation and delegation.
+service StandingOrderApprovalService {
+  // Submits a standing order.
+  rpc SubmitStandingOrder(SubmitStandingOrderRequest) returns (SubmitStandingOrderResponse);
+
+  // Approves a standing order.
+  rpc ApproveStandingOrder(ApproveStandingOrderRequest) returns (ApproveStandingOrderResponse);
+
+  // Escalates a standing order.
+  rpc EscalateStandingOrder(EscalateStandingOrderRequest) returns (EscalateStandingOrderResponse);
+
+  // Lists standing orders a page at a time.
+  rpc ListPendingStandingOrders(ListPendingStandingOrdersRequest) returns (ListPendingStandingOrdersResponse);
+
+  // Delegates a standing order.
+  rpc DelegateStandingOrderApproval(DelegateStandingOrderApprovalRequest) returns (DelegateStandingOrderApprovalResponse);
+
+  // Recalls a standing order.
+  rpc RecallStandingOrder(RecallStandingOrderRequest) returns (RecallStandingOrderResponse);
+}
+
+// The request of `SubmitStandingOrder`.
+message SubmitStandingOrderRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string standing_order_id = 2;
+  StandingOrder standing_order = 3;
+  SubmitStandingOrderRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SubmitStandingOrder`.
+message SubmitStandingOrderResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  StandingOrder standing_order = 1;
+  SubmitStandingOrderResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ApproveStandingOrder`.
+message ApproveStandingOrderRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string standing_order_id = 2;
+  StandingOrder standing_order = 3;
+  ApproveStandingOrderRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ApproveStandingOrder`.
+message ApproveStandingOrderResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  StandingOrder standing_order = 1;
+  ApproveStandingOrderResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `EscalateStandingOrder`.
+message EscalateStandingOrderRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string standing_order_id = 2;
+  StandingOrder standing_order = 3;
+  EscalateStandingOrderRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `EscalateStandingOrder`.
+message EscalateStandingOrderResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  StandingOrder standing_order = 1;
+  EscalateStandingOrderResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ListPendingStandingOrders`.
+message ListPendingStandingOrdersRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated StandingOrderStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListPendingStandingOrdersRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListPendingStandingOrders`.
+message ListPendingStandingOrdersResponse {
+  repeated StandingOrder standing_orders = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `DelegateStandingOrderApproval`.
+message DelegateStandingOrderApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string standing_order_id = 2;
+  StandingOrder standing_order = 3;
+  DelegateStandingOrderApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `DelegateStandingOrderApproval`.
+message DelegateStandingOrderApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  StandingOrder standing_order = 1;
+  DelegateStandingOrderApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RecallStandingOrder`.
+message RecallStandingOrderRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string standing_order_id = 2;
+  StandingOrder standing_order = 3;
+  RecallStandingOrderRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RecallStandingOrder`.
+message RecallStandingOrderResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  StandingOrder standing_order = 1;
+  RecallStandingOrderResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

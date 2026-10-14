@@ -1,0 +1,247 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.audit.v1;
+
+import "acme/audit/v1/audit.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "google/protobuf/any.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Audit.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/audit/v1;auditv1";
+option java_multiple_files = true;
+option java_outer_classname = "RetentionPolicyNotificationServiceProto";
+option java_package = "com.acme.audit.v1";
+
+// Tells the people who follow a retention policy what changed.
+service RetentionPolicyNotificationService {
+  // Subscribes a retention policy.
+  rpc SubscribeRetentionPolicyUpdates(SubscribeRetentionPolicyUpdatesRequest) returns (SubscribeRetentionPolicyUpdatesResponse);
+
+  // Unsubscribes a retention policy.
+  rpc UnsubscribeRetentionPolicyUpdates(UnsubscribeRetentionPolicyUpdatesRequest) returns (UnsubscribeRetentionPolicyUpdatesResponse);
+
+  // Notifys a retention policy.
+  rpc NotifyRetentionPolicyWatchers(NotifyRetentionPolicyWatchersRequest) returns (NotifyRetentionPolicyWatchersResponse);
+
+  // Lists retention policies a page at a time.
+  rpc ListRetentionPolicySubscriptions(ListRetentionPolicySubscriptionsRequest) returns (ListRetentionPolicySubscriptionsResponse);
+
+  // Sends a retention policy.
+  rpc SendRetentionPolicyTestNotice(SendRetentionPolicyTestNoticeRequest) returns (SendRetentionPolicyTestNoticeResponse);
+
+  // Returns a retention policy.
+  rpc GetRetentionPolicyPreferences(GetRetentionPolicyPreferencesRequest) returns (GetRetentionPolicyPreferencesResponse);
+
+  // Streams the changes of retention policies as they happen.
+  rpc StreamRetentionPolicyNotices(StreamRetentionPolicyNoticesRequest) returns (stream StreamRetentionPolicyNoticesResponse);
+}
+
+// The request of `SubscribeRetentionPolicyUpdates`.
+message SubscribeRetentionPolicyUpdatesRequest {
+  // What the operation needs besides the record.
+  message Details {
+    acme.common.v1.ContactInfo recipient = 1;
+    string template_id = 2;
+    map<string, string> variables = 3;
+    google.protobuf.Any payload = 4;
+    string channel = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string retention_policy_id = 2;
+  SubscribeRetentionPolicyUpdatesRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `SubscribeRetentionPolicyUpdates`.
+message SubscribeRetentionPolicyUpdatesResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RetentionPolicy retention_policy = 1;
+  SubscribeRetentionPolicyUpdatesResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `UnsubscribeRetentionPolicyUpdates`.
+message UnsubscribeRetentionPolicyUpdatesRequest {
+  // What the operation needs besides the record.
+  message Details {
+    acme.common.v1.ContactInfo recipient = 1;
+    string template_id = 2;
+    map<string, string> variables = 3;
+    google.protobuf.Any payload = 4;
+    string channel = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string retention_policy_id = 2;
+  UnsubscribeRetentionPolicyUpdatesRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `UnsubscribeRetentionPolicyUpdates`.
+message UnsubscribeRetentionPolicyUpdatesResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RetentionPolicy retention_policy = 1;
+  UnsubscribeRetentionPolicyUpdatesResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `NotifyRetentionPolicyWatchers`.
+message NotifyRetentionPolicyWatchersRequest {
+  // What the operation needs besides the record.
+  message Details {
+    acme.common.v1.ContactInfo recipient = 1;
+    string template_id = 2;
+    map<string, string> variables = 3;
+    google.protobuf.Any payload = 4;
+    string channel = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string retention_policy_id = 2;
+  NotifyRetentionPolicyWatchersRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `NotifyRetentionPolicyWatchers`.
+message NotifyRetentionPolicyWatchersResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RetentionPolicy retention_policy = 1;
+  NotifyRetentionPolicyWatchersResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ListRetentionPolicySubscriptions`.
+message ListRetentionPolicySubscriptionsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated RetentionPolicyStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListRetentionPolicySubscriptionsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListRetentionPolicySubscriptions`.
+message ListRetentionPolicySubscriptionsResponse {
+  repeated RetentionPolicy retention_policies = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SendRetentionPolicyTestNotice`.
+message SendRetentionPolicyTestNoticeRequest {
+  // What the operation needs besides the record.
+  message Details {
+    acme.common.v1.ContactInfo recipient = 1;
+    string template_id = 2;
+    map<string, string> variables = 3;
+    google.protobuf.Any payload = 4;
+    string channel = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string retention_policy_id = 2;
+  SendRetentionPolicyTestNoticeRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `SendRetentionPolicyTestNotice`.
+message SendRetentionPolicyTestNoticeResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RetentionPolicy retention_policy = 1;
+  SendRetentionPolicyTestNoticeResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetRetentionPolicyPreferences`.
+message GetRetentionPolicyPreferencesRequest {
+  acme.common.v1.RequestContext context = 1;
+  string retention_policy_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetRetentionPolicyPreferences`.
+message GetRetentionPolicyPreferencesResponse {
+  RetentionPolicy retention_policy = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `StreamRetentionPolicyNotices`.
+message StreamRetentionPolicyNoticesRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated RetentionPolicyStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  StreamRetentionPolicyNoticesRequest.Filter filter = 2;
+  google.protobuf.Timestamp since = 3;
+  int32 max_events = 4;
+  acme.common.v1.ContactInfo subscriber = 5;
+}
+
+// The response of `StreamRetentionPolicyNotices`.
+message StreamRetentionPolicyNoticesResponse {
+  RetentionPolicy retention_policy = 1;
+  string change_type = 2;
+  google.protobuf.Timestamp changed_at = 3;
+  int64 sequence = 4;
+  acme.common.v1.OperationResult result = 5;
+}

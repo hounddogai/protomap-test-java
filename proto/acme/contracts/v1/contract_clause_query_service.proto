@@ -1,0 +1,217 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.contracts.v1;
+
+import "acme/common/v1/audit.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/contracts/v1/contracts.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Contracts.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/contracts/v1;contractsv1";
+option java_multiple_files = true;
+option java_outer_classname = "ContractClauseQueryServiceProto";
+option java_package = "com.acme.contracts.v1";
+
+// Answers read-only questions about contract clauses, for screens and reports.
+service ContractClauseQueryService {
+  // Returns a contract clause.
+  rpc LookupContractClause(LookupContractClauseRequest) returns (LookupContractClauseResponse);
+
+  // Lists contract clauses a page at a time.
+  rpc BrowseContractClauses(BrowseContractClausesRequest) returns (BrowseContractClausesResponse);
+
+  // Lists contract clauses a page at a time.
+  rpc FindContractClauses(FindContractClausesRequest) returns (FindContractClausesResponse);
+
+  // Counts contract clauses by status.
+  rpc CountContractClauses(CountContractClausesRequest) returns (CountContractClausesResponse);
+
+  // Returns several contract clauses at once.
+  rpc ResolveContractClauses(ResolveContractClausesRequest) returns (ResolveContractClausesResponse);
+
+  // Streams every matching contract clause.
+  rpc ExportContractClauses(ExportContractClausesRequest) returns (stream ExportContractClausesResponse);
+
+  // Summarizes a contract clause.
+  rpc SummarizeContractClauses(SummarizeContractClausesRequest) returns (SummarizeContractClausesResponse);
+
+  // Returns a contract clause.
+  rpc PeekContractClause(PeekContractClauseRequest) returns (PeekContractClauseResponse);
+}
+
+// The request of `LookupContractClause`.
+message LookupContractClauseRequest {
+  acme.common.v1.RequestContext context = 1;
+  string contract_clause_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `LookupContractClause`.
+message LookupContractClauseResponse {
+  ContractClause contract_clause = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `BrowseContractClauses`.
+message BrowseContractClausesRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated ContractClauseStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  BrowseContractClausesRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `BrowseContractClauses`.
+message BrowseContractClausesResponse {
+  repeated ContractClause contract_clauses = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `FindContractClauses`.
+message FindContractClausesRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated ContractClauseStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  FindContractClausesRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `FindContractClauses`.
+message FindContractClausesResponse {
+  repeated ContractClause contract_clauses = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CountContractClauses`.
+message CountContractClausesRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated ContractClauseStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  CountContractClausesRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `CountContractClauses`.
+message CountContractClausesResponse {
+  int64 count = 1;
+  map<string, int64> by_status = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ResolveContractClauses`.
+message ResolveContractClausesRequest {
+  acme.common.v1.RequestContext context = 1;
+  repeated string contract_clause_ids = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `ResolveContractClauses`.
+message ResolveContractClausesResponse {
+  repeated ContractClause contract_clauses = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExportContractClauses`.
+message ExportContractClausesRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated ContractClauseStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  ExportContractClausesRequest.Filter filter = 2;
+  string format = 3;
+  google.protobuf.FieldMask fields = 4;
+  string destination_uri = 5;
+}
+
+// The response of `ExportContractClauses`.
+message ExportContractClausesResponse {
+  ContractClause contract_clause = 1;
+  string change_type = 2;
+  google.protobuf.Timestamp changed_at = 3;
+  int64 sequence = 4;
+  acme.common.v1.OperationResult result = 5;
+}
+
+// The request of `SummarizeContractClauses`.
+message SummarizeContractClausesRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string format = 1;
+    acme.common.v1.TimeWindow period = 2;
+    repeated string recipient_emails = 3;
+    string cron = 4;
+    map<string, string> filters = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string contract_clause_id = 2;
+  SummarizeContractClausesRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `SummarizeContractClauses`.
+message SummarizeContractClausesResponse {
+  string report_id = 1;
+  string download_uri = 2;
+  map<string, string> summary = 3;
+  acme.common.v1.TimeWindow period = 4;
+  acme.common.v1.OperationResult result = 5;
+}
+
+// The request of `PeekContractClause`.
+message PeekContractClauseRequest {
+  acme.common.v1.RequestContext context = 1;
+  string contract_clause_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `PeekContractClause`.
+message PeekContractClauseResponse {
+  ContractClause contract_clause = 1;
+  acme.common.v1.OperationResult result = 2;
+}

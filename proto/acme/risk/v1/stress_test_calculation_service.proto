@@ -1,0 +1,249 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.risk.v1;
+
+import "acme/common/v1/address.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/money.proto";
+import "acme/common/v1/operation.proto";
+import "acme/risk/v1/risk.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Risk.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/risk/v1;riskv1";
+option java_multiple_files = true;
+option java_outer_classname = "StressTestCalculationServiceProto";
+option java_package = "com.acme.risk.v1";
+
+// Computes the figures of a stress test, such as totals, taxes, and estimates.
+service StressTestCalculationService {
+  // Calculates a stress test.
+  rpc CalculateStressTest(CalculateStressTestRequest) returns (CalculateStressTestResponse);
+
+  // Estimates a stress test.
+  rpc EstimateStressTest(EstimateStressTestRequest) returns (EstimateStressTestResponse);
+
+  // Recalculates a stress test.
+  rpc RecalculateStressTests(RecalculateStressTestsRequest) returns (RecalculateStressTestsResponse);
+
+  // Simulates a stress test.
+  rpc SimulateStressTest(SimulateStressTestRequest) returns (SimulateStressTestResponse);
+
+  // Explains a stress test.
+  rpc ExplainStressTestCalculation(ExplainStressTestCalculationRequest) returns (ExplainStressTestCalculationResponse);
+
+  // Returns a stress test.
+  rpc GetStressTestRates(GetStressTestRatesRequest) returns (GetStressTestRatesResponse);
+}
+
+// The request of `CalculateStressTest`.
+message CalculateStressTestRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string stress_test_id = 2;
+  StressTest stress_test = 3;
+  CalculateStressTestRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CalculateStressTest`.
+message CalculateStressTestResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated CalculateStressTestResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  StressTest stress_test = 1;
+  CalculateStressTestResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `EstimateStressTest`.
+message EstimateStressTestRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string stress_test_id = 2;
+  StressTest stress_test = 3;
+  EstimateStressTestRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `EstimateStressTest`.
+message EstimateStressTestResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated EstimateStressTestResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  StressTest stress_test = 1;
+  EstimateStressTestResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RecalculateStressTests`.
+message RecalculateStressTestsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string stress_test_id = 2;
+  StressTest stress_test = 3;
+  RecalculateStressTestsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RecalculateStressTests`.
+message RecalculateStressTestsResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated RecalculateStressTestsResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  StressTest stress_test = 1;
+  RecalculateStressTestsResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SimulateStressTest`.
+message SimulateStressTestRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string stress_test_id = 2;
+  StressTest stress_test = 3;
+  SimulateStressTestRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SimulateStressTest`.
+message SimulateStressTestResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated SimulateStressTestResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  StressTest stress_test = 1;
+  SimulateStressTestResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExplainStressTestCalculation`.
+message ExplainStressTestCalculationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string stress_test_id = 2;
+  StressTest stress_test = 3;
+  ExplainStressTestCalculationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ExplainStressTestCalculation`.
+message ExplainStressTestCalculationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  StressTest stress_test = 1;
+  ExplainStressTestCalculationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetStressTestRates`.
+message GetStressTestRatesRequest {
+  acme.common.v1.RequestContext context = 1;
+  string stress_test_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetStressTestRates`.
+message GetStressTestRatesResponse {
+  StressTest stress_test = 1;
+  acme.common.v1.OperationResult result = 2;
+}

@@ -1,0 +1,268 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.insurance.v1;
+
+import "acme/common/v1/address.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/money.proto";
+import "acme/common/v1/operation.proto";
+import "acme/insurance/v1/insurance.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Insurance.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/insurance/v1;insurancev1";
+option java_multiple_files = true;
+option java_outer_classname = "PremiumValidationServiceProto";
+option java_package = "com.acme.insurance.v1";
+
+// Checks premiums against the rules before anything acts on them.
+service PremiumValidationService {
+  // Validates a premium.
+  rpc ValidatePremium(ValidatePremiumRequest) returns (ValidatePremiumResponse);
+
+  // Previews a premium.
+  rpc PreviewPremium(PreviewPremiumRequest) returns (PreviewPremiumResponse);
+
+  // Checks a premium.
+  rpc CheckPremiumEligibility(CheckPremiumEligibilityRequest) returns (CheckPremiumEligibilityResponse);
+
+  // Normalizes a premium.
+  rpc NormalizePremium(NormalizePremiumRequest) returns (NormalizePremiumResponse);
+
+  // Scores a premium.
+  rpc ScorePremium(ScorePremiumRequest) returns (ScorePremiumResponse);
+
+  // Lints a premium.
+  rpc LintPremiums(LintPremiumsRequest) returns (LintPremiumsResponse);
+
+  // Returns a premium.
+  rpc GetPremiumRules(GetPremiumRulesRequest) returns (GetPremiumRulesResponse);
+}
+
+// The request of `ValidatePremium`.
+message ValidatePremiumRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string premium_id = 2;
+  Premium premium = 3;
+  ValidatePremiumRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ValidatePremium`.
+message ValidatePremiumResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Premium premium = 1;
+  ValidatePremiumResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PreviewPremium`.
+message PreviewPremiumRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string premium_id = 2;
+  Premium premium = 3;
+  PreviewPremiumRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PreviewPremium`.
+message PreviewPremiumResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Premium premium = 1;
+  PreviewPremiumResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CheckPremiumEligibility`.
+message CheckPremiumEligibilityRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string premium_id = 2;
+  Premium premium = 3;
+  CheckPremiumEligibilityRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CheckPremiumEligibility`.
+message CheckPremiumEligibilityResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Premium premium = 1;
+  CheckPremiumEligibilityResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `NormalizePremium`.
+message NormalizePremiumRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string premium_id = 2;
+  Premium premium = 3;
+  NormalizePremiumRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `NormalizePremium`.
+message NormalizePremiumResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Premium premium = 1;
+  NormalizePremiumResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ScorePremium`.
+message ScorePremiumRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string premium_id = 2;
+  Premium premium = 3;
+  ScorePremiumRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ScorePremium`.
+message ScorePremiumResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated ScorePremiumResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Premium premium = 1;
+  ScorePremiumResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `LintPremiums`.
+message LintPremiumsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string premium_id = 2;
+  Premium premium = 3;
+  LintPremiumsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `LintPremiums`.
+message LintPremiumsResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Premium premium = 1;
+  LintPremiumsResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetPremiumRules`.
+message GetPremiumRulesRequest {
+  acme.common.v1.RequestContext context = 1;
+  string premium_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetPremiumRules`.
+message GetPremiumRulesResponse {
+  Premium premium = 1;
+  acme.common.v1.OperationResult result = 2;
+}

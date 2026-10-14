@@ -1,0 +1,246 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.treasury.v1;
+
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/treasury/v1/treasury.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Treasury.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/treasury/v1;treasuryv1";
+option java_multiple_files = true;
+option java_outer_classname = "FxHedgeSyncServiceProto";
+option java_package = "com.acme.treasury.v1";
+
+// Keeps fx hedges in step with the systems of record in other regions.
+service FxHedgeSyncService {
+  // Syncs a fx hedge.
+  rpc SyncFxHedges(SyncFxHedgesRequest) returns (SyncFxHedgesResponse);
+
+  // Pushs a fx hedge.
+  rpc PushFxHedge(PushFxHedgeRequest) returns (PushFxHedgeResponse);
+
+  // Reconciles a fx hedge.
+  rpc ReconcileFxHedges(ReconcileFxHedgesRequest) returns (ReconcileFxHedgesResponse);
+
+  // Exchanges changes of fx hedges with a peer.
+  rpc StreamFxHedgeChanges(stream StreamFxHedgeChangesRequest) returns (stream StreamFxHedgeChangesResponse);
+
+  // Resolves a fx hedge.
+  rpc ResolveFxHedgeConflict(ResolveFxHedgeConflictRequest) returns (ResolveFxHedgeConflictResponse);
+
+  // Returns a fx hedge.
+  rpc GetFxHedgeSyncState(GetFxHedgeSyncStateRequest) returns (GetFxHedgeSyncStateResponse);
+
+  // Lists fx hedges a page at a time.
+  rpc ListFxHedgeConflicts(ListFxHedgeConflictsRequest) returns (ListFxHedgeConflictsResponse);
+}
+
+// The request of `SyncFxHedges`.
+message SyncFxHedgesRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string cursor = 1;
+    bytes payload = 2;
+    string resolution = 3;
+    string peer_region = 4;
+    string checksum = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string fx_hedge_id = 2;
+  FxHedge fx_hedge = 3;
+  SyncFxHedgesRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SyncFxHedges`.
+message SyncFxHedgesResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FxHedge fx_hedge = 1;
+  SyncFxHedgesResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PushFxHedge`.
+message PushFxHedgeRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string cursor = 1;
+    bytes payload = 2;
+    string resolution = 3;
+    string peer_region = 4;
+    string checksum = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string fx_hedge_id = 2;
+  FxHedge fx_hedge = 3;
+  PushFxHedgeRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PushFxHedge`.
+message PushFxHedgeResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FxHedge fx_hedge = 1;
+  PushFxHedgeResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ReconcileFxHedges`.
+message ReconcileFxHedgesRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string cursor = 1;
+    bytes payload = 2;
+    string resolution = 3;
+    string peer_region = 4;
+    string checksum = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string fx_hedge_id = 2;
+  FxHedge fx_hedge = 3;
+  ReconcileFxHedgesRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ReconcileFxHedges`.
+message ReconcileFxHedgesResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FxHedge fx_hedge = 1;
+  ReconcileFxHedgesResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `StreamFxHedgeChanges`.
+message StreamFxHedgeChangesRequest {
+  // An acknowledgment of a change the peer sent.
+  message ChangeAck {
+    int64 sequence = 1;
+    string status = 2;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  oneof frame {
+    FxHedge change = 2;
+    StreamFxHedgeChangesRequest.ChangeAck ack = 3;
+  }
+  string cursor = 4;
+}
+
+// The response of `StreamFxHedgeChanges`.
+message StreamFxHedgeChangesResponse {
+  FxHedge fx_hedge = 1;
+  string change_type = 2;
+  google.protobuf.Timestamp changed_at = 3;
+  int64 sequence = 4;
+  acme.common.v1.OperationResult result = 5;
+}
+
+// The request of `ResolveFxHedgeConflict`.
+message ResolveFxHedgeConflictRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string cursor = 1;
+    bytes payload = 2;
+    string resolution = 3;
+    string peer_region = 4;
+    string checksum = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string fx_hedge_id = 2;
+  FxHedge fx_hedge = 3;
+  ResolveFxHedgeConflictRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ResolveFxHedgeConflict`.
+message ResolveFxHedgeConflictResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FxHedge fx_hedge = 1;
+  ResolveFxHedgeConflictResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetFxHedgeSyncState`.
+message GetFxHedgeSyncStateRequest {
+  acme.common.v1.RequestContext context = 1;
+  string fx_hedge_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetFxHedgeSyncState`.
+message GetFxHedgeSyncStateResponse {
+  FxHedge fx_hedge = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `ListFxHedgeConflicts`.
+message ListFxHedgeConflictsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated FxHedgeStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListFxHedgeConflictsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListFxHedgeConflicts`.
+message ListFxHedgeConflictsResponse {
+  repeated FxHedge fx_hedges = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}

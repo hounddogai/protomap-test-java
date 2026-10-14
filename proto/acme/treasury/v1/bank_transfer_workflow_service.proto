@@ -1,0 +1,334 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.treasury.v1;
+
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/treasury/v1/treasury.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Treasury.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/treasury/v1;treasuryv1";
+option java_multiple_files = true;
+option java_outer_classname = "BankTransferWorkflowServiceProto";
+option java_package = "com.acme.treasury.v1";
+
+// Runs the long-lived workflow that takes a bank transfer from start to finish.
+service BankTransferWorkflowService {
+  // Starts a bank transfer.
+  rpc StartBankTransferWorkflow(StartBankTransferWorkflowRequest) returns (StartBankTransferWorkflowResponse);
+
+  // Advances a bank transfer.
+  rpc AdvanceBankTransferWorkflow(AdvanceBankTransferWorkflowRequest) returns (AdvanceBankTransferWorkflowResponse);
+
+  // Cancels a bank transfer.
+  rpc CancelBankTransferWorkflow(CancelBankTransferWorkflowRequest) returns (CancelBankTransferWorkflowResponse);
+
+  // Retrys a bank transfer.
+  rpc RetryBankTransferWorkflow(RetryBankTransferWorkflowRequest) returns (RetryBankTransferWorkflowResponse);
+
+  // Pauses a bank transfer.
+  rpc PauseBankTransferWorkflow(PauseBankTransferWorkflowRequest) returns (PauseBankTransferWorkflowResponse);
+
+  // Resumes a bank transfer.
+  rpc ResumeBankTransferWorkflow(ResumeBankTransferWorkflowRequest) returns (ResumeBankTransferWorkflowResponse);
+
+  // Returns a bank transfer.
+  rpc InspectBankTransferWorkflow(InspectBankTransferWorkflowRequest) returns (InspectBankTransferWorkflowResponse);
+
+  // Lists bank transfers a page at a time.
+  rpc ListBankTransferWorkflows(ListBankTransferWorkflowsRequest) returns (ListBankTransferWorkflowsResponse);
+
+  // Signals a bank transfer.
+  rpc SignalBankTransferWorkflow(SignalBankTransferWorkflowRequest) returns (SignalBankTransferWorkflowResponse);
+}
+
+// The request of `StartBankTransferWorkflow`.
+message StartBankTransferWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string bank_transfer_id = 2;
+  BankTransfer bank_transfer = 3;
+  StartBankTransferWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `StartBankTransferWorkflow`.
+message StartBankTransferWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  BankTransfer bank_transfer = 1;
+  StartBankTransferWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `AdvanceBankTransferWorkflow`.
+message AdvanceBankTransferWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string bank_transfer_id = 2;
+  BankTransfer bank_transfer = 3;
+  AdvanceBankTransferWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `AdvanceBankTransferWorkflow`.
+message AdvanceBankTransferWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  BankTransfer bank_transfer = 1;
+  AdvanceBankTransferWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CancelBankTransferWorkflow`.
+message CancelBankTransferWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string bank_transfer_id = 2;
+  BankTransfer bank_transfer = 3;
+  CancelBankTransferWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CancelBankTransferWorkflow`.
+message CancelBankTransferWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  BankTransfer bank_transfer = 1;
+  CancelBankTransferWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RetryBankTransferWorkflow`.
+message RetryBankTransferWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string bank_transfer_id = 2;
+  BankTransfer bank_transfer = 3;
+  RetryBankTransferWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RetryBankTransferWorkflow`.
+message RetryBankTransferWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  BankTransfer bank_transfer = 1;
+  RetryBankTransferWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PauseBankTransferWorkflow`.
+message PauseBankTransferWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string bank_transfer_id = 2;
+  BankTransfer bank_transfer = 3;
+  PauseBankTransferWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PauseBankTransferWorkflow`.
+message PauseBankTransferWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  BankTransfer bank_transfer = 1;
+  PauseBankTransferWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ResumeBankTransferWorkflow`.
+message ResumeBankTransferWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string bank_transfer_id = 2;
+  BankTransfer bank_transfer = 3;
+  ResumeBankTransferWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ResumeBankTransferWorkflow`.
+message ResumeBankTransferWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  BankTransfer bank_transfer = 1;
+  ResumeBankTransferWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `InspectBankTransferWorkflow`.
+message InspectBankTransferWorkflowRequest {
+  acme.common.v1.RequestContext context = 1;
+  string bank_transfer_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `InspectBankTransferWorkflow`.
+message InspectBankTransferWorkflowResponse {
+  BankTransfer bank_transfer = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `ListBankTransferWorkflows`.
+message ListBankTransferWorkflowsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated BankTransferStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListBankTransferWorkflowsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListBankTransferWorkflows`.
+message ListBankTransferWorkflowsResponse {
+  repeated BankTransfer bank_transfers = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SignalBankTransferWorkflow`.
+message SignalBankTransferWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string bank_transfer_id = 2;
+  BankTransfer bank_transfer = 3;
+  SignalBankTransferWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SignalBankTransferWorkflow`.
+message SignalBankTransferWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  BankTransfer bank_transfer = 1;
+  SignalBankTransferWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

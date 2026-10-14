@@ -1,0 +1,232 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.ledger.v1;
+
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/ledger/v1/ledger.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Ledger.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/ledger/v1;ledgerv1";
+option java_multiple_files = true;
+option java_outer_classname = "PostingBatchHistoryServiceProto";
+option java_package = "com.acme.ledger.v1";
+
+// Keeps every version of a posting batch and restores earlier ones.
+service PostingBatchHistoryService {
+  // Records a posting batch.
+  rpc RecordPostingBatchVersion(RecordPostingBatchVersionRequest) returns (RecordPostingBatchVersionResponse);
+
+  // Lists posting batches a page at a time.
+  rpc ListPostingBatchVersions(ListPostingBatchVersionsRequest) returns (ListPostingBatchVersionsResponse);
+
+  // Returns a posting batch.
+  rpc GetPostingBatchVersion(GetPostingBatchVersionRequest) returns (GetPostingBatchVersionResponse);
+
+  // Compares a posting batch.
+  rpc ComparePostingBatchVersions(ComparePostingBatchVersionsRequest) returns (ComparePostingBatchVersionsResponse);
+
+  // Reverts a posting batch.
+  rpc RevertPostingBatch(RevertPostingBatchRequest) returns (RevertPostingBatchResponse);
+
+  // Annotates a posting batch.
+  rpc AnnotatePostingBatchVersion(AnnotatePostingBatchVersionRequest) returns (AnnotatePostingBatchVersionResponse);
+
+  // Deletes a posting batch.
+  rpc PrunePostingBatchVersions(PrunePostingBatchVersionsRequest) returns (PrunePostingBatchVersionsResponse);
+}
+
+// The request of `RecordPostingBatchVersion`.
+message RecordPostingBatchVersionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    int64 version = 1;
+    int64 other_version = 2;
+    bytes snapshot = 3;
+    string author_email = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string posting_batch_id = 2;
+  PostingBatch posting_batch = 3;
+  RecordPostingBatchVersionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RecordPostingBatchVersion`.
+message RecordPostingBatchVersionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PostingBatch posting_batch = 1;
+  RecordPostingBatchVersionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ListPostingBatchVersions`.
+message ListPostingBatchVersionsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated PostingBatchStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListPostingBatchVersionsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListPostingBatchVersions`.
+message ListPostingBatchVersionsResponse {
+  repeated PostingBatch posting_batches = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetPostingBatchVersion`.
+message GetPostingBatchVersionRequest {
+  acme.common.v1.RequestContext context = 1;
+  string posting_batch_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetPostingBatchVersion`.
+message GetPostingBatchVersionResponse {
+  PostingBatch posting_batch = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `ComparePostingBatchVersions`.
+message ComparePostingBatchVersionsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    int64 version = 1;
+    int64 other_version = 2;
+    bytes snapshot = 3;
+    string author_email = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string posting_batch_id = 2;
+  PostingBatch posting_batch = 3;
+  ComparePostingBatchVersionsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ComparePostingBatchVersions`.
+message ComparePostingBatchVersionsResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PostingBatch posting_batch = 1;
+  ComparePostingBatchVersionsResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RevertPostingBatch`.
+message RevertPostingBatchRequest {
+  // What the operation needs besides the record.
+  message Details {
+    int64 version = 1;
+    int64 other_version = 2;
+    bytes snapshot = 3;
+    string author_email = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string posting_batch_id = 2;
+  PostingBatch posting_batch = 3;
+  RevertPostingBatchRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RevertPostingBatch`.
+message RevertPostingBatchResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PostingBatch posting_batch = 1;
+  RevertPostingBatchResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `AnnotatePostingBatchVersion`.
+message AnnotatePostingBatchVersionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    int64 version = 1;
+    int64 other_version = 2;
+    bytes snapshot = 3;
+    string author_email = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string posting_batch_id = 2;
+  PostingBatch posting_batch = 3;
+  AnnotatePostingBatchVersionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `AnnotatePostingBatchVersion`.
+message AnnotatePostingBatchVersionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PostingBatch posting_batch = 1;
+  AnnotatePostingBatchVersionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PrunePostingBatchVersions`.
+message PrunePostingBatchVersionsRequest {
+  acme.common.v1.RequestContext context = 1;
+  string posting_batch_id = 2;
+  string reason = 3;
+  string etag = 4;
+  bool force = 5;
+}
+
+// The response of `PrunePostingBatchVersions`.
+message PrunePostingBatchVersionsResponse {
+  acme.common.v1.OperationResult result = 1;
+  google.protobuf.Timestamp effective_at = 2;
+}

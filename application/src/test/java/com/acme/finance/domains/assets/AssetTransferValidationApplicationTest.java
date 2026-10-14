@@ -1,0 +1,170 @@
+package com.acme.finance.domains.assets;
+
+import com.acme.assets.v1.AssetTransfer;
+import com.acme.assets.v1.AssetTransferCalculationServiceGrpc;
+import com.acme.assets.v1.CalculateDepreciationRequest;
+import com.acme.assets.v1.CalculateDepreciationResponse;
+import com.acme.assets.v1.CheckAssetTransferEligibilityRequest;
+import com.acme.assets.v1.CheckAssetTransferEligibilityResponse;
+import com.acme.assets.v1.CompareAssetTransferOptionsRequest;
+import com.acme.assets.v1.CompareAssetTransferOptionsResponse;
+import com.acme.assets.v1.CompareDisposalOptionsRequest;
+import com.acme.assets.v1.CompareDisposalOptionsResponse;
+import com.acme.assets.v1.Depreciation;
+import com.acme.assets.v1.DepreciationCalculationServiceGrpc;
+import com.acme.assets.v1.DepreciationParticipant;
+import com.acme.assets.v1.Disposal;
+import com.acme.assets.v1.DisposalCalculationServiceGrpc;
+import com.acme.assets.v1.DisposalComment;
+import com.acme.assets.v1.EstimateFixedAssetRequest;
+import com.acme.assets.v1.EstimateFixedAssetResponse;
+import com.acme.assets.v1.ExplainAssetTransferCalculationRequest;
+import com.acme.assets.v1.ExplainAssetTransferCalculationResponse;
+import com.acme.assets.v1.ExplainAssetTransferDecisionRequest;
+import com.acme.assets.v1.ExplainAssetTransferDecisionResponse;
+import com.acme.assets.v1.FixedAsset;
+import com.acme.assets.v1.FixedAssetCalculationServiceGrpc;
+import com.acme.assets.v1.FixedAssetRef;
+import com.acme.assets.v1.GetAssetTransferRulesRequest;
+import com.acme.assets.v1.GetAssetTransferRulesResponse;
+import com.acme.assets.v1.LintAssetTransfersRequest;
+import com.acme.assets.v1.LintAssetTransfersResponse;
+import com.acme.assets.v1.NormalizeAssetTransferRequest;
+import com.acme.assets.v1.NormalizeAssetTransferResponse;
+import com.acme.assets.v1.PreviewAssetTransferRequest;
+import com.acme.assets.v1.PreviewAssetTransferResponse;
+import com.acme.assets.v1.RecalculateDepreciationsRequest;
+import com.acme.assets.v1.RecalculateDepreciationsResponse;
+import com.acme.assets.v1.ValidateAssetTransferRequest;
+import com.acme.assets.v1.ValidateAssetTransferResponse;
+import com.acme.audit.v1.AuditEvent;
+import com.acme.audit.v1.AuditEventValidationServiceGrpc;
+import com.acme.audit.v1.AuditTrailRef;
+import com.acme.audit.v1.ValidateAuditEventRequest;
+import com.acme.audit.v1.ValidateAuditEventResponse;
+import com.acme.collections.v1.CollectionCaseServiceGrpc;
+import com.acme.collections.v1.WatchCollectionCasesRequest;
+import com.acme.collections.v1.WatchCollectionCasesResponse;
+import com.acme.common.v1.AuditInfo;
+import com.acme.common.v1.ContactInfo;
+import com.acme.common.v1.OperationResult;
+import com.acme.common.v1.PostalAddress;
+import com.acme.compliance.v1.Attestation;
+import com.acme.compliance.v1.AttestationCalculationServiceGrpc;
+import com.acme.compliance.v1.CompareAttestationOptionsRequest;
+import com.acme.compliance.v1.CompareAttestationOptionsResponse;
+import com.acme.compliance.v1.Sanction;
+import com.acme.compliance.v1.SanctionValidationServiceGrpc;
+import com.acme.compliance.v1.ValidateSanctionRequest;
+import com.acme.compliance.v1.ValidateSanctionResponse;
+import com.acme.finance.platform.ChannelRegistry;
+import com.acme.finance.platform.RpcPort;
+import com.acme.finance.platform.RpcSupport;
+import com.acme.finance.testing.ProbeSupport;
+import com.acme.identity.v1.UserRef;
+import com.acme.ledger.v1.LedgerAccountNotificationServiceGrpc;
+import com.acme.ledger.v1.StreamLedgerAccountNoticesRequest;
+import com.acme.ledger.v1.StreamLedgerAccountNoticesResponse;
+import com.acme.lending.v1.LoanQueryServiceGrpc;
+import com.acme.lending.v1.SummarizeLoansRequest;
+import com.acme.lending.v1.SummarizeLoansResponse;
+import com.acme.risk.v1.CheckStressTestEligibilityRequest;
+import com.acme.risk.v1.CheckStressTestEligibilityResponse;
+import com.acme.risk.v1.StressTest;
+import com.acme.risk.v1.StressTestLine;
+import com.acme.risk.v1.StressTestLineTax;
+import com.acme.risk.v1.StressTestValidationServiceGrpc;
+import com.acme.venues.v1.ValidateVenueRequest;
+import com.acme.venues.v1.ValidateVenueResponse;
+import com.acme.venues.v1.Venue;
+import com.acme.venues.v1.VenueValidationServiceGrpc;
+import com.google.protobuf.Any;
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+
+class AssetTransferValidationApplicationTest {
+    @Test
+    void normalizeAssetTransferPreservesPlannedFields() {
+        var channel = new ProbeSupport.RecordingChannel();
+        var repository = new AssetsRepository() {
+            public void recordAction(String tenant, String kind, String id, String action) {}
+            public void recordDetail(String tenant, String operation, String detail) {}
+            public void saveAssetTransfer(String tenant, AssetTransfer value) {}
+            public void saveDepreciation(String tenant, Depreciation value) {}
+            public void saveDisposal(String tenant, Disposal value) {}
+            public void saveFixedAsset(String tenant, FixedAsset value) {}
+        };
+        var application = new AssetTransferValidationApplication(
+                AssetTransferCalculationServiceGrpc.newBlockingStub(channel),
+                DepreciationCalculationServiceGrpc.newBlockingStub(channel),
+                DisposalCalculationServiceGrpc.newBlockingStub(channel),
+                FixedAssetCalculationServiceGrpc.newBlockingStub(channel),
+                AuditEventValidationServiceGrpc.newBlockingStub(channel),
+                ChannelRegistry.fixed(channel),
+                CollectionCaseServiceGrpc.newBlockingStub(channel),
+                AttestationCalculationServiceGrpc.newBlockingStub(channel),
+                SanctionValidationServiceGrpc.newBlockingStub(channel),
+                LedgerAccountNotificationServiceGrpc.newBlockingStub(channel),
+                LoanQueryServiceGrpc.newBlockingStub(channel),
+                new AssetTransferValidationRequestMapperImpl(),
+                repository,
+                StressTestValidationServiceGrpc.newBlockingStub(channel),
+                Runnable::run,
+                VenueValidationServiceGrpc.newFutureStub(channel));
+        var request = ProbeSupport.sample(NormalizeAssetTransferRequest.getDefaultInstance());
+        var response = application.normalizeAssetTransfer(request);
+        var sent0 = channel.request("acme.assets.v1.DisposalCalculationService/CompareDisposalOptions");
+        ProbeSupport.assertValue(ProbeSupport.value(request, "context"),
+                ProbeSupport.value(sent0, "context"));
+        ProbeSupport.assertValue(ProbeSupport.value(request, "asset_transfer", "audit", "created_at"),
+                ProbeSupport.value(sent0, "disposal", "comments", "created_at"));
+        ProbeSupport.assertValue(ProbeSupport.value(request, "details", "contact", "phone"),
+                ProbeSupport.value(sent0, "disposal", "requester", "phone"));
+        var sent1 = channel.request("acme.assets.v1.FixedAssetCalculationService/EstimateFixedAsset");
+        ProbeSupport.assertValue(ProbeSupport.value(request, "context"),
+                ProbeSupport.value(sent1, "context"));
+        ProbeSupport.assertValue(ProbeSupport.value(request, "details", "contact", "email"),
+                ProbeSupport.value(sent1, "fixed_asset", "owner", "email"));
+        ProbeSupport.assertValue(ProbeSupport.value(request, "asset_transfer", "billing_address", "recipient"),
+                ProbeSupport.value(sent1, "details", "destination", "recipient"));
+        var sent2 = channel.request("acme.risk.v1.StressTestValidationService/CheckStressTestEligibility");
+        ProbeSupport.assertValue(ProbeSupport.value(request, "context"),
+                ProbeSupport.value(sent2, "context"));
+        ProbeSupport.assertValue(ProbeSupport.value(request, "asset_transfer", "lines", "tax", "amount"),
+                ProbeSupport.value(sent2, "stress_test", "lines", "amount"));
+        ProbeSupport.assertValue(ProbeSupport.value(request, "asset_transfer", "lines", "amount"),
+                ProbeSupport.value(sent2, "stress_test", "lines", "tax", "amount"));
+        var sent3 = channel.request("acme.audit.v1.AuditEventValidationService/ValidateAuditEvent");
+        ProbeSupport.assertValue(ProbeSupport.value(request, "context"),
+                ProbeSupport.value(sent3, "context"));
+        ProbeSupport.assertValue(ProbeSupport.value(channel.response("acme.assets.v1.DisposalCalculationService/CompareDisposalOptions"), "disposal", "customer", "display_name"),
+                ProbeSupport.value(sent3, "audit_event", "subject", "display_name"));
+        ProbeSupport.assertValue(ProbeSupport.value(channel.response("acme.assets.v1.DisposalCalculationService/CompareDisposalOptions"), "disposal", "requester", "phone"),
+                ProbeSupport.value(sent3, "details", "contact", "phone"));
+        ProbeSupport.assertValue(ProbeSupport.value(channel.response("acme.assets.v1.DisposalCalculationService/CompareDisposalOptions"), "disposal", "customer", "fixed_asset_id"),
+                ProbeSupport.value(response, "asset_transfer", "counterparty", "fixed_asset_id"));
+        ProbeSupport.assertValue(ProbeSupport.value(channel.response("acme.assets.v1.DisposalCalculationService/CompareDisposalOptions"), "disposal", "audit", "updated_at"),
+                ProbeSupport.value(response, "asset_transfer", "audit", "updated_at"));
+        ProbeSupport.assertValue(ProbeSupport.value(channel.response("acme.assets.v1.FixedAssetCalculationService/EstimateFixedAsset"), "fixed_asset", "audit", "etag"),
+                ProbeSupport.value(response, "asset_transfer", "audit", "etag"));
+        ProbeSupport.assertValue(ProbeSupport.value(channel.response("acme.assets.v1.FixedAssetCalculationService/EstimateFixedAsset"), "fixed_asset", "address", "region"),
+                ProbeSupport.value(response, "asset_transfer", "billing_address", "region"));
+        ProbeSupport.assertValue(ProbeSupport.value(channel.response("acme.audit.v1.AuditEventValidationService/ValidateAuditEvent"), "result", "correlation_id"),
+                ProbeSupport.value(response, "result", "correlation_id"));
+        ProbeSupport.assertValue(ProbeSupport.value(channel.response("acme.audit.v1.AuditEventValidationService/ValidateAuditEvent"), "result", "reference_ids"),
+                ProbeSupport.value(response, "result", "reference_ids"));
+        ProbeSupport.assertValue(ProbeSupport.value(request, "asset_transfer_id"),
+                ProbeSupport.value(response, "asset_transfer", "asset_transfer_id"));
+        ProbeSupport.assertValue(ProbeSupport.value(request, "asset_transfer", "notes"),
+                ProbeSupport.value(response, "asset_transfer", "notes"));
+    }
+}

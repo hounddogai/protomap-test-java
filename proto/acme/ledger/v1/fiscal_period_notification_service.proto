@@ -1,0 +1,247 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.ledger.v1;
+
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/ledger/v1/ledger.proto";
+import "google/protobuf/any.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Ledger.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/ledger/v1;ledgerv1";
+option java_multiple_files = true;
+option java_outer_classname = "FiscalPeriodNotificationServiceProto";
+option java_package = "com.acme.ledger.v1";
+
+// Tells the people who follow a fiscal period what changed.
+service FiscalPeriodNotificationService {
+  // Subscribes a fiscal period.
+  rpc SubscribeFiscalPeriodUpdates(SubscribeFiscalPeriodUpdatesRequest) returns (SubscribeFiscalPeriodUpdatesResponse);
+
+  // Unsubscribes a fiscal period.
+  rpc UnsubscribeFiscalPeriodUpdates(UnsubscribeFiscalPeriodUpdatesRequest) returns (UnsubscribeFiscalPeriodUpdatesResponse);
+
+  // Notifys a fiscal period.
+  rpc NotifyFiscalPeriodWatchers(NotifyFiscalPeriodWatchersRequest) returns (NotifyFiscalPeriodWatchersResponse);
+
+  // Lists fiscal periods a page at a time.
+  rpc ListFiscalPeriodSubscriptions(ListFiscalPeriodSubscriptionsRequest) returns (ListFiscalPeriodSubscriptionsResponse);
+
+  // Sends a fiscal period.
+  rpc SendFiscalPeriodTestNotice(SendFiscalPeriodTestNoticeRequest) returns (SendFiscalPeriodTestNoticeResponse);
+
+  // Returns a fiscal period.
+  rpc GetFiscalPeriodPreferences(GetFiscalPeriodPreferencesRequest) returns (GetFiscalPeriodPreferencesResponse);
+
+  // Streams the changes of fiscal periods as they happen.
+  rpc StreamFiscalPeriodNotices(StreamFiscalPeriodNoticesRequest) returns (stream StreamFiscalPeriodNoticesResponse);
+}
+
+// The request of `SubscribeFiscalPeriodUpdates`.
+message SubscribeFiscalPeriodUpdatesRequest {
+  // What the operation needs besides the record.
+  message Details {
+    acme.common.v1.ContactInfo recipient = 1;
+    string template_id = 2;
+    map<string, string> variables = 3;
+    google.protobuf.Any payload = 4;
+    string channel = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string fiscal_period_id = 2;
+  SubscribeFiscalPeriodUpdatesRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `SubscribeFiscalPeriodUpdates`.
+message SubscribeFiscalPeriodUpdatesResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FiscalPeriod fiscal_period = 1;
+  SubscribeFiscalPeriodUpdatesResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `UnsubscribeFiscalPeriodUpdates`.
+message UnsubscribeFiscalPeriodUpdatesRequest {
+  // What the operation needs besides the record.
+  message Details {
+    acme.common.v1.ContactInfo recipient = 1;
+    string template_id = 2;
+    map<string, string> variables = 3;
+    google.protobuf.Any payload = 4;
+    string channel = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string fiscal_period_id = 2;
+  UnsubscribeFiscalPeriodUpdatesRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `UnsubscribeFiscalPeriodUpdates`.
+message UnsubscribeFiscalPeriodUpdatesResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FiscalPeriod fiscal_period = 1;
+  UnsubscribeFiscalPeriodUpdatesResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `NotifyFiscalPeriodWatchers`.
+message NotifyFiscalPeriodWatchersRequest {
+  // What the operation needs besides the record.
+  message Details {
+    acme.common.v1.ContactInfo recipient = 1;
+    string template_id = 2;
+    map<string, string> variables = 3;
+    google.protobuf.Any payload = 4;
+    string channel = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string fiscal_period_id = 2;
+  NotifyFiscalPeriodWatchersRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `NotifyFiscalPeriodWatchers`.
+message NotifyFiscalPeriodWatchersResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FiscalPeriod fiscal_period = 1;
+  NotifyFiscalPeriodWatchersResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ListFiscalPeriodSubscriptions`.
+message ListFiscalPeriodSubscriptionsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated FiscalPeriodStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListFiscalPeriodSubscriptionsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListFiscalPeriodSubscriptions`.
+message ListFiscalPeriodSubscriptionsResponse {
+  repeated FiscalPeriod fiscal_periods = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SendFiscalPeriodTestNotice`.
+message SendFiscalPeriodTestNoticeRequest {
+  // What the operation needs besides the record.
+  message Details {
+    acme.common.v1.ContactInfo recipient = 1;
+    string template_id = 2;
+    map<string, string> variables = 3;
+    google.protobuf.Any payload = 4;
+    string channel = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string fiscal_period_id = 2;
+  SendFiscalPeriodTestNoticeRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `SendFiscalPeriodTestNotice`.
+message SendFiscalPeriodTestNoticeResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FiscalPeriod fiscal_period = 1;
+  SendFiscalPeriodTestNoticeResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetFiscalPeriodPreferences`.
+message GetFiscalPeriodPreferencesRequest {
+  acme.common.v1.RequestContext context = 1;
+  string fiscal_period_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetFiscalPeriodPreferences`.
+message GetFiscalPeriodPreferencesResponse {
+  FiscalPeriod fiscal_period = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `StreamFiscalPeriodNotices`.
+message StreamFiscalPeriodNoticesRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated FiscalPeriodStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  StreamFiscalPeriodNoticesRequest.Filter filter = 2;
+  google.protobuf.Timestamp since = 3;
+  int32 max_events = 4;
+  acme.common.v1.ContactInfo subscriber = 5;
+}
+
+// The response of `StreamFiscalPeriodNotices`.
+message StreamFiscalPeriodNoticesResponse {
+  FiscalPeriod fiscal_period = 1;
+  string change_type = 2;
+  google.protobuf.Timestamp changed_at = 3;
+  int64 sequence = 4;
+  acme.common.v1.OperationResult result = 5;
+}

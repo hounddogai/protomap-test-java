@@ -1,0 +1,334 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.billing.v1;
+
+import "acme/billing/v1/billing.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Billing.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/billing/v1;billingv1";
+option java_multiple_files = true;
+option java_outer_classname = "BillingAccountWorkflowServiceProto";
+option java_package = "com.acme.billing.v1";
+
+// Runs the long-lived workflow that takes a billing account from start to finish.
+service BillingAccountWorkflowService {
+  // Starts a billing account.
+  rpc StartBillingAccountWorkflow(StartBillingAccountWorkflowRequest) returns (StartBillingAccountWorkflowResponse);
+
+  // Advances a billing account.
+  rpc AdvanceBillingAccountWorkflow(AdvanceBillingAccountWorkflowRequest) returns (AdvanceBillingAccountWorkflowResponse);
+
+  // Cancels a billing account.
+  rpc CancelBillingAccountWorkflow(CancelBillingAccountWorkflowRequest) returns (CancelBillingAccountWorkflowResponse);
+
+  // Retrys a billing account.
+  rpc RetryBillingAccountWorkflow(RetryBillingAccountWorkflowRequest) returns (RetryBillingAccountWorkflowResponse);
+
+  // Pauses a billing account.
+  rpc PauseBillingAccountWorkflow(PauseBillingAccountWorkflowRequest) returns (PauseBillingAccountWorkflowResponse);
+
+  // Resumes a billing account.
+  rpc ResumeBillingAccountWorkflow(ResumeBillingAccountWorkflowRequest) returns (ResumeBillingAccountWorkflowResponse);
+
+  // Returns a billing account.
+  rpc InspectBillingAccountWorkflow(InspectBillingAccountWorkflowRequest) returns (InspectBillingAccountWorkflowResponse);
+
+  // Lists billing accounts a page at a time.
+  rpc ListBillingAccountWorkflows(ListBillingAccountWorkflowsRequest) returns (ListBillingAccountWorkflowsResponse);
+
+  // Signals a billing account.
+  rpc SignalBillingAccountWorkflow(SignalBillingAccountWorkflowRequest) returns (SignalBillingAccountWorkflowResponse);
+}
+
+// The request of `StartBillingAccountWorkflow`.
+message StartBillingAccountWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string billing_account_id = 2;
+  BillingAccount billing_account = 3;
+  StartBillingAccountWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `StartBillingAccountWorkflow`.
+message StartBillingAccountWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  BillingAccount billing_account = 1;
+  StartBillingAccountWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `AdvanceBillingAccountWorkflow`.
+message AdvanceBillingAccountWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string billing_account_id = 2;
+  BillingAccount billing_account = 3;
+  AdvanceBillingAccountWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `AdvanceBillingAccountWorkflow`.
+message AdvanceBillingAccountWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  BillingAccount billing_account = 1;
+  AdvanceBillingAccountWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CancelBillingAccountWorkflow`.
+message CancelBillingAccountWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string billing_account_id = 2;
+  BillingAccount billing_account = 3;
+  CancelBillingAccountWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CancelBillingAccountWorkflow`.
+message CancelBillingAccountWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  BillingAccount billing_account = 1;
+  CancelBillingAccountWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RetryBillingAccountWorkflow`.
+message RetryBillingAccountWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string billing_account_id = 2;
+  BillingAccount billing_account = 3;
+  RetryBillingAccountWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RetryBillingAccountWorkflow`.
+message RetryBillingAccountWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  BillingAccount billing_account = 1;
+  RetryBillingAccountWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PauseBillingAccountWorkflow`.
+message PauseBillingAccountWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string billing_account_id = 2;
+  BillingAccount billing_account = 3;
+  PauseBillingAccountWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PauseBillingAccountWorkflow`.
+message PauseBillingAccountWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  BillingAccount billing_account = 1;
+  PauseBillingAccountWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ResumeBillingAccountWorkflow`.
+message ResumeBillingAccountWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string billing_account_id = 2;
+  BillingAccount billing_account = 3;
+  ResumeBillingAccountWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ResumeBillingAccountWorkflow`.
+message ResumeBillingAccountWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  BillingAccount billing_account = 1;
+  ResumeBillingAccountWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `InspectBillingAccountWorkflow`.
+message InspectBillingAccountWorkflowRequest {
+  acme.common.v1.RequestContext context = 1;
+  string billing_account_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `InspectBillingAccountWorkflow`.
+message InspectBillingAccountWorkflowResponse {
+  BillingAccount billing_account = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `ListBillingAccountWorkflows`.
+message ListBillingAccountWorkflowsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated BillingAccountStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListBillingAccountWorkflowsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListBillingAccountWorkflows`.
+message ListBillingAccountWorkflowsResponse {
+  repeated BillingAccount billing_accounts = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SignalBillingAccountWorkflow`.
+message SignalBillingAccountWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string billing_account_id = 2;
+  BillingAccount billing_account = 3;
+  SignalBillingAccountWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SignalBillingAccountWorkflow`.
+message SignalBillingAccountWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  BillingAccount billing_account = 1;
+  SignalBillingAccountWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

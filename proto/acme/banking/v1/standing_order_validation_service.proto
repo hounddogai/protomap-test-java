@@ -1,0 +1,305 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.banking.v1;
+
+import "acme/banking/v1/banking.proto";
+import "acme/common/v1/address.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/money.proto";
+import "acme/common/v1/operation.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Banking.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/banking/v1;bankingv1";
+option java_multiple_files = true;
+option java_outer_classname = "StandingOrderValidationServiceProto";
+option java_package = "com.acme.banking.v1";
+
+// Checks standing orders against the rules before anything acts on them.
+service StandingOrderValidationService {
+  // Validates a standing order.
+  rpc ValidateStandingOrder(ValidateStandingOrderRequest) returns (ValidateStandingOrderResponse);
+
+  // Previews a standing order.
+  rpc PreviewStandingOrder(PreviewStandingOrderRequest) returns (PreviewStandingOrderResponse);
+
+  // Checks a standing order.
+  rpc CheckStandingOrderEligibility(CheckStandingOrderEligibilityRequest) returns (CheckStandingOrderEligibilityResponse);
+
+  // Normalizes a standing order.
+  rpc NormalizeStandingOrder(NormalizeStandingOrderRequest) returns (NormalizeStandingOrderResponse);
+
+  // Explains a standing order.
+  rpc ExplainStandingOrderDecision(ExplainStandingOrderDecisionRequest) returns (ExplainStandingOrderDecisionResponse);
+
+  // Scores a standing order.
+  rpc ScoreStandingOrder(ScoreStandingOrderRequest) returns (ScoreStandingOrderResponse);
+
+  // Lints a standing order.
+  rpc LintStandingOrders(LintStandingOrdersRequest) returns (LintStandingOrdersResponse);
+
+  // Returns a standing order.
+  rpc GetStandingOrderRules(GetStandingOrderRulesRequest) returns (GetStandingOrderRulesResponse);
+}
+
+// The request of `ValidateStandingOrder`.
+message ValidateStandingOrderRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string standing_order_id = 2;
+  StandingOrder standing_order = 3;
+  ValidateStandingOrderRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ValidateStandingOrder`.
+message ValidateStandingOrderResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  StandingOrder standing_order = 1;
+  ValidateStandingOrderResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PreviewStandingOrder`.
+message PreviewStandingOrderRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string standing_order_id = 2;
+  StandingOrder standing_order = 3;
+  PreviewStandingOrderRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PreviewStandingOrder`.
+message PreviewStandingOrderResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  StandingOrder standing_order = 1;
+  PreviewStandingOrderResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CheckStandingOrderEligibility`.
+message CheckStandingOrderEligibilityRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string standing_order_id = 2;
+  StandingOrder standing_order = 3;
+  CheckStandingOrderEligibilityRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CheckStandingOrderEligibility`.
+message CheckStandingOrderEligibilityResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  StandingOrder standing_order = 1;
+  CheckStandingOrderEligibilityResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `NormalizeStandingOrder`.
+message NormalizeStandingOrderRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string standing_order_id = 2;
+  StandingOrder standing_order = 3;
+  NormalizeStandingOrderRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `NormalizeStandingOrder`.
+message NormalizeStandingOrderResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  StandingOrder standing_order = 1;
+  NormalizeStandingOrderResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExplainStandingOrderDecision`.
+message ExplainStandingOrderDecisionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string standing_order_id = 2;
+  StandingOrder standing_order = 3;
+  ExplainStandingOrderDecisionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ExplainStandingOrderDecision`.
+message ExplainStandingOrderDecisionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  StandingOrder standing_order = 1;
+  ExplainStandingOrderDecisionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ScoreStandingOrder`.
+message ScoreStandingOrderRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string standing_order_id = 2;
+  StandingOrder standing_order = 3;
+  ScoreStandingOrderRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ScoreStandingOrder`.
+message ScoreStandingOrderResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated ScoreStandingOrderResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  StandingOrder standing_order = 1;
+  ScoreStandingOrderResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `LintStandingOrders`.
+message LintStandingOrdersRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string standing_order_id = 2;
+  StandingOrder standing_order = 3;
+  LintStandingOrdersRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `LintStandingOrders`.
+message LintStandingOrdersResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  StandingOrder standing_order = 1;
+  LintStandingOrdersResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetStandingOrderRules`.
+message GetStandingOrderRulesRequest {
+  acme.common.v1.RequestContext context = 1;
+  string standing_order_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetStandingOrderRules`.
+message GetStandingOrderRulesResponse {
+  StandingOrder standing_order = 1;
+  acme.common.v1.OperationResult result = 2;
+}

@@ -1,0 +1,219 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.billing.v1;
+
+import "acme/billing/v1/billing.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/identity/v1/refs.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Billing.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/billing/v1;billingv1";
+option java_multiple_files = true;
+option java_outer_classname = "CreditNoteApprovalServiceProto";
+option java_package = "com.acme.billing.v1";
+
+// Routes credit notes through approval, with escalation and delegation.
+service CreditNoteApprovalService {
+  // Submits a credit note.
+  rpc SubmitCreditNote(SubmitCreditNoteRequest) returns (SubmitCreditNoteResponse);
+
+  // Approves a credit note.
+  rpc ApproveCreditNote(ApproveCreditNoteRequest) returns (ApproveCreditNoteResponse);
+
+  // Rejects a credit note.
+  rpc RejectCreditNote(RejectCreditNoteRequest) returns (RejectCreditNoteResponse);
+
+  // Lists credit notes a page at a time.
+  rpc ListPendingCreditNotes(ListPendingCreditNotesRequest) returns (ListPendingCreditNotesResponse);
+
+  // Returns a credit note.
+  rpc GetCreditNoteApprovalStatus(GetCreditNoteApprovalStatusRequest) returns (GetCreditNoteApprovalStatusResponse);
+
+  // Comments a credit note.
+  rpc CommentCreditNoteApproval(CommentCreditNoteApprovalRequest) returns (CommentCreditNoteApprovalResponse);
+}
+
+// The request of `SubmitCreditNote`.
+message SubmitCreditNoteRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string credit_note_id = 2;
+  CreditNote credit_note = 3;
+  SubmitCreditNoteRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SubmitCreditNote`.
+message SubmitCreditNoteResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  CreditNote credit_note = 1;
+  SubmitCreditNoteResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ApproveCreditNote`.
+message ApproveCreditNoteRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string credit_note_id = 2;
+  CreditNote credit_note = 3;
+  ApproveCreditNoteRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ApproveCreditNote`.
+message ApproveCreditNoteResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  CreditNote credit_note = 1;
+  ApproveCreditNoteResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RejectCreditNote`.
+message RejectCreditNoteRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string credit_note_id = 2;
+  CreditNote credit_note = 3;
+  RejectCreditNoteRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RejectCreditNote`.
+message RejectCreditNoteResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  CreditNote credit_note = 1;
+  RejectCreditNoteResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ListPendingCreditNotes`.
+message ListPendingCreditNotesRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated CreditNoteStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListPendingCreditNotesRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListPendingCreditNotes`.
+message ListPendingCreditNotesResponse {
+  repeated CreditNote credit_notes = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetCreditNoteApprovalStatus`.
+message GetCreditNoteApprovalStatusRequest {
+  acme.common.v1.RequestContext context = 1;
+  string credit_note_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetCreditNoteApprovalStatus`.
+message GetCreditNoteApprovalStatusResponse {
+  CreditNote credit_note = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `CommentCreditNoteApproval`.
+message CommentCreditNoteApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string credit_note_id = 2;
+  CreditNote credit_note = 3;
+  CommentCreditNoteApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CommentCreditNoteApproval`.
+message CommentCreditNoteApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  CreditNote credit_note = 1;
+  CommentCreditNoteApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

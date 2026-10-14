@@ -1,0 +1,253 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.budgeting.v1;
+
+import "acme/budgeting/v1/budgeting.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/identity/v1/refs.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Budgeting.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/budgeting/v1;budgetingv1";
+option java_multiple_files = true;
+option java_outer_classname = "VarianceImportServiceProto";
+option java_package = "com.acme.budgeting.v1";
+
+// Takes variances in bulk from partners and legacy systems.
+service VarianceImportService {
+  // Takes a stream of variances and answers once at the end.
+  rpc ImportVariances(stream ImportVariancesRequest) returns (ImportVariancesResponse);
+
+  // Returns a variance.
+  rpc GetVarianceImportStatus(GetVarianceImportStatusRequest) returns (GetVarianceImportStatusResponse);
+
+  // Cancels a variance.
+  rpc CancelVarianceImport(CancelVarianceImportRequest) returns (CancelVarianceImportResponse);
+
+  // Validates a variance.
+  rpc ValidateVarianceImport(ValidateVarianceImportRequest) returns (ValidateVarianceImportResponse);
+
+  // Lists variances a page at a time.
+  rpc ListVarianceImports(ListVarianceImportsRequest) returns (ListVarianceImportsResponse);
+
+  // Retrys a variance.
+  rpc RetryVarianceImport(RetryVarianceImportRequest) returns (RetryVarianceImportResponse);
+
+  // Maps a variance.
+  rpc MapVarianceImportColumns(MapVarianceImportColumnsRequest) returns (MapVarianceImportColumnsResponse);
+}
+
+// The request of `ImportVariances`.
+message ImportVariancesRequest {
+  // What a stream of records starts with.
+  message StreamHeader {
+    string source = 1;
+    string format = 2;
+    int64 total_records = 3;
+    acme.common.v1.ContactInfo submitted_by = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  oneof chunk {
+    ImportVariancesRequest.StreamHeader header = 2;
+    Variance record = 3;
+  }
+  int64 sequence = 4;
+}
+
+// The response of `ImportVariances`.
+message ImportVariancesResponse {
+  // A record the import turned down.
+  message Rejection {
+    int64 sequence = 1;
+    string reason = 2;
+    string variance_id = 3;
+  }
+
+  int64 accepted = 1;
+  int64 rejected = 2;
+  repeated ImportVariancesResponse.Rejection rejections = 3;
+  acme.common.v1.OperationResult result = 4;
+}
+
+// The request of `GetVarianceImportStatus`.
+message GetVarianceImportStatusRequest {
+  acme.common.v1.RequestContext context = 1;
+  string variance_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetVarianceImportStatus`.
+message GetVarianceImportStatusResponse {
+  Variance variance = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `CancelVarianceImport`.
+message CancelVarianceImportRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string variance_id = 2;
+  CancelVarianceImportRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `CancelVarianceImport`.
+message CancelVarianceImportResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Variance variance = 1;
+  CancelVarianceImportResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ValidateVarianceImport`.
+message ValidateVarianceImportRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string variance_id = 2;
+  Variance variance = 3;
+  ValidateVarianceImportRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ValidateVarianceImport`.
+message ValidateVarianceImportResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Variance variance = 1;
+  ValidateVarianceImportResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ListVarianceImports`.
+message ListVarianceImportsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated VarianceStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListVarianceImportsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListVarianceImports`.
+message ListVarianceImportsResponse {
+  repeated Variance variances = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RetryVarianceImport`.
+message RetryVarianceImportRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string variance_id = 2;
+  Variance variance = 3;
+  RetryVarianceImportRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RetryVarianceImport`.
+message RetryVarianceImportResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Variance variance = 1;
+  RetryVarianceImportResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `MapVarianceImportColumns`.
+message MapVarianceImportColumnsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string variance_id = 2;
+  Variance variance = 3;
+  MapVarianceImportColumnsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `MapVarianceImportColumns`.
+message MapVarianceImportColumnsResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Variance variance = 1;
+  MapVarianceImportColumnsResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

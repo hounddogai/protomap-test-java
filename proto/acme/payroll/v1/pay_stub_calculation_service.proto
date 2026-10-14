@@ -1,0 +1,335 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.payroll.v1;
+
+import "acme/common/v1/address.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/money.proto";
+import "acme/common/v1/operation.proto";
+import "acme/payroll/v1/payroll.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Payroll.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/payroll/v1;payrollv1";
+option java_multiple_files = true;
+option java_outer_classname = "PayStubCalculationServiceProto";
+option java_package = "com.acme.payroll.v1";
+
+// Computes the figures of a pay stub, such as totals, taxes, and estimates.
+service PayStubCalculationService {
+  // Calculates a pay stub.
+  rpc CalculatePayStub(CalculatePayStubRequest) returns (CalculatePayStubResponse);
+
+  // Estimates a pay stub.
+  rpc EstimatePayStub(EstimatePayStubRequest) returns (EstimatePayStubResponse);
+
+  // Quotes a pay stub.
+  rpc QuotePayStub(QuotePayStubRequest) returns (QuotePayStubResponse);
+
+  // Compares a pay stub.
+  rpc ComparePayStubOptions(ComparePayStubOptionsRequest) returns (ComparePayStubOptionsResponse);
+
+  // Recalculates a pay stub.
+  rpc RecalculatePayStubs(RecalculatePayStubsRequest) returns (RecalculatePayStubsResponse);
+
+  // Simulates a pay stub.
+  rpc SimulatePayStub(SimulatePayStubRequest) returns (SimulatePayStubResponse);
+
+  // Explains a pay stub.
+  rpc ExplainPayStubCalculation(ExplainPayStubCalculationRequest) returns (ExplainPayStubCalculationResponse);
+
+  // Returns a pay stub.
+  rpc GetPayStubRates(GetPayStubRatesRequest) returns (GetPayStubRatesResponse);
+}
+
+// The request of `CalculatePayStub`.
+message CalculatePayStubRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string pay_stub_id = 2;
+  PayStub pay_stub = 3;
+  CalculatePayStubRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CalculatePayStub`.
+message CalculatePayStubResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated CalculatePayStubResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  PayStub pay_stub = 1;
+  CalculatePayStubResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `EstimatePayStub`.
+message EstimatePayStubRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string pay_stub_id = 2;
+  PayStub pay_stub = 3;
+  EstimatePayStubRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `EstimatePayStub`.
+message EstimatePayStubResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated EstimatePayStubResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  PayStub pay_stub = 1;
+  EstimatePayStubResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `QuotePayStub`.
+message QuotePayStubRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string pay_stub_id = 2;
+  PayStub pay_stub = 3;
+  QuotePayStubRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `QuotePayStub`.
+message QuotePayStubResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated QuotePayStubResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  PayStub pay_stub = 1;
+  QuotePayStubResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ComparePayStubOptions`.
+message ComparePayStubOptionsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string pay_stub_id = 2;
+  PayStub pay_stub = 3;
+  ComparePayStubOptionsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ComparePayStubOptions`.
+message ComparePayStubOptionsResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated ComparePayStubOptionsResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  PayStub pay_stub = 1;
+  ComparePayStubOptionsResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RecalculatePayStubs`.
+message RecalculatePayStubsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string pay_stub_id = 2;
+  PayStub pay_stub = 3;
+  RecalculatePayStubsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RecalculatePayStubs`.
+message RecalculatePayStubsResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated RecalculatePayStubsResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  PayStub pay_stub = 1;
+  RecalculatePayStubsResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SimulatePayStub`.
+message SimulatePayStubRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string pay_stub_id = 2;
+  PayStub pay_stub = 3;
+  SimulatePayStubRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SimulatePayStub`.
+message SimulatePayStubResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated SimulatePayStubResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  PayStub pay_stub = 1;
+  SimulatePayStubResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExplainPayStubCalculation`.
+message ExplainPayStubCalculationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string pay_stub_id = 2;
+  PayStub pay_stub = 3;
+  ExplainPayStubCalculationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ExplainPayStubCalculation`.
+message ExplainPayStubCalculationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PayStub pay_stub = 1;
+  ExplainPayStubCalculationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetPayStubRates`.
+message GetPayStubRatesRequest {
+  acme.common.v1.RequestContext context = 1;
+  string pay_stub_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetPayStubRates`.
+message GetPayStubRatesResponse {
+  PayStub pay_stub = 1;
+  acme.common.v1.OperationResult result = 2;
+}

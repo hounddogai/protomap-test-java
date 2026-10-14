@@ -1,0 +1,333 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.compliance.v1;
+
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/compliance/v1/compliance.proto";
+import "acme/identity/v1/refs.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Compliance.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/compliance/v1;compliancev1";
+option java_multiple_files = true;
+option java_outer_classname = "SanctionApprovalServiceProto";
+option java_package = "com.acme.compliance.v1";
+
+// Routes sanctions through approval, with escalation and delegation.
+service SanctionApprovalService {
+  // Submits a sanction.
+  rpc SubmitSanction(SubmitSanctionRequest) returns (SubmitSanctionResponse);
+
+  // Approves a sanction.
+  rpc ApproveSanction(ApproveSanctionRequest) returns (ApproveSanctionResponse);
+
+  // Rejects a sanction.
+  rpc RejectSanction(RejectSanctionRequest) returns (RejectSanctionResponse);
+
+  // Escalates a sanction.
+  rpc EscalateSanction(EscalateSanctionRequest) returns (EscalateSanctionResponse);
+
+  // Lists sanctions a page at a time.
+  rpc ListPendingSanctions(ListPendingSanctionsRequest) returns (ListPendingSanctionsResponse);
+
+  // Delegates a sanction.
+  rpc DelegateSanctionApproval(DelegateSanctionApprovalRequest) returns (DelegateSanctionApprovalResponse);
+
+  // Recalls a sanction.
+  rpc RecallSanction(RecallSanctionRequest) returns (RecallSanctionResponse);
+
+  // Returns a sanction.
+  rpc GetSanctionApprovalStatus(GetSanctionApprovalStatusRequest) returns (GetSanctionApprovalStatusResponse);
+
+  // Comments a sanction.
+  rpc CommentSanctionApproval(CommentSanctionApprovalRequest) returns (CommentSanctionApprovalResponse);
+}
+
+// The request of `SubmitSanction`.
+message SubmitSanctionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string sanction_id = 2;
+  Sanction sanction = 3;
+  SubmitSanctionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SubmitSanction`.
+message SubmitSanctionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Sanction sanction = 1;
+  SubmitSanctionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ApproveSanction`.
+message ApproveSanctionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string sanction_id = 2;
+  Sanction sanction = 3;
+  ApproveSanctionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ApproveSanction`.
+message ApproveSanctionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Sanction sanction = 1;
+  ApproveSanctionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RejectSanction`.
+message RejectSanctionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string sanction_id = 2;
+  Sanction sanction = 3;
+  RejectSanctionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RejectSanction`.
+message RejectSanctionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Sanction sanction = 1;
+  RejectSanctionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `EscalateSanction`.
+message EscalateSanctionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string sanction_id = 2;
+  Sanction sanction = 3;
+  EscalateSanctionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `EscalateSanction`.
+message EscalateSanctionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Sanction sanction = 1;
+  EscalateSanctionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ListPendingSanctions`.
+message ListPendingSanctionsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated SanctionStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListPendingSanctionsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListPendingSanctions`.
+message ListPendingSanctionsResponse {
+  repeated Sanction sanctions = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `DelegateSanctionApproval`.
+message DelegateSanctionApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string sanction_id = 2;
+  Sanction sanction = 3;
+  DelegateSanctionApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `DelegateSanctionApproval`.
+message DelegateSanctionApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Sanction sanction = 1;
+  DelegateSanctionApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RecallSanction`.
+message RecallSanctionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string sanction_id = 2;
+  Sanction sanction = 3;
+  RecallSanctionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RecallSanction`.
+message RecallSanctionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Sanction sanction = 1;
+  RecallSanctionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetSanctionApprovalStatus`.
+message GetSanctionApprovalStatusRequest {
+  acme.common.v1.RequestContext context = 1;
+  string sanction_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetSanctionApprovalStatus`.
+message GetSanctionApprovalStatusResponse {
+  Sanction sanction = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `CommentSanctionApproval`.
+message CommentSanctionApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string sanction_id = 2;
+  Sanction sanction = 3;
+  CommentSanctionApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CommentSanctionApproval`.
+message CommentSanctionApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Sanction sanction = 1;
+  CommentSanctionApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

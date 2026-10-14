@@ -1,0 +1,266 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.accounting.v1;
+
+import "acme/accounting/v1/accounting.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/identity/v1/refs.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Accounting.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/accounting/v1;accountingv1";
+option java_multiple_files = true;
+option java_outer_classname = "ChartOfAccountsApprovalServiceProto";
+option java_package = "com.acme.accounting.v1";
+
+// Routes chart of accountses through approval, with escalation and delegation.
+service ChartOfAccountsApprovalService {
+  // Submits a chart of accounts.
+  rpc SubmitChartOfAccounts(SubmitChartOfAccountsRequest) returns (SubmitChartOfAccountsResponse);
+
+  // Approves a chart of accounts.
+  rpc ApproveChartOfAccounts(ApproveChartOfAccountsRequest) returns (ApproveChartOfAccountsResponse);
+
+  // Rejects a chart of accounts.
+  rpc RejectChartOfAccounts(RejectChartOfAccountsRequest) returns (RejectChartOfAccountsResponse);
+
+  // Delegates a chart of accounts.
+  rpc DelegateChartOfAccountsApproval(DelegateChartOfAccountsApprovalRequest) returns (DelegateChartOfAccountsApprovalResponse);
+
+  // Recalls a chart of accounts.
+  rpc RecallChartOfAccounts(RecallChartOfAccountsRequest) returns (RecallChartOfAccountsResponse);
+
+  // Returns a chart of accounts.
+  rpc GetChartOfAccountsApprovalStatus(GetChartOfAccountsApprovalStatusRequest) returns (GetChartOfAccountsApprovalStatusResponse);
+
+  // Comments a chart of accounts.
+  rpc CommentChartOfAccountsApproval(CommentChartOfAccountsApprovalRequest) returns (CommentChartOfAccountsApprovalResponse);
+}
+
+// The request of `SubmitChartOfAccounts`.
+message SubmitChartOfAccountsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string chart_of_accounts_id = 2;
+  ChartOfAccounts chart_of_accounts = 3;
+  SubmitChartOfAccountsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SubmitChartOfAccounts`.
+message SubmitChartOfAccountsResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ChartOfAccounts chart_of_accounts = 1;
+  SubmitChartOfAccountsResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ApproveChartOfAccounts`.
+message ApproveChartOfAccountsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string chart_of_accounts_id = 2;
+  ChartOfAccounts chart_of_accounts = 3;
+  ApproveChartOfAccountsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ApproveChartOfAccounts`.
+message ApproveChartOfAccountsResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ChartOfAccounts chart_of_accounts = 1;
+  ApproveChartOfAccountsResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RejectChartOfAccounts`.
+message RejectChartOfAccountsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string chart_of_accounts_id = 2;
+  ChartOfAccounts chart_of_accounts = 3;
+  RejectChartOfAccountsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RejectChartOfAccounts`.
+message RejectChartOfAccountsResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ChartOfAccounts chart_of_accounts = 1;
+  RejectChartOfAccountsResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `DelegateChartOfAccountsApproval`.
+message DelegateChartOfAccountsApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string chart_of_accounts_id = 2;
+  ChartOfAccounts chart_of_accounts = 3;
+  DelegateChartOfAccountsApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `DelegateChartOfAccountsApproval`.
+message DelegateChartOfAccountsApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ChartOfAccounts chart_of_accounts = 1;
+  DelegateChartOfAccountsApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RecallChartOfAccounts`.
+message RecallChartOfAccountsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string chart_of_accounts_id = 2;
+  ChartOfAccounts chart_of_accounts = 3;
+  RecallChartOfAccountsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RecallChartOfAccounts`.
+message RecallChartOfAccountsResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ChartOfAccounts chart_of_accounts = 1;
+  RecallChartOfAccountsResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetChartOfAccountsApprovalStatus`.
+message GetChartOfAccountsApprovalStatusRequest {
+  acme.common.v1.RequestContext context = 1;
+  string chart_of_accounts_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetChartOfAccountsApprovalStatus`.
+message GetChartOfAccountsApprovalStatusResponse {
+  ChartOfAccounts chart_of_accounts = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `CommentChartOfAccountsApproval`.
+message CommentChartOfAccountsApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string chart_of_accounts_id = 2;
+  ChartOfAccounts chart_of_accounts = 3;
+  CommentChartOfAccountsApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CommentChartOfAccountsApproval`.
+message CommentChartOfAccountsApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ChartOfAccounts chart_of_accounts = 1;
+  CommentChartOfAccountsApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

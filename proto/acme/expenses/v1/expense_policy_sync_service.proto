@@ -1,0 +1,284 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.expenses.v1;
+
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/expenses/v1/expenses.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Expenses.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/expenses/v1;expensesv1";
+option java_multiple_files = true;
+option java_outer_classname = "ExpensePolicySyncServiceProto";
+option java_package = "com.acme.expenses.v1";
+
+// Keeps expense policies in step with the systems of record in other regions.
+service ExpensePolicySyncService {
+  // Syncs an expense policy.
+  rpc SyncExpensePolicies(SyncExpensePoliciesRequest) returns (SyncExpensePoliciesResponse);
+
+  // Pushs an expense policy.
+  rpc PushExpensePolicy(PushExpensePolicyRequest) returns (PushExpensePolicyResponse);
+
+  // Pulls an expense policy.
+  rpc PullExpensePolicies(PullExpensePoliciesRequest) returns (PullExpensePoliciesResponse);
+
+  // Reconciles an expense policy.
+  rpc ReconcileExpensePolicies(ReconcileExpensePoliciesRequest) returns (ReconcileExpensePoliciesResponse);
+
+  // Exchanges changes of expense policies with a peer.
+  rpc StreamExpensePolicyChanges(stream StreamExpensePolicyChangesRequest) returns (stream StreamExpensePolicyChangesResponse);
+
+  // Resolves an expense policy.
+  rpc ResolveExpensePolicyConflict(ResolveExpensePolicyConflictRequest) returns (ResolveExpensePolicyConflictResponse);
+
+  // Returns an expense policy.
+  rpc GetExpensePolicySyncState(GetExpensePolicySyncStateRequest) returns (GetExpensePolicySyncStateResponse);
+
+  // Lists expense policies a page at a time.
+  rpc ListExpensePolicyConflicts(ListExpensePolicyConflictsRequest) returns (ListExpensePolicyConflictsResponse);
+}
+
+// The request of `SyncExpensePolicies`.
+message SyncExpensePoliciesRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string cursor = 1;
+    bytes payload = 2;
+    string resolution = 3;
+    string peer_region = 4;
+    string checksum = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string expense_policy_id = 2;
+  ExpensePolicy expense_policy = 3;
+  SyncExpensePoliciesRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SyncExpensePolicies`.
+message SyncExpensePoliciesResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ExpensePolicy expense_policy = 1;
+  SyncExpensePoliciesResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PushExpensePolicy`.
+message PushExpensePolicyRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string cursor = 1;
+    bytes payload = 2;
+    string resolution = 3;
+    string peer_region = 4;
+    string checksum = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string expense_policy_id = 2;
+  ExpensePolicy expense_policy = 3;
+  PushExpensePolicyRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PushExpensePolicy`.
+message PushExpensePolicyResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ExpensePolicy expense_policy = 1;
+  PushExpensePolicyResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PullExpensePolicies`.
+message PullExpensePoliciesRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string cursor = 1;
+    bytes payload = 2;
+    string resolution = 3;
+    string peer_region = 4;
+    string checksum = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string expense_policy_id = 2;
+  ExpensePolicy expense_policy = 3;
+  PullExpensePoliciesRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PullExpensePolicies`.
+message PullExpensePoliciesResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ExpensePolicy expense_policy = 1;
+  PullExpensePoliciesResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ReconcileExpensePolicies`.
+message ReconcileExpensePoliciesRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string cursor = 1;
+    bytes payload = 2;
+    string resolution = 3;
+    string peer_region = 4;
+    string checksum = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string expense_policy_id = 2;
+  ExpensePolicy expense_policy = 3;
+  ReconcileExpensePoliciesRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ReconcileExpensePolicies`.
+message ReconcileExpensePoliciesResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ExpensePolicy expense_policy = 1;
+  ReconcileExpensePoliciesResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `StreamExpensePolicyChanges`.
+message StreamExpensePolicyChangesRequest {
+  // An acknowledgment of a change the peer sent.
+  message ChangeAck {
+    int64 sequence = 1;
+    string status = 2;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  oneof frame {
+    ExpensePolicy change = 2;
+    StreamExpensePolicyChangesRequest.ChangeAck ack = 3;
+  }
+  string cursor = 4;
+}
+
+// The response of `StreamExpensePolicyChanges`.
+message StreamExpensePolicyChangesResponse {
+  ExpensePolicy expense_policy = 1;
+  string change_type = 2;
+  google.protobuf.Timestamp changed_at = 3;
+  int64 sequence = 4;
+  acme.common.v1.OperationResult result = 5;
+}
+
+// The request of `ResolveExpensePolicyConflict`.
+message ResolveExpensePolicyConflictRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string cursor = 1;
+    bytes payload = 2;
+    string resolution = 3;
+    string peer_region = 4;
+    string checksum = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string expense_policy_id = 2;
+  ExpensePolicy expense_policy = 3;
+  ResolveExpensePolicyConflictRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ResolveExpensePolicyConflict`.
+message ResolveExpensePolicyConflictResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ExpensePolicy expense_policy = 1;
+  ResolveExpensePolicyConflictResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetExpensePolicySyncState`.
+message GetExpensePolicySyncStateRequest {
+  acme.common.v1.RequestContext context = 1;
+  string expense_policy_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetExpensePolicySyncState`.
+message GetExpensePolicySyncStateResponse {
+  ExpensePolicy expense_policy = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `ListExpensePolicyConflicts`.
+message ListExpensePolicyConflictsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated ExpensePolicyStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListExpensePolicyConflictsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListExpensePolicyConflicts`.
+message ListExpensePolicyConflictsResponse {
+  repeated ExpensePolicy expense_policies = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}

@@ -1,0 +1,334 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.budgeting.v1;
+
+import "acme/budgeting/v1/budgeting.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Budgeting.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/budgeting/v1;budgetingv1";
+option java_multiple_files = true;
+option java_outer_classname = "BudgetWorkflowServiceProto";
+option java_package = "com.acme.budgeting.v1";
+
+// Runs the long-lived workflow that takes a budget from start to finish.
+service BudgetWorkflowService {
+  // Starts a budget.
+  rpc StartBudgetWorkflow(StartBudgetWorkflowRequest) returns (StartBudgetWorkflowResponse);
+
+  // Advances a budget.
+  rpc AdvanceBudgetWorkflow(AdvanceBudgetWorkflowRequest) returns (AdvanceBudgetWorkflowResponse);
+
+  // Cancels a budget.
+  rpc CancelBudgetWorkflow(CancelBudgetWorkflowRequest) returns (CancelBudgetWorkflowResponse);
+
+  // Retrys a budget.
+  rpc RetryBudgetWorkflow(RetryBudgetWorkflowRequest) returns (RetryBudgetWorkflowResponse);
+
+  // Pauses a budget.
+  rpc PauseBudgetWorkflow(PauseBudgetWorkflowRequest) returns (PauseBudgetWorkflowResponse);
+
+  // Resumes a budget.
+  rpc ResumeBudgetWorkflow(ResumeBudgetWorkflowRequest) returns (ResumeBudgetWorkflowResponse);
+
+  // Returns a budget.
+  rpc InspectBudgetWorkflow(InspectBudgetWorkflowRequest) returns (InspectBudgetWorkflowResponse);
+
+  // Lists budgets a page at a time.
+  rpc ListBudgetWorkflows(ListBudgetWorkflowsRequest) returns (ListBudgetWorkflowsResponse);
+
+  // Signals a budget.
+  rpc SignalBudgetWorkflow(SignalBudgetWorkflowRequest) returns (SignalBudgetWorkflowResponse);
+}
+
+// The request of `StartBudgetWorkflow`.
+message StartBudgetWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string budget_id = 2;
+  Budget budget = 3;
+  StartBudgetWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `StartBudgetWorkflow`.
+message StartBudgetWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Budget budget = 1;
+  StartBudgetWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `AdvanceBudgetWorkflow`.
+message AdvanceBudgetWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string budget_id = 2;
+  Budget budget = 3;
+  AdvanceBudgetWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `AdvanceBudgetWorkflow`.
+message AdvanceBudgetWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Budget budget = 1;
+  AdvanceBudgetWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CancelBudgetWorkflow`.
+message CancelBudgetWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string budget_id = 2;
+  Budget budget = 3;
+  CancelBudgetWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CancelBudgetWorkflow`.
+message CancelBudgetWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Budget budget = 1;
+  CancelBudgetWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RetryBudgetWorkflow`.
+message RetryBudgetWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string budget_id = 2;
+  Budget budget = 3;
+  RetryBudgetWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RetryBudgetWorkflow`.
+message RetryBudgetWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Budget budget = 1;
+  RetryBudgetWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PauseBudgetWorkflow`.
+message PauseBudgetWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string budget_id = 2;
+  Budget budget = 3;
+  PauseBudgetWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PauseBudgetWorkflow`.
+message PauseBudgetWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Budget budget = 1;
+  PauseBudgetWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ResumeBudgetWorkflow`.
+message ResumeBudgetWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string budget_id = 2;
+  Budget budget = 3;
+  ResumeBudgetWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ResumeBudgetWorkflow`.
+message ResumeBudgetWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Budget budget = 1;
+  ResumeBudgetWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `InspectBudgetWorkflow`.
+message InspectBudgetWorkflowRequest {
+  acme.common.v1.RequestContext context = 1;
+  string budget_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `InspectBudgetWorkflow`.
+message InspectBudgetWorkflowResponse {
+  Budget budget = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `ListBudgetWorkflows`.
+message ListBudgetWorkflowsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated BudgetStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListBudgetWorkflowsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListBudgetWorkflows`.
+message ListBudgetWorkflowsResponse {
+  repeated Budget budgets = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SignalBudgetWorkflow`.
+message SignalBudgetWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string budget_id = 2;
+  Budget budget = 3;
+  SignalBudgetWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SignalBudgetWorkflow`.
+message SignalBudgetWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Budget budget = 1;
+  SignalBudgetWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

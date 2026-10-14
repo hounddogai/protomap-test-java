@@ -1,0 +1,268 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.contracts.v1;
+
+import "acme/common/v1/address.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/money.proto";
+import "acme/common/v1/operation.proto";
+import "acme/contracts/v1/contracts.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Contracts.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/contracts/v1;contractsv1";
+option java_multiple_files = true;
+option java_outer_classname = "RenewalValidationServiceProto";
+option java_package = "com.acme.contracts.v1";
+
+// Checks renewals against the rules before anything acts on them.
+service RenewalValidationService {
+  // Validates a renewal.
+  rpc ValidateRenewal(ValidateRenewalRequest) returns (ValidateRenewalResponse);
+
+  // Previews a renewal.
+  rpc PreviewRenewal(PreviewRenewalRequest) returns (PreviewRenewalResponse);
+
+  // Checks a renewal.
+  rpc CheckRenewalEligibility(CheckRenewalEligibilityRequest) returns (CheckRenewalEligibilityResponse);
+
+  // Normalizes a renewal.
+  rpc NormalizeRenewal(NormalizeRenewalRequest) returns (NormalizeRenewalResponse);
+
+  // Explains a renewal.
+  rpc ExplainRenewalDecision(ExplainRenewalDecisionRequest) returns (ExplainRenewalDecisionResponse);
+
+  // Scores a renewal.
+  rpc ScoreRenewal(ScoreRenewalRequest) returns (ScoreRenewalResponse);
+
+  // Returns a renewal.
+  rpc GetRenewalRules(GetRenewalRulesRequest) returns (GetRenewalRulesResponse);
+}
+
+// The request of `ValidateRenewal`.
+message ValidateRenewalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string renewal_id = 2;
+  Renewal renewal = 3;
+  ValidateRenewalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ValidateRenewal`.
+message ValidateRenewalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Renewal renewal = 1;
+  ValidateRenewalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PreviewRenewal`.
+message PreviewRenewalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string renewal_id = 2;
+  Renewal renewal = 3;
+  PreviewRenewalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PreviewRenewal`.
+message PreviewRenewalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Renewal renewal = 1;
+  PreviewRenewalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CheckRenewalEligibility`.
+message CheckRenewalEligibilityRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string renewal_id = 2;
+  Renewal renewal = 3;
+  CheckRenewalEligibilityRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CheckRenewalEligibility`.
+message CheckRenewalEligibilityResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Renewal renewal = 1;
+  CheckRenewalEligibilityResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `NormalizeRenewal`.
+message NormalizeRenewalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string renewal_id = 2;
+  Renewal renewal = 3;
+  NormalizeRenewalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `NormalizeRenewal`.
+message NormalizeRenewalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Renewal renewal = 1;
+  NormalizeRenewalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExplainRenewalDecision`.
+message ExplainRenewalDecisionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string renewal_id = 2;
+  Renewal renewal = 3;
+  ExplainRenewalDecisionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ExplainRenewalDecision`.
+message ExplainRenewalDecisionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Renewal renewal = 1;
+  ExplainRenewalDecisionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ScoreRenewal`.
+message ScoreRenewalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string renewal_id = 2;
+  Renewal renewal = 3;
+  ScoreRenewalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ScoreRenewal`.
+message ScoreRenewalResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated ScoreRenewalResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Renewal renewal = 1;
+  ScoreRenewalResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetRenewalRules`.
+message GetRenewalRulesRequest {
+  acme.common.v1.RequestContext context = 1;
+  string renewal_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetRenewalRules`.
+message GetRenewalRulesResponse {
+  Renewal renewal = 1;
+  acme.common.v1.OperationResult result = 2;
+}

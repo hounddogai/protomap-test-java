@@ -1,0 +1,334 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.treasury.v1;
+
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/treasury/v1/treasury.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Treasury.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/treasury/v1;treasuryv1";
+option java_multiple_files = true;
+option java_outer_classname = "FxHedgeWorkflowServiceProto";
+option java_package = "com.acme.treasury.v1";
+
+// Runs the long-lived workflow that takes a fx hedge from start to finish.
+service FxHedgeWorkflowService {
+  // Starts a fx hedge.
+  rpc StartFxHedgeWorkflow(StartFxHedgeWorkflowRequest) returns (StartFxHedgeWorkflowResponse);
+
+  // Advances a fx hedge.
+  rpc AdvanceFxHedgeWorkflow(AdvanceFxHedgeWorkflowRequest) returns (AdvanceFxHedgeWorkflowResponse);
+
+  // Cancels a fx hedge.
+  rpc CancelFxHedgeWorkflow(CancelFxHedgeWorkflowRequest) returns (CancelFxHedgeWorkflowResponse);
+
+  // Retrys a fx hedge.
+  rpc RetryFxHedgeWorkflow(RetryFxHedgeWorkflowRequest) returns (RetryFxHedgeWorkflowResponse);
+
+  // Pauses a fx hedge.
+  rpc PauseFxHedgeWorkflow(PauseFxHedgeWorkflowRequest) returns (PauseFxHedgeWorkflowResponse);
+
+  // Resumes a fx hedge.
+  rpc ResumeFxHedgeWorkflow(ResumeFxHedgeWorkflowRequest) returns (ResumeFxHedgeWorkflowResponse);
+
+  // Returns a fx hedge.
+  rpc InspectFxHedgeWorkflow(InspectFxHedgeWorkflowRequest) returns (InspectFxHedgeWorkflowResponse);
+
+  // Lists fx hedges a page at a time.
+  rpc ListFxHedgeWorkflows(ListFxHedgeWorkflowsRequest) returns (ListFxHedgeWorkflowsResponse);
+
+  // Signals a fx hedge.
+  rpc SignalFxHedgeWorkflow(SignalFxHedgeWorkflowRequest) returns (SignalFxHedgeWorkflowResponse);
+}
+
+// The request of `StartFxHedgeWorkflow`.
+message StartFxHedgeWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string fx_hedge_id = 2;
+  FxHedge fx_hedge = 3;
+  StartFxHedgeWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `StartFxHedgeWorkflow`.
+message StartFxHedgeWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FxHedge fx_hedge = 1;
+  StartFxHedgeWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `AdvanceFxHedgeWorkflow`.
+message AdvanceFxHedgeWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string fx_hedge_id = 2;
+  FxHedge fx_hedge = 3;
+  AdvanceFxHedgeWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `AdvanceFxHedgeWorkflow`.
+message AdvanceFxHedgeWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FxHedge fx_hedge = 1;
+  AdvanceFxHedgeWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CancelFxHedgeWorkflow`.
+message CancelFxHedgeWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string fx_hedge_id = 2;
+  FxHedge fx_hedge = 3;
+  CancelFxHedgeWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CancelFxHedgeWorkflow`.
+message CancelFxHedgeWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FxHedge fx_hedge = 1;
+  CancelFxHedgeWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RetryFxHedgeWorkflow`.
+message RetryFxHedgeWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string fx_hedge_id = 2;
+  FxHedge fx_hedge = 3;
+  RetryFxHedgeWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RetryFxHedgeWorkflow`.
+message RetryFxHedgeWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FxHedge fx_hedge = 1;
+  RetryFxHedgeWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PauseFxHedgeWorkflow`.
+message PauseFxHedgeWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string fx_hedge_id = 2;
+  FxHedge fx_hedge = 3;
+  PauseFxHedgeWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PauseFxHedgeWorkflow`.
+message PauseFxHedgeWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FxHedge fx_hedge = 1;
+  PauseFxHedgeWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ResumeFxHedgeWorkflow`.
+message ResumeFxHedgeWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string fx_hedge_id = 2;
+  FxHedge fx_hedge = 3;
+  ResumeFxHedgeWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ResumeFxHedgeWorkflow`.
+message ResumeFxHedgeWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FxHedge fx_hedge = 1;
+  ResumeFxHedgeWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `InspectFxHedgeWorkflow`.
+message InspectFxHedgeWorkflowRequest {
+  acme.common.v1.RequestContext context = 1;
+  string fx_hedge_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `InspectFxHedgeWorkflow`.
+message InspectFxHedgeWorkflowResponse {
+  FxHedge fx_hedge = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `ListFxHedgeWorkflows`.
+message ListFxHedgeWorkflowsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated FxHedgeStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListFxHedgeWorkflowsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListFxHedgeWorkflows`.
+message ListFxHedgeWorkflowsResponse {
+  repeated FxHedge fx_hedges = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SignalFxHedgeWorkflow`.
+message SignalFxHedgeWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string fx_hedge_id = 2;
+  FxHedge fx_hedge = 3;
+  SignalFxHedgeWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SignalFxHedgeWorkflow`.
+message SignalFxHedgeWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FxHedge fx_hedge = 1;
+  SignalFxHedgeWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

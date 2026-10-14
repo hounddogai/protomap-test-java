@@ -1,0 +1,278 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.collections.v1;
+
+import "acme/collections/v1/collections.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/identity/v1/refs.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Collections.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/collections/v1;collectionsv1";
+option java_multiple_files = true;
+option java_outer_classname = "WriteOffApprovalServiceProto";
+option java_package = "com.acme.collections.v1";
+
+// Routes write offs through approval, with escalation and delegation.
+service WriteOffApprovalService {
+  // Submits a write off.
+  rpc SubmitWriteOff(SubmitWriteOffRequest) returns (SubmitWriteOffResponse);
+
+  // Approves a write off.
+  rpc ApproveWriteOff(ApproveWriteOffRequest) returns (ApproveWriteOffResponse);
+
+  // Rejects a write off.
+  rpc RejectWriteOff(RejectWriteOffRequest) returns (RejectWriteOffResponse);
+
+  // Escalates a write off.
+  rpc EscalateWriteOff(EscalateWriteOffRequest) returns (EscalateWriteOffResponse);
+
+  // Lists write offs a page at a time.
+  rpc ListPendingWriteOffs(ListPendingWriteOffsRequest) returns (ListPendingWriteOffsResponse);
+
+  // Recalls a write off.
+  rpc RecallWriteOff(RecallWriteOffRequest) returns (RecallWriteOffResponse);
+
+  // Comments a write off.
+  rpc CommentWriteOffApproval(CommentWriteOffApprovalRequest) returns (CommentWriteOffApprovalResponse);
+}
+
+// The request of `SubmitWriteOff`.
+message SubmitWriteOffRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string write_off_id = 2;
+  WriteOff write_off = 3;
+  SubmitWriteOffRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SubmitWriteOff`.
+message SubmitWriteOffResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  WriteOff write_off = 1;
+  SubmitWriteOffResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ApproveWriteOff`.
+message ApproveWriteOffRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string write_off_id = 2;
+  WriteOff write_off = 3;
+  ApproveWriteOffRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ApproveWriteOff`.
+message ApproveWriteOffResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  WriteOff write_off = 1;
+  ApproveWriteOffResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RejectWriteOff`.
+message RejectWriteOffRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string write_off_id = 2;
+  WriteOff write_off = 3;
+  RejectWriteOffRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RejectWriteOff`.
+message RejectWriteOffResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  WriteOff write_off = 1;
+  RejectWriteOffResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `EscalateWriteOff`.
+message EscalateWriteOffRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string write_off_id = 2;
+  WriteOff write_off = 3;
+  EscalateWriteOffRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `EscalateWriteOff`.
+message EscalateWriteOffResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  WriteOff write_off = 1;
+  EscalateWriteOffResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ListPendingWriteOffs`.
+message ListPendingWriteOffsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated WriteOffStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListPendingWriteOffsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListPendingWriteOffs`.
+message ListPendingWriteOffsResponse {
+  repeated WriteOff write_offs = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RecallWriteOff`.
+message RecallWriteOffRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string write_off_id = 2;
+  WriteOff write_off = 3;
+  RecallWriteOffRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RecallWriteOff`.
+message RecallWriteOffResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  WriteOff write_off = 1;
+  RecallWriteOffResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CommentWriteOffApproval`.
+message CommentWriteOffApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string write_off_id = 2;
+  WriteOff write_off = 3;
+  CommentWriteOffApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CommentWriteOffApproval`.
+message CommentWriteOffApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  WriteOff write_off = 1;
+  CommentWriteOffApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

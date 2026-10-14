@@ -1,0 +1,152 @@
+[
+  {
+    "pattern": "anonymous_class",
+    "calls": 201,
+    "flows": 980
+  },
+  {
+    "pattern": "any_roundtrip",
+    "calls": 205,
+    "flows": 986
+  },
+  {
+    "pattern": "application_event",
+    "calls": 191,
+    "flows": 888
+  },
+  {
+    "pattern": "async_each",
+    "calls": 143,
+    "flows": 492
+  },
+  {
+    "pattern": "batch_job",
+    "calls": 6,
+    "flows": 3
+  },
+  {
+    "pattern": "bidi_call",
+    "calls": 131,
+    "flows": 524
+  },
+  {
+    "pattern": "blocking_stub",
+    "calls": 376,
+    "flows": 1836
+  },
+  {
+    "pattern": "builder_chain",
+    "calls": 194,
+    "flows": 928
+  },
+  {
+    "pattern": "channel_registry",
+    "calls": 224,
+    "flows": 1046
+  },
+  {
+    "pattern": "client_stream_call",
+    "calls": 134,
+    "flows": 419
+  },
+  {
+    "pattern": "completable_fanout",
+    "calls": 457,
+    "flows": 2057
+  },
+  {
+    "pattern": "dynamic_descriptor",
+    "calls": 225,
+    "flows": 1067
+  },
+  {
+    "pattern": "future_stub",
+    "calls": 185,
+    "flows": 877
+  },
+  {
+    "pattern": "generic_call",
+    "calls": 225,
+    "flows": 1052
+  },
+  {
+    "pattern": "inner_adapter",
+    "calls": 194,
+    "flows": 886
+  },
+  {
+    "pattern": "json_roundtrip",
+    "calls": 210,
+    "flows": 988
+  },
+  {
+    "pattern": "loop_each",
+    "calls": 135,
+    "flows": 488
+  },
+  {
+    "pattern": "mapper_interface",
+    "calls": 222,
+    "flows": 1070
+  },
+  {
+    "pattern": "method_reference",
+    "calls": 175,
+    "flows": 858
+  },
+  {
+    "pattern": "oneof_switch",
+    "calls": 505,
+    "flows": 2700
+  },
+  {
+    "pattern": "optional_chain",
+    "calls": 184,
+    "flows": 894
+  },
+  {
+    "pattern": "port_adapter",
+    "calls": 222,
+    "flows": 1047
+  },
+  {
+    "pattern": "record_dto",
+    "calls": 186,
+    "flows": 876
+  },
+  {
+    "pattern": "reflection_copy",
+    "calls": 187,
+    "flows": 908
+  },
+  {
+    "pattern": "request_echo",
+    "calls": 0,
+    "flows": 4556
+  },
+  {
+    "pattern": "retry_lambda",
+    "calls": 62,
+    "flows": 261
+  },
+  {
+    "pattern": "server_stream_call",
+    "calls": 256,
+    "flows": 886
+  },
+  {
+    "pattern": "stream_each",
+    "calls": 166,
+    "flows": 603
+  },
+  {
+    "pattern": "stream_pipeline",
+    "calls": 211,
+    "flows": 1005
+  },
+  {
+    "pattern": "to_builder",
+    "calls": 215,
+    "flows": 1034
+  }
+]

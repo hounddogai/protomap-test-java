@@ -1,0 +1,247 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.ledger.v1;
+
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/ledger/v1/ledger.proto";
+import "google/protobuf/any.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Ledger.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/ledger/v1;ledgerv1";
+option java_multiple_files = true;
+option java_outer_classname = "PostingBatchNotificationServiceProto";
+option java_package = "com.acme.ledger.v1";
+
+// Tells the people who follow a posting batch what changed.
+service PostingBatchNotificationService {
+  // Subscribes a posting batch.
+  rpc SubscribePostingBatchUpdates(SubscribePostingBatchUpdatesRequest) returns (SubscribePostingBatchUpdatesResponse);
+
+  // Unsubscribes a posting batch.
+  rpc UnsubscribePostingBatchUpdates(UnsubscribePostingBatchUpdatesRequest) returns (UnsubscribePostingBatchUpdatesResponse);
+
+  // Notifys a posting batch.
+  rpc NotifyPostingBatchWatchers(NotifyPostingBatchWatchersRequest) returns (NotifyPostingBatchWatchersResponse);
+
+  // Lists posting batches a page at a time.
+  rpc ListPostingBatchSubscriptions(ListPostingBatchSubscriptionsRequest) returns (ListPostingBatchSubscriptionsResponse);
+
+  // Sends a posting batch.
+  rpc SendPostingBatchTestNotice(SendPostingBatchTestNoticeRequest) returns (SendPostingBatchTestNoticeResponse);
+
+  // Returns a posting batch.
+  rpc GetPostingBatchPreferences(GetPostingBatchPreferencesRequest) returns (GetPostingBatchPreferencesResponse);
+
+  // Streams the changes of posting batches as they happen.
+  rpc StreamPostingBatchNotices(StreamPostingBatchNoticesRequest) returns (stream StreamPostingBatchNoticesResponse);
+}
+
+// The request of `SubscribePostingBatchUpdates`.
+message SubscribePostingBatchUpdatesRequest {
+  // What the operation needs besides the record.
+  message Details {
+    acme.common.v1.ContactInfo recipient = 1;
+    string template_id = 2;
+    map<string, string> variables = 3;
+    google.protobuf.Any payload = 4;
+    string channel = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string posting_batch_id = 2;
+  SubscribePostingBatchUpdatesRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `SubscribePostingBatchUpdates`.
+message SubscribePostingBatchUpdatesResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PostingBatch posting_batch = 1;
+  SubscribePostingBatchUpdatesResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `UnsubscribePostingBatchUpdates`.
+message UnsubscribePostingBatchUpdatesRequest {
+  // What the operation needs besides the record.
+  message Details {
+    acme.common.v1.ContactInfo recipient = 1;
+    string template_id = 2;
+    map<string, string> variables = 3;
+    google.protobuf.Any payload = 4;
+    string channel = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string posting_batch_id = 2;
+  UnsubscribePostingBatchUpdatesRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `UnsubscribePostingBatchUpdates`.
+message UnsubscribePostingBatchUpdatesResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PostingBatch posting_batch = 1;
+  UnsubscribePostingBatchUpdatesResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `NotifyPostingBatchWatchers`.
+message NotifyPostingBatchWatchersRequest {
+  // What the operation needs besides the record.
+  message Details {
+    acme.common.v1.ContactInfo recipient = 1;
+    string template_id = 2;
+    map<string, string> variables = 3;
+    google.protobuf.Any payload = 4;
+    string channel = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string posting_batch_id = 2;
+  NotifyPostingBatchWatchersRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `NotifyPostingBatchWatchers`.
+message NotifyPostingBatchWatchersResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PostingBatch posting_batch = 1;
+  NotifyPostingBatchWatchersResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ListPostingBatchSubscriptions`.
+message ListPostingBatchSubscriptionsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated PostingBatchStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListPostingBatchSubscriptionsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListPostingBatchSubscriptions`.
+message ListPostingBatchSubscriptionsResponse {
+  repeated PostingBatch posting_batches = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SendPostingBatchTestNotice`.
+message SendPostingBatchTestNoticeRequest {
+  // What the operation needs besides the record.
+  message Details {
+    acme.common.v1.ContactInfo recipient = 1;
+    string template_id = 2;
+    map<string, string> variables = 3;
+    google.protobuf.Any payload = 4;
+    string channel = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string posting_batch_id = 2;
+  SendPostingBatchTestNoticeRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `SendPostingBatchTestNotice`.
+message SendPostingBatchTestNoticeResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PostingBatch posting_batch = 1;
+  SendPostingBatchTestNoticeResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetPostingBatchPreferences`.
+message GetPostingBatchPreferencesRequest {
+  acme.common.v1.RequestContext context = 1;
+  string posting_batch_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetPostingBatchPreferences`.
+message GetPostingBatchPreferencesResponse {
+  PostingBatch posting_batch = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `StreamPostingBatchNotices`.
+message StreamPostingBatchNoticesRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated PostingBatchStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  StreamPostingBatchNoticesRequest.Filter filter = 2;
+  google.protobuf.Timestamp since = 3;
+  int32 max_events = 4;
+  acme.common.v1.ContactInfo subscriber = 5;
+}
+
+// The response of `StreamPostingBatchNotices`.
+message StreamPostingBatchNoticesResponse {
+  PostingBatch posting_batch = 1;
+  string change_type = 2;
+  google.protobuf.Timestamp changed_at = 3;
+  int64 sequence = 4;
+  acme.common.v1.OperationResult result = 5;
+}

@@ -1,0 +1,296 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.contracts.v1;
+
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/contracts/v1/contracts.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Contracts.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/contracts/v1;contractsv1";
+option java_multiple_files = true;
+option java_outer_classname = "RenewalWorkflowServiceProto";
+option java_package = "com.acme.contracts.v1";
+
+// Runs the long-lived workflow that takes a renewal from start to finish.
+service RenewalWorkflowService {
+  // Starts a renewal.
+  rpc StartRenewalWorkflow(StartRenewalWorkflowRequest) returns (StartRenewalWorkflowResponse);
+
+  // Advances a renewal.
+  rpc AdvanceRenewalWorkflow(AdvanceRenewalWorkflowRequest) returns (AdvanceRenewalWorkflowResponse);
+
+  // Cancels a renewal.
+  rpc CancelRenewalWorkflow(CancelRenewalWorkflowRequest) returns (CancelRenewalWorkflowResponse);
+
+  // Retrys a renewal.
+  rpc RetryRenewalWorkflow(RetryRenewalWorkflowRequest) returns (RetryRenewalWorkflowResponse);
+
+  // Pauses a renewal.
+  rpc PauseRenewalWorkflow(PauseRenewalWorkflowRequest) returns (PauseRenewalWorkflowResponse);
+
+  // Resumes a renewal.
+  rpc ResumeRenewalWorkflow(ResumeRenewalWorkflowRequest) returns (ResumeRenewalWorkflowResponse);
+
+  // Returns a renewal.
+  rpc InspectRenewalWorkflow(InspectRenewalWorkflowRequest) returns (InspectRenewalWorkflowResponse);
+
+  // Lists renewals a page at a time.
+  rpc ListRenewalWorkflows(ListRenewalWorkflowsRequest) returns (ListRenewalWorkflowsResponse);
+}
+
+// The request of `StartRenewalWorkflow`.
+message StartRenewalWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string renewal_id = 2;
+  Renewal renewal = 3;
+  StartRenewalWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `StartRenewalWorkflow`.
+message StartRenewalWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Renewal renewal = 1;
+  StartRenewalWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `AdvanceRenewalWorkflow`.
+message AdvanceRenewalWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string renewal_id = 2;
+  Renewal renewal = 3;
+  AdvanceRenewalWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `AdvanceRenewalWorkflow`.
+message AdvanceRenewalWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Renewal renewal = 1;
+  AdvanceRenewalWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CancelRenewalWorkflow`.
+message CancelRenewalWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string renewal_id = 2;
+  Renewal renewal = 3;
+  CancelRenewalWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CancelRenewalWorkflow`.
+message CancelRenewalWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Renewal renewal = 1;
+  CancelRenewalWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RetryRenewalWorkflow`.
+message RetryRenewalWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string renewal_id = 2;
+  Renewal renewal = 3;
+  RetryRenewalWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RetryRenewalWorkflow`.
+message RetryRenewalWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Renewal renewal = 1;
+  RetryRenewalWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PauseRenewalWorkflow`.
+message PauseRenewalWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string renewal_id = 2;
+  Renewal renewal = 3;
+  PauseRenewalWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PauseRenewalWorkflow`.
+message PauseRenewalWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Renewal renewal = 1;
+  PauseRenewalWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ResumeRenewalWorkflow`.
+message ResumeRenewalWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string renewal_id = 2;
+  Renewal renewal = 3;
+  ResumeRenewalWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ResumeRenewalWorkflow`.
+message ResumeRenewalWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Renewal renewal = 1;
+  ResumeRenewalWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `InspectRenewalWorkflow`.
+message InspectRenewalWorkflowRequest {
+  acme.common.v1.RequestContext context = 1;
+  string renewal_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `InspectRenewalWorkflow`.
+message InspectRenewalWorkflowResponse {
+  Renewal renewal = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `ListRenewalWorkflows`.
+message ListRenewalWorkflowsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated RenewalStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListRenewalWorkflowsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListRenewalWorkflows`.
+message ListRenewalWorkflowsResponse {
+  repeated Renewal renewals = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}

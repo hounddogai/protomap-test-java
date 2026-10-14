@@ -1,0 +1,334 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.insurance.v1;
+
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/insurance/v1/insurance.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Insurance.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/insurance/v1;insurancev1";
+option java_multiple_files = true;
+option java_outer_classname = "ClaimWorkflowServiceProto";
+option java_package = "com.acme.insurance.v1";
+
+// Runs the long-lived workflow that takes a claim from start to finish.
+service ClaimWorkflowService {
+  // Starts a claim.
+  rpc StartClaimWorkflow(StartClaimWorkflowRequest) returns (StartClaimWorkflowResponse);
+
+  // Advances a claim.
+  rpc AdvanceClaimWorkflow(AdvanceClaimWorkflowRequest) returns (AdvanceClaimWorkflowResponse);
+
+  // Cancels a claim.
+  rpc CancelClaimWorkflow(CancelClaimWorkflowRequest) returns (CancelClaimWorkflowResponse);
+
+  // Retrys a claim.
+  rpc RetryClaimWorkflow(RetryClaimWorkflowRequest) returns (RetryClaimWorkflowResponse);
+
+  // Pauses a claim.
+  rpc PauseClaimWorkflow(PauseClaimWorkflowRequest) returns (PauseClaimWorkflowResponse);
+
+  // Resumes a claim.
+  rpc ResumeClaimWorkflow(ResumeClaimWorkflowRequest) returns (ResumeClaimWorkflowResponse);
+
+  // Returns a claim.
+  rpc InspectClaimWorkflow(InspectClaimWorkflowRequest) returns (InspectClaimWorkflowResponse);
+
+  // Lists claims a page at a time.
+  rpc ListClaimWorkflows(ListClaimWorkflowsRequest) returns (ListClaimWorkflowsResponse);
+
+  // Signals a claim.
+  rpc SignalClaimWorkflow(SignalClaimWorkflowRequest) returns (SignalClaimWorkflowResponse);
+}
+
+// The request of `StartClaimWorkflow`.
+message StartClaimWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string claim_id = 2;
+  Claim claim = 3;
+  StartClaimWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `StartClaimWorkflow`.
+message StartClaimWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Claim claim = 1;
+  StartClaimWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `AdvanceClaimWorkflow`.
+message AdvanceClaimWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string claim_id = 2;
+  Claim claim = 3;
+  AdvanceClaimWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `AdvanceClaimWorkflow`.
+message AdvanceClaimWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Claim claim = 1;
+  AdvanceClaimWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CancelClaimWorkflow`.
+message CancelClaimWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string claim_id = 2;
+  Claim claim = 3;
+  CancelClaimWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CancelClaimWorkflow`.
+message CancelClaimWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Claim claim = 1;
+  CancelClaimWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RetryClaimWorkflow`.
+message RetryClaimWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string claim_id = 2;
+  Claim claim = 3;
+  RetryClaimWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RetryClaimWorkflow`.
+message RetryClaimWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Claim claim = 1;
+  RetryClaimWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PauseClaimWorkflow`.
+message PauseClaimWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string claim_id = 2;
+  Claim claim = 3;
+  PauseClaimWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PauseClaimWorkflow`.
+message PauseClaimWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Claim claim = 1;
+  PauseClaimWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ResumeClaimWorkflow`.
+message ResumeClaimWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string claim_id = 2;
+  Claim claim = 3;
+  ResumeClaimWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ResumeClaimWorkflow`.
+message ResumeClaimWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Claim claim = 1;
+  ResumeClaimWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `InspectClaimWorkflow`.
+message InspectClaimWorkflowRequest {
+  acme.common.v1.RequestContext context = 1;
+  string claim_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `InspectClaimWorkflow`.
+message InspectClaimWorkflowResponse {
+  Claim claim = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `ListClaimWorkflows`.
+message ListClaimWorkflowsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated ClaimStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListClaimWorkflowsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListClaimWorkflows`.
+message ListClaimWorkflowsResponse {
+  repeated Claim claims = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SignalClaimWorkflow`.
+message SignalClaimWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string claim_id = 2;
+  Claim claim = 3;
+  SignalClaimWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SignalClaimWorkflow`.
+message SignalClaimWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Claim claim = 1;
+  SignalClaimWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

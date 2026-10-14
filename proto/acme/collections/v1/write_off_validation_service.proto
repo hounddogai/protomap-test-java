@@ -1,0 +1,305 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.collections.v1;
+
+import "acme/collections/v1/collections.proto";
+import "acme/common/v1/address.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/money.proto";
+import "acme/common/v1/operation.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Collections.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/collections/v1;collectionsv1";
+option java_multiple_files = true;
+option java_outer_classname = "WriteOffValidationServiceProto";
+option java_package = "com.acme.collections.v1";
+
+// Checks write offs against the rules before anything acts on them.
+service WriteOffValidationService {
+  // Validates a write off.
+  rpc ValidateWriteOff(ValidateWriteOffRequest) returns (ValidateWriteOffResponse);
+
+  // Previews a write off.
+  rpc PreviewWriteOff(PreviewWriteOffRequest) returns (PreviewWriteOffResponse);
+
+  // Checks a write off.
+  rpc CheckWriteOffEligibility(CheckWriteOffEligibilityRequest) returns (CheckWriteOffEligibilityResponse);
+
+  // Normalizes a write off.
+  rpc NormalizeWriteOff(NormalizeWriteOffRequest) returns (NormalizeWriteOffResponse);
+
+  // Explains a write off.
+  rpc ExplainWriteOffDecision(ExplainWriteOffDecisionRequest) returns (ExplainWriteOffDecisionResponse);
+
+  // Scores a write off.
+  rpc ScoreWriteOff(ScoreWriteOffRequest) returns (ScoreWriteOffResponse);
+
+  // Lints a write off.
+  rpc LintWriteOffs(LintWriteOffsRequest) returns (LintWriteOffsResponse);
+
+  // Returns a write off.
+  rpc GetWriteOffRules(GetWriteOffRulesRequest) returns (GetWriteOffRulesResponse);
+}
+
+// The request of `ValidateWriteOff`.
+message ValidateWriteOffRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string write_off_id = 2;
+  WriteOff write_off = 3;
+  ValidateWriteOffRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ValidateWriteOff`.
+message ValidateWriteOffResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  WriteOff write_off = 1;
+  ValidateWriteOffResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PreviewWriteOff`.
+message PreviewWriteOffRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string write_off_id = 2;
+  WriteOff write_off = 3;
+  PreviewWriteOffRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PreviewWriteOff`.
+message PreviewWriteOffResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  WriteOff write_off = 1;
+  PreviewWriteOffResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CheckWriteOffEligibility`.
+message CheckWriteOffEligibilityRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string write_off_id = 2;
+  WriteOff write_off = 3;
+  CheckWriteOffEligibilityRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CheckWriteOffEligibility`.
+message CheckWriteOffEligibilityResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  WriteOff write_off = 1;
+  CheckWriteOffEligibilityResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `NormalizeWriteOff`.
+message NormalizeWriteOffRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string write_off_id = 2;
+  WriteOff write_off = 3;
+  NormalizeWriteOffRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `NormalizeWriteOff`.
+message NormalizeWriteOffResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  WriteOff write_off = 1;
+  NormalizeWriteOffResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExplainWriteOffDecision`.
+message ExplainWriteOffDecisionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string write_off_id = 2;
+  WriteOff write_off = 3;
+  ExplainWriteOffDecisionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ExplainWriteOffDecision`.
+message ExplainWriteOffDecisionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  WriteOff write_off = 1;
+  ExplainWriteOffDecisionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ScoreWriteOff`.
+message ScoreWriteOffRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string write_off_id = 2;
+  WriteOff write_off = 3;
+  ScoreWriteOffRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ScoreWriteOff`.
+message ScoreWriteOffResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated ScoreWriteOffResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  WriteOff write_off = 1;
+  ScoreWriteOffResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `LintWriteOffs`.
+message LintWriteOffsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string write_off_id = 2;
+  WriteOff write_off = 3;
+  LintWriteOffsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `LintWriteOffs`.
+message LintWriteOffsResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  WriteOff write_off = 1;
+  LintWriteOffsResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetWriteOffRules`.
+message GetWriteOffRulesRequest {
+  acme.common.v1.RequestContext context = 1;
+  string write_off_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetWriteOffRules`.
+message GetWriteOffRulesResponse {
+  WriteOff write_off = 1;
+  acme.common.v1.OperationResult result = 2;
+}

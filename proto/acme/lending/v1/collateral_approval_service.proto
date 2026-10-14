@@ -1,0 +1,333 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.lending.v1;
+
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/identity/v1/refs.proto";
+import "acme/lending/v1/lending.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Lending.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/lending/v1;lendingv1";
+option java_multiple_files = true;
+option java_outer_classname = "CollateralApprovalServiceProto";
+option java_package = "com.acme.lending.v1";
+
+// Routes collaterals through approval, with escalation and delegation.
+service CollateralApprovalService {
+  // Submits a collateral.
+  rpc SubmitCollateral(SubmitCollateralRequest) returns (SubmitCollateralResponse);
+
+  // Approves a collateral.
+  rpc ApproveCollateral(ApproveCollateralRequest) returns (ApproveCollateralResponse);
+
+  // Rejects a collateral.
+  rpc RejectCollateral(RejectCollateralRequest) returns (RejectCollateralResponse);
+
+  // Escalates a collateral.
+  rpc EscalateCollateral(EscalateCollateralRequest) returns (EscalateCollateralResponse);
+
+  // Lists collaterals a page at a time.
+  rpc ListPendingCollaterals(ListPendingCollateralsRequest) returns (ListPendingCollateralsResponse);
+
+  // Delegates a collateral.
+  rpc DelegateCollateralApproval(DelegateCollateralApprovalRequest) returns (DelegateCollateralApprovalResponse);
+
+  // Recalls a collateral.
+  rpc RecallCollateral(RecallCollateralRequest) returns (RecallCollateralResponse);
+
+  // Returns a collateral.
+  rpc GetCollateralApprovalStatus(GetCollateralApprovalStatusRequest) returns (GetCollateralApprovalStatusResponse);
+
+  // Comments a collateral.
+  rpc CommentCollateralApproval(CommentCollateralApprovalRequest) returns (CommentCollateralApprovalResponse);
+}
+
+// The request of `SubmitCollateral`.
+message SubmitCollateralRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string collateral_id = 2;
+  Collateral collateral = 3;
+  SubmitCollateralRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SubmitCollateral`.
+message SubmitCollateralResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Collateral collateral = 1;
+  SubmitCollateralResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ApproveCollateral`.
+message ApproveCollateralRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string collateral_id = 2;
+  Collateral collateral = 3;
+  ApproveCollateralRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ApproveCollateral`.
+message ApproveCollateralResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Collateral collateral = 1;
+  ApproveCollateralResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RejectCollateral`.
+message RejectCollateralRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string collateral_id = 2;
+  Collateral collateral = 3;
+  RejectCollateralRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RejectCollateral`.
+message RejectCollateralResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Collateral collateral = 1;
+  RejectCollateralResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `EscalateCollateral`.
+message EscalateCollateralRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string collateral_id = 2;
+  Collateral collateral = 3;
+  EscalateCollateralRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `EscalateCollateral`.
+message EscalateCollateralResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Collateral collateral = 1;
+  EscalateCollateralResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ListPendingCollaterals`.
+message ListPendingCollateralsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated CollateralStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListPendingCollateralsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListPendingCollaterals`.
+message ListPendingCollateralsResponse {
+  repeated Collateral collaterals = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `DelegateCollateralApproval`.
+message DelegateCollateralApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string collateral_id = 2;
+  Collateral collateral = 3;
+  DelegateCollateralApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `DelegateCollateralApproval`.
+message DelegateCollateralApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Collateral collateral = 1;
+  DelegateCollateralApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RecallCollateral`.
+message RecallCollateralRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string collateral_id = 2;
+  Collateral collateral = 3;
+  RecallCollateralRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RecallCollateral`.
+message RecallCollateralResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Collateral collateral = 1;
+  RecallCollateralResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetCollateralApprovalStatus`.
+message GetCollateralApprovalStatusRequest {
+  acme.common.v1.RequestContext context = 1;
+  string collateral_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetCollateralApprovalStatus`.
+message GetCollateralApprovalStatusResponse {
+  Collateral collateral = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `CommentCollateralApproval`.
+message CommentCollateralApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string collateral_id = 2;
+  Collateral collateral = 3;
+  CommentCollateralApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CommentCollateralApproval`.
+message CommentCollateralApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Collateral collateral = 1;
+  CommentCollateralApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

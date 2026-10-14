@@ -1,0 +1,249 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.compliance.v1;
+
+import "acme/common/v1/address.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/money.proto";
+import "acme/common/v1/operation.proto";
+import "acme/compliance/v1/compliance.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Compliance.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/compliance/v1;compliancev1";
+option java_multiple_files = true;
+option java_outer_classname = "SanctionCalculationServiceProto";
+option java_package = "com.acme.compliance.v1";
+
+// Computes the figures of a sanction, such as totals, taxes, and estimates.
+service SanctionCalculationService {
+  // Calculates a sanction.
+  rpc CalculateSanction(CalculateSanctionRequest) returns (CalculateSanctionResponse);
+
+  // Estimates a sanction.
+  rpc EstimateSanction(EstimateSanctionRequest) returns (EstimateSanctionResponse);
+
+  // Compares a sanction.
+  rpc CompareSanctionOptions(CompareSanctionOptionsRequest) returns (CompareSanctionOptionsResponse);
+
+  // Simulates a sanction.
+  rpc SimulateSanction(SimulateSanctionRequest) returns (SimulateSanctionResponse);
+
+  // Explains a sanction.
+  rpc ExplainSanctionCalculation(ExplainSanctionCalculationRequest) returns (ExplainSanctionCalculationResponse);
+
+  // Returns a sanction.
+  rpc GetSanctionRates(GetSanctionRatesRequest) returns (GetSanctionRatesResponse);
+}
+
+// The request of `CalculateSanction`.
+message CalculateSanctionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string sanction_id = 2;
+  Sanction sanction = 3;
+  CalculateSanctionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CalculateSanction`.
+message CalculateSanctionResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated CalculateSanctionResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Sanction sanction = 1;
+  CalculateSanctionResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `EstimateSanction`.
+message EstimateSanctionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string sanction_id = 2;
+  Sanction sanction = 3;
+  EstimateSanctionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `EstimateSanction`.
+message EstimateSanctionResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated EstimateSanctionResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Sanction sanction = 1;
+  EstimateSanctionResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CompareSanctionOptions`.
+message CompareSanctionOptionsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string sanction_id = 2;
+  Sanction sanction = 3;
+  CompareSanctionOptionsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CompareSanctionOptions`.
+message CompareSanctionOptionsResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated CompareSanctionOptionsResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Sanction sanction = 1;
+  CompareSanctionOptionsResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SimulateSanction`.
+message SimulateSanctionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string sanction_id = 2;
+  Sanction sanction = 3;
+  SimulateSanctionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SimulateSanction`.
+message SimulateSanctionResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated SimulateSanctionResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Sanction sanction = 1;
+  SimulateSanctionResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExplainSanctionCalculation`.
+message ExplainSanctionCalculationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string sanction_id = 2;
+  Sanction sanction = 3;
+  ExplainSanctionCalculationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ExplainSanctionCalculation`.
+message ExplainSanctionCalculationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Sanction sanction = 1;
+  ExplainSanctionCalculationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetSanctionRates`.
+message GetSanctionRatesRequest {
+  acme.common.v1.RequestContext context = 1;
+  string sanction_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetSanctionRates`.
+message GetSanctionRatesResponse {
+  Sanction sanction = 1;
+  acme.common.v1.OperationResult result = 2;
+}

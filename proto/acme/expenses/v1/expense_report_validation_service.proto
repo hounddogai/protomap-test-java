@@ -1,0 +1,268 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.expenses.v1;
+
+import "acme/common/v1/address.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/money.proto";
+import "acme/common/v1/operation.proto";
+import "acme/expenses/v1/expenses.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Expenses.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/expenses/v1;expensesv1";
+option java_multiple_files = true;
+option java_outer_classname = "ExpenseReportValidationServiceProto";
+option java_package = "com.acme.expenses.v1";
+
+// Checks expense reports against the rules before anything acts on them.
+service ExpenseReportValidationService {
+  // Validates an expense report.
+  rpc ValidateExpenseReport(ValidateExpenseReportRequest) returns (ValidateExpenseReportResponse);
+
+  // Previews an expense report.
+  rpc PreviewExpenseReport(PreviewExpenseReportRequest) returns (PreviewExpenseReportResponse);
+
+  // Checks an expense report.
+  rpc CheckExpenseReportEligibility(CheckExpenseReportEligibilityRequest) returns (CheckExpenseReportEligibilityResponse);
+
+  // Explains an expense report.
+  rpc ExplainExpenseReportDecision(ExplainExpenseReportDecisionRequest) returns (ExplainExpenseReportDecisionResponse);
+
+  // Scores an expense report.
+  rpc ScoreExpenseReport(ScoreExpenseReportRequest) returns (ScoreExpenseReportResponse);
+
+  // Lints an expense report.
+  rpc LintExpenseReports(LintExpenseReportsRequest) returns (LintExpenseReportsResponse);
+
+  // Returns an expense report.
+  rpc GetExpenseReportRules(GetExpenseReportRulesRequest) returns (GetExpenseReportRulesResponse);
+}
+
+// The request of `ValidateExpenseReport`.
+message ValidateExpenseReportRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string expense_report_id = 2;
+  ExpenseReport expense_report = 3;
+  ValidateExpenseReportRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ValidateExpenseReport`.
+message ValidateExpenseReportResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ExpenseReport expense_report = 1;
+  ValidateExpenseReportResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PreviewExpenseReport`.
+message PreviewExpenseReportRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string expense_report_id = 2;
+  ExpenseReport expense_report = 3;
+  PreviewExpenseReportRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PreviewExpenseReport`.
+message PreviewExpenseReportResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ExpenseReport expense_report = 1;
+  PreviewExpenseReportResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CheckExpenseReportEligibility`.
+message CheckExpenseReportEligibilityRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string expense_report_id = 2;
+  ExpenseReport expense_report = 3;
+  CheckExpenseReportEligibilityRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CheckExpenseReportEligibility`.
+message CheckExpenseReportEligibilityResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ExpenseReport expense_report = 1;
+  CheckExpenseReportEligibilityResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExplainExpenseReportDecision`.
+message ExplainExpenseReportDecisionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string expense_report_id = 2;
+  ExpenseReport expense_report = 3;
+  ExplainExpenseReportDecisionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ExplainExpenseReportDecision`.
+message ExplainExpenseReportDecisionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ExpenseReport expense_report = 1;
+  ExplainExpenseReportDecisionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ScoreExpenseReport`.
+message ScoreExpenseReportRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string expense_report_id = 2;
+  ExpenseReport expense_report = 3;
+  ScoreExpenseReportRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ScoreExpenseReport`.
+message ScoreExpenseReportResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated ScoreExpenseReportResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  ExpenseReport expense_report = 1;
+  ScoreExpenseReportResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `LintExpenseReports`.
+message LintExpenseReportsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string expense_report_id = 2;
+  ExpenseReport expense_report = 3;
+  LintExpenseReportsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `LintExpenseReports`.
+message LintExpenseReportsResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ExpenseReport expense_report = 1;
+  LintExpenseReportsResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetExpenseReportRules`.
+message GetExpenseReportRulesRequest {
+  acme.common.v1.RequestContext context = 1;
+  string expense_report_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetExpenseReportRules`.
+message GetExpenseReportRulesResponse {
+  ExpenseReport expense_report = 1;
+  acme.common.v1.OperationResult result = 2;
+}

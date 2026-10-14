@@ -1,0 +1,231 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.ledger.v1;
+
+import "acme/common/v1/address.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/money.proto";
+import "acme/common/v1/operation.proto";
+import "acme/ledger/v1/ledger.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Ledger.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/ledger/v1;ledgerv1";
+option java_multiple_files = true;
+option java_outer_classname = "PostingBatchValidationServiceProto";
+option java_package = "com.acme.ledger.v1";
+
+// Checks posting batches against the rules before anything acts on them.
+service PostingBatchValidationService {
+  // Validates a posting batch.
+  rpc ValidatePostingBatch(ValidatePostingBatchRequest) returns (ValidatePostingBatchResponse);
+
+  // Previews a posting batch.
+  rpc PreviewPostingBatch(PreviewPostingBatchRequest) returns (PreviewPostingBatchResponse);
+
+  // Checks a posting batch.
+  rpc CheckPostingBatchEligibility(CheckPostingBatchEligibilityRequest) returns (CheckPostingBatchEligibilityResponse);
+
+  // Scores a posting batch.
+  rpc ScorePostingBatch(ScorePostingBatchRequest) returns (ScorePostingBatchResponse);
+
+  // Lints a posting batch.
+  rpc LintPostingBatches(LintPostingBatchesRequest) returns (LintPostingBatchesResponse);
+
+  // Returns a posting batch.
+  rpc GetPostingBatchRules(GetPostingBatchRulesRequest) returns (GetPostingBatchRulesResponse);
+}
+
+// The request of `ValidatePostingBatch`.
+message ValidatePostingBatchRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string posting_batch_id = 2;
+  PostingBatch posting_batch = 3;
+  ValidatePostingBatchRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ValidatePostingBatch`.
+message ValidatePostingBatchResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PostingBatch posting_batch = 1;
+  ValidatePostingBatchResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PreviewPostingBatch`.
+message PreviewPostingBatchRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string posting_batch_id = 2;
+  PostingBatch posting_batch = 3;
+  PreviewPostingBatchRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PreviewPostingBatch`.
+message PreviewPostingBatchResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PostingBatch posting_batch = 1;
+  PreviewPostingBatchResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CheckPostingBatchEligibility`.
+message CheckPostingBatchEligibilityRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string posting_batch_id = 2;
+  PostingBatch posting_batch = 3;
+  CheckPostingBatchEligibilityRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CheckPostingBatchEligibility`.
+message CheckPostingBatchEligibilityResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PostingBatch posting_batch = 1;
+  CheckPostingBatchEligibilityResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ScorePostingBatch`.
+message ScorePostingBatchRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string posting_batch_id = 2;
+  PostingBatch posting_batch = 3;
+  ScorePostingBatchRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ScorePostingBatch`.
+message ScorePostingBatchResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated ScorePostingBatchResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  PostingBatch posting_batch = 1;
+  ScorePostingBatchResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `LintPostingBatches`.
+message LintPostingBatchesRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string posting_batch_id = 2;
+  PostingBatch posting_batch = 3;
+  LintPostingBatchesRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `LintPostingBatches`.
+message LintPostingBatchesResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PostingBatch posting_batch = 1;
+  LintPostingBatchesResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetPostingBatchRules`.
+message GetPostingBatchRulesRequest {
+  acme.common.v1.RequestContext context = 1;
+  string posting_batch_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetPostingBatchRules`.
+message GetPostingBatchRulesResponse {
+  PostingBatch posting_batch = 1;
+  acme.common.v1.OperationResult result = 2;
+}

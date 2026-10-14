@@ -1,0 +1,333 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.suppliers.v1;
+
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/identity/v1/refs.proto";
+import "acme/suppliers/v1/suppliers.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Suppliers.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/suppliers/v1;suppliersv1";
+option java_multiple_files = true;
+option java_outer_classname = "SupplierContractApprovalServiceProto";
+option java_package = "com.acme.suppliers.v1";
+
+// Routes supplier contracts through approval, with escalation and delegation.
+service SupplierContractApprovalService {
+  // Submits a supplier contract.
+  rpc SubmitSupplierContract(SubmitSupplierContractRequest) returns (SubmitSupplierContractResponse);
+
+  // Approves a supplier contract.
+  rpc ApproveSupplierContract(ApproveSupplierContractRequest) returns (ApproveSupplierContractResponse);
+
+  // Rejects a supplier contract.
+  rpc RejectSupplierContract(RejectSupplierContractRequest) returns (RejectSupplierContractResponse);
+
+  // Escalates a supplier contract.
+  rpc EscalateSupplierContract(EscalateSupplierContractRequest) returns (EscalateSupplierContractResponse);
+
+  // Lists supplier contracts a page at a time.
+  rpc ListPendingSupplierContracts(ListPendingSupplierContractsRequest) returns (ListPendingSupplierContractsResponse);
+
+  // Delegates a supplier contract.
+  rpc DelegateSupplierContractApproval(DelegateSupplierContractApprovalRequest) returns (DelegateSupplierContractApprovalResponse);
+
+  // Recalls a supplier contract.
+  rpc RecallSupplierContract(RecallSupplierContractRequest) returns (RecallSupplierContractResponse);
+
+  // Returns a supplier contract.
+  rpc GetSupplierContractApprovalStatus(GetSupplierContractApprovalStatusRequest) returns (GetSupplierContractApprovalStatusResponse);
+
+  // Comments a supplier contract.
+  rpc CommentSupplierContractApproval(CommentSupplierContractApprovalRequest) returns (CommentSupplierContractApprovalResponse);
+}
+
+// The request of `SubmitSupplierContract`.
+message SubmitSupplierContractRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string supplier_contract_id = 2;
+  SupplierContract supplier_contract = 3;
+  SubmitSupplierContractRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SubmitSupplierContract`.
+message SubmitSupplierContractResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  SupplierContract supplier_contract = 1;
+  SubmitSupplierContractResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ApproveSupplierContract`.
+message ApproveSupplierContractRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string supplier_contract_id = 2;
+  SupplierContract supplier_contract = 3;
+  ApproveSupplierContractRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ApproveSupplierContract`.
+message ApproveSupplierContractResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  SupplierContract supplier_contract = 1;
+  ApproveSupplierContractResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RejectSupplierContract`.
+message RejectSupplierContractRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string supplier_contract_id = 2;
+  SupplierContract supplier_contract = 3;
+  RejectSupplierContractRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RejectSupplierContract`.
+message RejectSupplierContractResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  SupplierContract supplier_contract = 1;
+  RejectSupplierContractResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `EscalateSupplierContract`.
+message EscalateSupplierContractRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string supplier_contract_id = 2;
+  SupplierContract supplier_contract = 3;
+  EscalateSupplierContractRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `EscalateSupplierContract`.
+message EscalateSupplierContractResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  SupplierContract supplier_contract = 1;
+  EscalateSupplierContractResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ListPendingSupplierContracts`.
+message ListPendingSupplierContractsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated SupplierContractStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListPendingSupplierContractsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListPendingSupplierContracts`.
+message ListPendingSupplierContractsResponse {
+  repeated SupplierContract supplier_contracts = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `DelegateSupplierContractApproval`.
+message DelegateSupplierContractApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string supplier_contract_id = 2;
+  SupplierContract supplier_contract = 3;
+  DelegateSupplierContractApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `DelegateSupplierContractApproval`.
+message DelegateSupplierContractApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  SupplierContract supplier_contract = 1;
+  DelegateSupplierContractApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RecallSupplierContract`.
+message RecallSupplierContractRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string supplier_contract_id = 2;
+  SupplierContract supplier_contract = 3;
+  RecallSupplierContractRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RecallSupplierContract`.
+message RecallSupplierContractResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  SupplierContract supplier_contract = 1;
+  RecallSupplierContractResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetSupplierContractApprovalStatus`.
+message GetSupplierContractApprovalStatusRequest {
+  acme.common.v1.RequestContext context = 1;
+  string supplier_contract_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetSupplierContractApprovalStatus`.
+message GetSupplierContractApprovalStatusResponse {
+  SupplierContract supplier_contract = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `CommentSupplierContractApproval`.
+message CommentSupplierContractApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string supplier_contract_id = 2;
+  SupplierContract supplier_contract = 3;
+  CommentSupplierContractApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CommentSupplierContractApproval`.
+message CommentSupplierContractApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  SupplierContract supplier_contract = 1;
+  CommentSupplierContractApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

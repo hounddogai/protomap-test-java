@@ -1,0 +1,260 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.compliance.v1;
+
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/compliance/v1/compliance.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Compliance.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/compliance/v1;compliancev1";
+option java_multiple_files = true;
+option java_outer_classname = "ComplianceCaseValidationServiceProto";
+option java_package = "com.acme.compliance.v1";
+
+// Checks compliance cases against the rules before anything acts on them.
+service ComplianceCaseValidationService {
+  // Validates a compliance case.
+  rpc ValidateComplianceCase(ValidateComplianceCaseRequest) returns (ValidateComplianceCaseResponse);
+
+  // Previews a compliance case.
+  rpc PreviewComplianceCase(PreviewComplianceCaseRequest) returns (PreviewComplianceCaseResponse);
+
+  // Checks a compliance case.
+  rpc CheckComplianceCaseEligibility(CheckComplianceCaseEligibilityRequest) returns (CheckComplianceCaseEligibilityResponse);
+
+  // Normalizes a compliance case.
+  rpc NormalizeComplianceCase(NormalizeComplianceCaseRequest) returns (NormalizeComplianceCaseResponse);
+
+  // Explains a compliance case.
+  rpc ExplainComplianceCaseDecision(ExplainComplianceCaseDecisionRequest) returns (ExplainComplianceCaseDecisionResponse);
+
+  // Lints a compliance case.
+  rpc LintComplianceCases(LintComplianceCasesRequest) returns (LintComplianceCasesResponse);
+
+  // Returns a compliance case.
+  rpc GetComplianceCaseRules(GetComplianceCaseRulesRequest) returns (GetComplianceCaseRulesResponse);
+}
+
+// The request of `ValidateComplianceCase`.
+message ValidateComplianceCaseRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string compliance_case_id = 2;
+  ComplianceCase compliance_case = 3;
+  ValidateComplianceCaseRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ValidateComplianceCase`.
+message ValidateComplianceCaseResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ComplianceCase compliance_case = 1;
+  ValidateComplianceCaseResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PreviewComplianceCase`.
+message PreviewComplianceCaseRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string compliance_case_id = 2;
+  ComplianceCase compliance_case = 3;
+  PreviewComplianceCaseRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PreviewComplianceCase`.
+message PreviewComplianceCaseResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ComplianceCase compliance_case = 1;
+  PreviewComplianceCaseResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CheckComplianceCaseEligibility`.
+message CheckComplianceCaseEligibilityRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string compliance_case_id = 2;
+  ComplianceCase compliance_case = 3;
+  CheckComplianceCaseEligibilityRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CheckComplianceCaseEligibility`.
+message CheckComplianceCaseEligibilityResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ComplianceCase compliance_case = 1;
+  CheckComplianceCaseEligibilityResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `NormalizeComplianceCase`.
+message NormalizeComplianceCaseRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string compliance_case_id = 2;
+  ComplianceCase compliance_case = 3;
+  NormalizeComplianceCaseRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `NormalizeComplianceCase`.
+message NormalizeComplianceCaseResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ComplianceCase compliance_case = 1;
+  NormalizeComplianceCaseResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExplainComplianceCaseDecision`.
+message ExplainComplianceCaseDecisionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string compliance_case_id = 2;
+  ComplianceCase compliance_case = 3;
+  ExplainComplianceCaseDecisionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ExplainComplianceCaseDecision`.
+message ExplainComplianceCaseDecisionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ComplianceCase compliance_case = 1;
+  ExplainComplianceCaseDecisionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `LintComplianceCases`.
+message LintComplianceCasesRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string compliance_case_id = 2;
+  ComplianceCase compliance_case = 3;
+  LintComplianceCasesRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `LintComplianceCases`.
+message LintComplianceCasesResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ComplianceCase compliance_case = 1;
+  LintComplianceCasesResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetComplianceCaseRules`.
+message GetComplianceCaseRulesRequest {
+  acme.common.v1.RequestContext context = 1;
+  string compliance_case_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetComplianceCaseRules`.
+message GetComplianceCaseRulesResponse {
+  ComplianceCase compliance_case = 1;
+  acme.common.v1.OperationResult result = 2;
+}

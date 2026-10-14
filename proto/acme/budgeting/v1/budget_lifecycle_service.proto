@@ -1,0 +1,294 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.budgeting.v1;
+
+import "acme/budgeting/v1/budgeting.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/identity/v1/refs.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Budgeting.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/budgeting/v1;budgetingv1";
+option java_multiple_files = true;
+option java_outer_classname = "BudgetLifecycleServiceProto";
+option java_package = "com.acme.budgeting.v1";
+
+// Moves a budget between the states of its lifecycle.
+service BudgetLifecycleService {
+  // Activates a budget.
+  rpc ActivateBudget(ActivateBudgetRequest) returns (ActivateBudgetResponse);
+
+  // Suspends a budget.
+  rpc SuspendBudget(SuspendBudgetRequest) returns (SuspendBudgetResponse);
+
+  // Reinstates a budget.
+  rpc ReinstateBudget(ReinstateBudgetRequest) returns (ReinstateBudgetResponse);
+
+  // Terminates a budget.
+  rpc TerminateBudget(TerminateBudgetRequest) returns (TerminateBudgetResponse);
+
+  // Renews a budget.
+  rpc RenewBudget(RenewBudgetRequest) returns (RenewBudgetResponse);
+
+  // Expires a budget.
+  rpc ExpireBudget(ExpireBudgetRequest) returns (ExpireBudgetResponse);
+
+  // Returns a budget.
+  rpc GetBudgetLifecycle(GetBudgetLifecycleRequest) returns (GetBudgetLifecycleResponse);
+
+  // Schedules a budget.
+  rpc ScheduleBudgetExpiry(ScheduleBudgetExpiryRequest) returns (ScheduleBudgetExpiryResponse);
+}
+
+// The request of `ActivateBudget`.
+message ActivateBudgetRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string budget_id = 2;
+  ActivateBudgetRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ActivateBudget`.
+message ActivateBudgetResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Budget budget = 1;
+  ActivateBudgetResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SuspendBudget`.
+message SuspendBudgetRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string budget_id = 2;
+  SuspendBudgetRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `SuspendBudget`.
+message SuspendBudgetResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Budget budget = 1;
+  SuspendBudgetResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ReinstateBudget`.
+message ReinstateBudgetRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string budget_id = 2;
+  ReinstateBudgetRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ReinstateBudget`.
+message ReinstateBudgetResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Budget budget = 1;
+  ReinstateBudgetResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `TerminateBudget`.
+message TerminateBudgetRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string budget_id = 2;
+  TerminateBudgetRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `TerminateBudget`.
+message TerminateBudgetResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Budget budget = 1;
+  TerminateBudgetResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RenewBudget`.
+message RenewBudgetRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string budget_id = 2;
+  RenewBudgetRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `RenewBudget`.
+message RenewBudgetResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Budget budget = 1;
+  RenewBudgetResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExpireBudget`.
+message ExpireBudgetRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string budget_id = 2;
+  ExpireBudgetRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ExpireBudget`.
+message ExpireBudgetResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Budget budget = 1;
+  ExpireBudgetResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetBudgetLifecycle`.
+message GetBudgetLifecycleRequest {
+  acme.common.v1.RequestContext context = 1;
+  string budget_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetBudgetLifecycle`.
+message GetBudgetLifecycleResponse {
+  Budget budget = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `ScheduleBudgetExpiry`.
+message ScheduleBudgetExpiryRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string budget_id = 2;
+  Budget budget = 3;
+  ScheduleBudgetExpiryRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ScheduleBudgetExpiry`.
+message ScheduleBudgetExpiryResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Budget budget = 1;
+  ScheduleBudgetExpiryResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

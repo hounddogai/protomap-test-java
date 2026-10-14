@@ -1,0 +1,305 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.invoicing.v1;
+
+import "acme/common/v1/address.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/money.proto";
+import "acme/common/v1/operation.proto";
+import "acme/invoicing/v1/invoicing.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Invoicing.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/invoicing/v1;invoicingv1";
+option java_multiple_files = true;
+option java_outer_classname = "EInvoiceValidationServiceProto";
+option java_package = "com.acme.invoicing.v1";
+
+// Checks e invoices against the rules before anything acts on them.
+service EInvoiceValidationService {
+  // Validates an e invoice.
+  rpc ValidateEInvoice(ValidateEInvoiceRequest) returns (ValidateEInvoiceResponse);
+
+  // Previews an e invoice.
+  rpc PreviewEInvoice(PreviewEInvoiceRequest) returns (PreviewEInvoiceResponse);
+
+  // Checks an e invoice.
+  rpc CheckEInvoiceEligibility(CheckEInvoiceEligibilityRequest) returns (CheckEInvoiceEligibilityResponse);
+
+  // Normalizes an e invoice.
+  rpc NormalizeEInvoice(NormalizeEInvoiceRequest) returns (NormalizeEInvoiceResponse);
+
+  // Explains an e invoice.
+  rpc ExplainEInvoiceDecision(ExplainEInvoiceDecisionRequest) returns (ExplainEInvoiceDecisionResponse);
+
+  // Scores an e invoice.
+  rpc ScoreEInvoice(ScoreEInvoiceRequest) returns (ScoreEInvoiceResponse);
+
+  // Lints an e invoice.
+  rpc LintEInvoices(LintEInvoicesRequest) returns (LintEInvoicesResponse);
+
+  // Returns an e invoice.
+  rpc GetEInvoiceRules(GetEInvoiceRulesRequest) returns (GetEInvoiceRulesResponse);
+}
+
+// The request of `ValidateEInvoice`.
+message ValidateEInvoiceRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string e_invoice_id = 2;
+  EInvoice e_invoice = 3;
+  ValidateEInvoiceRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ValidateEInvoice`.
+message ValidateEInvoiceResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  EInvoice e_invoice = 1;
+  ValidateEInvoiceResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PreviewEInvoice`.
+message PreviewEInvoiceRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string e_invoice_id = 2;
+  EInvoice e_invoice = 3;
+  PreviewEInvoiceRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PreviewEInvoice`.
+message PreviewEInvoiceResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  EInvoice e_invoice = 1;
+  PreviewEInvoiceResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CheckEInvoiceEligibility`.
+message CheckEInvoiceEligibilityRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string e_invoice_id = 2;
+  EInvoice e_invoice = 3;
+  CheckEInvoiceEligibilityRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CheckEInvoiceEligibility`.
+message CheckEInvoiceEligibilityResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  EInvoice e_invoice = 1;
+  CheckEInvoiceEligibilityResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `NormalizeEInvoice`.
+message NormalizeEInvoiceRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string e_invoice_id = 2;
+  EInvoice e_invoice = 3;
+  NormalizeEInvoiceRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `NormalizeEInvoice`.
+message NormalizeEInvoiceResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  EInvoice e_invoice = 1;
+  NormalizeEInvoiceResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExplainEInvoiceDecision`.
+message ExplainEInvoiceDecisionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string e_invoice_id = 2;
+  EInvoice e_invoice = 3;
+  ExplainEInvoiceDecisionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ExplainEInvoiceDecision`.
+message ExplainEInvoiceDecisionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  EInvoice e_invoice = 1;
+  ExplainEInvoiceDecisionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ScoreEInvoice`.
+message ScoreEInvoiceRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string e_invoice_id = 2;
+  EInvoice e_invoice = 3;
+  ScoreEInvoiceRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ScoreEInvoice`.
+message ScoreEInvoiceResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated ScoreEInvoiceResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  EInvoice e_invoice = 1;
+  ScoreEInvoiceResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `LintEInvoices`.
+message LintEInvoicesRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string e_invoice_id = 2;
+  EInvoice e_invoice = 3;
+  LintEInvoicesRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `LintEInvoices`.
+message LintEInvoicesResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  EInvoice e_invoice = 1;
+  LintEInvoicesResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetEInvoiceRules`.
+message GetEInvoiceRulesRequest {
+  acme.common.v1.RequestContext context = 1;
+  string e_invoice_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetEInvoiceRules`.
+message GetEInvoiceRulesResponse {
+  EInvoice e_invoice = 1;
+  acme.common.v1.OperationResult result = 2;
+}

@@ -1,0 +1,295 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.compliance.v1;
+
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/compliance/v1/compliance.proto";
+import "acme/identity/v1/refs.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Compliance.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/compliance/v1;compliancev1";
+option java_multiple_files = true;
+option java_outer_classname = "ControlApprovalServiceProto";
+option java_package = "com.acme.compliance.v1";
+
+// Routes controls through approval, with escalation and delegation.
+service ControlApprovalService {
+  // Submits a control.
+  rpc SubmitControl(SubmitControlRequest) returns (SubmitControlResponse);
+
+  // Approves a control.
+  rpc ApproveControl(ApproveControlRequest) returns (ApproveControlResponse);
+
+  // Rejects a control.
+  rpc RejectControl(RejectControlRequest) returns (RejectControlResponse);
+
+  // Escalates a control.
+  rpc EscalateControl(EscalateControlRequest) returns (EscalateControlResponse);
+
+  // Lists controls a page at a time.
+  rpc ListPendingControls(ListPendingControlsRequest) returns (ListPendingControlsResponse);
+
+  // Recalls a control.
+  rpc RecallControl(RecallControlRequest) returns (RecallControlResponse);
+
+  // Returns a control.
+  rpc GetControlApprovalStatus(GetControlApprovalStatusRequest) returns (GetControlApprovalStatusResponse);
+
+  // Comments a control.
+  rpc CommentControlApproval(CommentControlApprovalRequest) returns (CommentControlApprovalResponse);
+}
+
+// The request of `SubmitControl`.
+message SubmitControlRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string control_id = 2;
+  Control control = 3;
+  SubmitControlRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SubmitControl`.
+message SubmitControlResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Control control = 1;
+  SubmitControlResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ApproveControl`.
+message ApproveControlRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string control_id = 2;
+  Control control = 3;
+  ApproveControlRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ApproveControl`.
+message ApproveControlResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Control control = 1;
+  ApproveControlResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RejectControl`.
+message RejectControlRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string control_id = 2;
+  Control control = 3;
+  RejectControlRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RejectControl`.
+message RejectControlResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Control control = 1;
+  RejectControlResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `EscalateControl`.
+message EscalateControlRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string control_id = 2;
+  Control control = 3;
+  EscalateControlRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `EscalateControl`.
+message EscalateControlResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Control control = 1;
+  EscalateControlResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ListPendingControls`.
+message ListPendingControlsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated ControlStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListPendingControlsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListPendingControls`.
+message ListPendingControlsResponse {
+  repeated Control controls = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RecallControl`.
+message RecallControlRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string control_id = 2;
+  Control control = 3;
+  RecallControlRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RecallControl`.
+message RecallControlResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Control control = 1;
+  RecallControlResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetControlApprovalStatus`.
+message GetControlApprovalStatusRequest {
+  acme.common.v1.RequestContext context = 1;
+  string control_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetControlApprovalStatus`.
+message GetControlApprovalStatusResponse {
+  Control control = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `CommentControlApproval`.
+message CommentControlApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string control_id = 2;
+  Control control = 3;
+  CommentControlApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CommentControlApproval`.
+message CommentControlApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Control control = 1;
+  CommentControlApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

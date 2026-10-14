@@ -1,0 +1,305 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.contracts.v1;
+
+import "acme/common/v1/address.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/money.proto";
+import "acme/common/v1/operation.proto";
+import "acme/contracts/v1/contracts.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Contracts.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/contracts/v1;contractsv1";
+option java_multiple_files = true;
+option java_outer_classname = "ObligationValidationServiceProto";
+option java_package = "com.acme.contracts.v1";
+
+// Checks obligations against the rules before anything acts on them.
+service ObligationValidationService {
+  // Validates an obligation.
+  rpc ValidateObligation(ValidateObligationRequest) returns (ValidateObligationResponse);
+
+  // Previews an obligation.
+  rpc PreviewObligation(PreviewObligationRequest) returns (PreviewObligationResponse);
+
+  // Checks an obligation.
+  rpc CheckObligationEligibility(CheckObligationEligibilityRequest) returns (CheckObligationEligibilityResponse);
+
+  // Normalizes an obligation.
+  rpc NormalizeObligation(NormalizeObligationRequest) returns (NormalizeObligationResponse);
+
+  // Explains an obligation.
+  rpc ExplainObligationDecision(ExplainObligationDecisionRequest) returns (ExplainObligationDecisionResponse);
+
+  // Scores an obligation.
+  rpc ScoreObligation(ScoreObligationRequest) returns (ScoreObligationResponse);
+
+  // Lints an obligation.
+  rpc LintObligations(LintObligationsRequest) returns (LintObligationsResponse);
+
+  // Returns an obligation.
+  rpc GetObligationRules(GetObligationRulesRequest) returns (GetObligationRulesResponse);
+}
+
+// The request of `ValidateObligation`.
+message ValidateObligationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string obligation_id = 2;
+  Obligation obligation = 3;
+  ValidateObligationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ValidateObligation`.
+message ValidateObligationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Obligation obligation = 1;
+  ValidateObligationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PreviewObligation`.
+message PreviewObligationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string obligation_id = 2;
+  Obligation obligation = 3;
+  PreviewObligationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PreviewObligation`.
+message PreviewObligationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Obligation obligation = 1;
+  PreviewObligationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CheckObligationEligibility`.
+message CheckObligationEligibilityRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string obligation_id = 2;
+  Obligation obligation = 3;
+  CheckObligationEligibilityRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CheckObligationEligibility`.
+message CheckObligationEligibilityResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Obligation obligation = 1;
+  CheckObligationEligibilityResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `NormalizeObligation`.
+message NormalizeObligationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string obligation_id = 2;
+  Obligation obligation = 3;
+  NormalizeObligationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `NormalizeObligation`.
+message NormalizeObligationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Obligation obligation = 1;
+  NormalizeObligationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExplainObligationDecision`.
+message ExplainObligationDecisionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string obligation_id = 2;
+  Obligation obligation = 3;
+  ExplainObligationDecisionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ExplainObligationDecision`.
+message ExplainObligationDecisionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Obligation obligation = 1;
+  ExplainObligationDecisionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ScoreObligation`.
+message ScoreObligationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string obligation_id = 2;
+  Obligation obligation = 3;
+  ScoreObligationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ScoreObligation`.
+message ScoreObligationResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated ScoreObligationResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Obligation obligation = 1;
+  ScoreObligationResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `LintObligations`.
+message LintObligationsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string obligation_id = 2;
+  Obligation obligation = 3;
+  LintObligationsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `LintObligations`.
+message LintObligationsResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Obligation obligation = 1;
+  LintObligationsResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetObligationRules`.
+message GetObligationRulesRequest {
+  acme.common.v1.RequestContext context = 1;
+  string obligation_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetObligationRules`.
+message GetObligationRulesResponse {
+  Obligation obligation = 1;
+  acme.common.v1.OperationResult result = 2;
+}

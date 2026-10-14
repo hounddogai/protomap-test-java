@@ -1,0 +1,304 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.insurance.v1;
+
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/identity/v1/refs.proto";
+import "acme/insurance/v1/insurance.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Insurance.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/insurance/v1;insurancev1";
+option java_multiple_files = true;
+option java_outer_classname = "PremiumApprovalServiceProto";
+option java_package = "com.acme.insurance.v1";
+
+// Routes premiums through approval, with escalation and delegation.
+service PremiumApprovalService {
+  // Submits a premium.
+  rpc SubmitPremium(SubmitPremiumRequest) returns (SubmitPremiumResponse);
+
+  // Approves a premium.
+  rpc ApprovePremium(ApprovePremiumRequest) returns (ApprovePremiumResponse);
+
+  // Rejects a premium.
+  rpc RejectPremium(RejectPremiumRequest) returns (RejectPremiumResponse);
+
+  // Escalates a premium.
+  rpc EscalatePremium(EscalatePremiumRequest) returns (EscalatePremiumResponse);
+
+  // Delegates a premium.
+  rpc DelegatePremiumApproval(DelegatePremiumApprovalRequest) returns (DelegatePremiumApprovalResponse);
+
+  // Recalls a premium.
+  rpc RecallPremium(RecallPremiumRequest) returns (RecallPremiumResponse);
+
+  // Returns a premium.
+  rpc GetPremiumApprovalStatus(GetPremiumApprovalStatusRequest) returns (GetPremiumApprovalStatusResponse);
+
+  // Comments a premium.
+  rpc CommentPremiumApproval(CommentPremiumApprovalRequest) returns (CommentPremiumApprovalResponse);
+}
+
+// The request of `SubmitPremium`.
+message SubmitPremiumRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string premium_id = 2;
+  Premium premium = 3;
+  SubmitPremiumRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SubmitPremium`.
+message SubmitPremiumResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Premium premium = 1;
+  SubmitPremiumResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ApprovePremium`.
+message ApprovePremiumRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string premium_id = 2;
+  Premium premium = 3;
+  ApprovePremiumRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ApprovePremium`.
+message ApprovePremiumResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Premium premium = 1;
+  ApprovePremiumResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RejectPremium`.
+message RejectPremiumRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string premium_id = 2;
+  Premium premium = 3;
+  RejectPremiumRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RejectPremium`.
+message RejectPremiumResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Premium premium = 1;
+  RejectPremiumResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `EscalatePremium`.
+message EscalatePremiumRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string premium_id = 2;
+  Premium premium = 3;
+  EscalatePremiumRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `EscalatePremium`.
+message EscalatePremiumResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Premium premium = 1;
+  EscalatePremiumResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `DelegatePremiumApproval`.
+message DelegatePremiumApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string premium_id = 2;
+  Premium premium = 3;
+  DelegatePremiumApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `DelegatePremiumApproval`.
+message DelegatePremiumApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Premium premium = 1;
+  DelegatePremiumApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RecallPremium`.
+message RecallPremiumRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string premium_id = 2;
+  Premium premium = 3;
+  RecallPremiumRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RecallPremium`.
+message RecallPremiumResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Premium premium = 1;
+  RecallPremiumResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetPremiumApprovalStatus`.
+message GetPremiumApprovalStatusRequest {
+  acme.common.v1.RequestContext context = 1;
+  string premium_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetPremiumApprovalStatus`.
+message GetPremiumApprovalStatusResponse {
+  Premium premium = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `CommentPremiumApproval`.
+message CommentPremiumApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string premium_id = 2;
+  Premium premium = 3;
+  CommentPremiumApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CommentPremiumApproval`.
+message CommentPremiumApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Premium premium = 1;
+  CommentPremiumApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

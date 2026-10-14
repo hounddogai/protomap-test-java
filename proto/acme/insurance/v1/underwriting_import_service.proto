@@ -1,0 +1,214 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.insurance.v1;
+
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/identity/v1/refs.proto";
+import "acme/insurance/v1/insurance.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Insurance.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/insurance/v1;insurancev1";
+option java_multiple_files = true;
+option java_outer_classname = "UnderwritingImportServiceProto";
+option java_package = "com.acme.insurance.v1";
+
+// Takes underwritings in bulk from partners and legacy systems.
+service UnderwritingImportService {
+  // Takes a stream of underwritings and answers once at the end.
+  rpc ImportUnderwritings(stream ImportUnderwritingsRequest) returns (ImportUnderwritingsResponse);
+
+  // Returns an underwriting.
+  rpc GetUnderwritingImportStatus(GetUnderwritingImportStatusRequest) returns (GetUnderwritingImportStatusResponse);
+
+  // Cancels an underwriting.
+  rpc CancelUnderwritingImport(CancelUnderwritingImportRequest) returns (CancelUnderwritingImportResponse);
+
+  // Validates an underwriting.
+  rpc ValidateUnderwritingImport(ValidateUnderwritingImportRequest) returns (ValidateUnderwritingImportResponse);
+
+  // Lists underwritings a page at a time.
+  rpc ListUnderwritingImports(ListUnderwritingImportsRequest) returns (ListUnderwritingImportsResponse);
+
+  // Maps an underwriting.
+  rpc MapUnderwritingImportColumns(MapUnderwritingImportColumnsRequest) returns (MapUnderwritingImportColumnsResponse);
+}
+
+// The request of `ImportUnderwritings`.
+message ImportUnderwritingsRequest {
+  // What a stream of records starts with.
+  message StreamHeader {
+    string source = 1;
+    string format = 2;
+    int64 total_records = 3;
+    acme.common.v1.ContactInfo submitted_by = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  oneof chunk {
+    ImportUnderwritingsRequest.StreamHeader header = 2;
+    Underwriting record = 3;
+  }
+  int64 sequence = 4;
+}
+
+// The response of `ImportUnderwritings`.
+message ImportUnderwritingsResponse {
+  // A record the import turned down.
+  message Rejection {
+    int64 sequence = 1;
+    string reason = 2;
+    string underwriting_id = 3;
+  }
+
+  int64 accepted = 1;
+  int64 rejected = 2;
+  repeated ImportUnderwritingsResponse.Rejection rejections = 3;
+  acme.common.v1.OperationResult result = 4;
+}
+
+// The request of `GetUnderwritingImportStatus`.
+message GetUnderwritingImportStatusRequest {
+  acme.common.v1.RequestContext context = 1;
+  string underwriting_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetUnderwritingImportStatus`.
+message GetUnderwritingImportStatusResponse {
+  Underwriting underwriting = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `CancelUnderwritingImport`.
+message CancelUnderwritingImportRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string underwriting_id = 2;
+  CancelUnderwritingImportRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `CancelUnderwritingImport`.
+message CancelUnderwritingImportResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Underwriting underwriting = 1;
+  CancelUnderwritingImportResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ValidateUnderwritingImport`.
+message ValidateUnderwritingImportRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string underwriting_id = 2;
+  Underwriting underwriting = 3;
+  ValidateUnderwritingImportRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ValidateUnderwritingImport`.
+message ValidateUnderwritingImportResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Underwriting underwriting = 1;
+  ValidateUnderwritingImportResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ListUnderwritingImports`.
+message ListUnderwritingImportsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated UnderwritingStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListUnderwritingImportsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListUnderwritingImports`.
+message ListUnderwritingImportsResponse {
+  repeated Underwriting underwritings = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `MapUnderwritingImportColumns`.
+message MapUnderwritingImportColumnsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string underwriting_id = 2;
+  Underwriting underwriting = 3;
+  MapUnderwritingImportColumnsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `MapUnderwritingImportColumns`.
+message MapUnderwritingImportColumnsResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Underwriting underwriting = 1;
+  MapUnderwritingImportColumnsResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

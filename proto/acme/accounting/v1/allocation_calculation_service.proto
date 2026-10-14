@@ -1,0 +1,253 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.accounting.v1;
+
+import "acme/accounting/v1/accounting.proto";
+import "acme/common/v1/address.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/money.proto";
+import "acme/common/v1/operation.proto";
+import "google/protobuf/field_mask.proto";
+
+option csharp_namespace = "Acme.Accounting.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/accounting/v1;accountingv1";
+option java_multiple_files = true;
+option java_outer_classname = "AllocationCalculationServiceProto";
+option java_package = "com.acme.accounting.v1";
+
+// Computes the figures of an allocation, such as totals, taxes, and estimates.
+service AllocationCalculationService {
+  // Calculates an allocation.
+  rpc CalculateAllocation(CalculateAllocationRequest) returns (CalculateAllocationResponse);
+
+  // Estimates an allocation.
+  rpc EstimateAllocation(EstimateAllocationRequest) returns (EstimateAllocationResponse);
+
+  // Compares an allocation.
+  rpc CompareAllocationOptions(CompareAllocationOptionsRequest) returns (CompareAllocationOptionsResponse);
+
+  // Recalculates an allocation.
+  rpc RecalculateAllocations(RecalculateAllocationsRequest) returns (RecalculateAllocationsResponse);
+
+  // Simulates an allocation.
+  rpc SimulateAllocation(SimulateAllocationRequest) returns (SimulateAllocationResponse);
+
+  // Returns an allocation.
+  rpc GetAllocationRates(GetAllocationRatesRequest) returns (GetAllocationRatesResponse);
+}
+
+// The request of `CalculateAllocation`.
+message CalculateAllocationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string allocation_id = 2;
+  Allocation allocation = 3;
+  CalculateAllocationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CalculateAllocation`.
+message CalculateAllocationResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated CalculateAllocationResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Allocation allocation = 1;
+  CalculateAllocationResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `EstimateAllocation`.
+message EstimateAllocationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string allocation_id = 2;
+  Allocation allocation = 3;
+  EstimateAllocationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `EstimateAllocation`.
+message EstimateAllocationResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated EstimateAllocationResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Allocation allocation = 1;
+  EstimateAllocationResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CompareAllocationOptions`.
+message CompareAllocationOptionsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string allocation_id = 2;
+  Allocation allocation = 3;
+  CompareAllocationOptionsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CompareAllocationOptions`.
+message CompareAllocationOptionsResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated CompareAllocationOptionsResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Allocation allocation = 1;
+  CompareAllocationOptionsResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RecalculateAllocations`.
+message RecalculateAllocationsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string allocation_id = 2;
+  Allocation allocation = 3;
+  RecalculateAllocationsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RecalculateAllocations`.
+message RecalculateAllocationsResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated RecalculateAllocationsResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Allocation allocation = 1;
+  RecalculateAllocationsResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SimulateAllocation`.
+message SimulateAllocationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string allocation_id = 2;
+  Allocation allocation = 3;
+  SimulateAllocationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SimulateAllocation`.
+message SimulateAllocationResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated SimulateAllocationResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Allocation allocation = 1;
+  SimulateAllocationResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetAllocationRates`.
+message GetAllocationRatesRequest {
+  acme.common.v1.RequestContext context = 1;
+  string allocation_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetAllocationRates`.
+message GetAllocationRatesResponse {
+  Allocation allocation = 1;
+  acme.common.v1.OperationResult result = 2;
+}
