@@ -1,0 +1,333 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.invoicing.v1;
+
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/identity/v1/refs.proto";
+import "acme/invoicing/v1/invoicing.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Invoicing.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/invoicing/v1;invoicingv1";
+option java_multiple_files = true;
+option java_outer_classname = "InvoiceTemplateApprovalServiceProto";
+option java_package = "com.acme.invoicing.v1";
+
+// Routes invoice templates through approval, with escalation and delegation.
+service InvoiceTemplateApprovalService {
+  // Submits an invoice template.
+  rpc SubmitInvoiceTemplate(SubmitInvoiceTemplateRequest) returns (SubmitInvoiceTemplateResponse);
+
+  // Approves an invoice template.
+  rpc ApproveInvoiceTemplate(ApproveInvoiceTemplateRequest) returns (ApproveInvoiceTemplateResponse);
+
+  // Rejects an invoice template.
+  rpc RejectInvoiceTemplate(RejectInvoiceTemplateRequest) returns (RejectInvoiceTemplateResponse);
+
+  // Escalates an invoice template.
+  rpc EscalateInvoiceTemplate(EscalateInvoiceTemplateRequest) returns (EscalateInvoiceTemplateResponse);
+
+  // Lists invoice templates a page at a time.
+  rpc ListPendingInvoiceTemplates(ListPendingInvoiceTemplatesRequest) returns (ListPendingInvoiceTemplatesResponse);
+
+  // Delegates an invoice template.
+  rpc DelegateInvoiceTemplateApproval(DelegateInvoiceTemplateApprovalRequest) returns (DelegateInvoiceTemplateApprovalResponse);
+
+  // Recalls an invoice template.
+  rpc RecallInvoiceTemplate(RecallInvoiceTemplateRequest) returns (RecallInvoiceTemplateResponse);
+
+  // Returns an invoice template.
+  rpc GetInvoiceTemplateApprovalStatus(GetInvoiceTemplateApprovalStatusRequest) returns (GetInvoiceTemplateApprovalStatusResponse);
+
+  // Comments an invoice template.
+  rpc CommentInvoiceTemplateApproval(CommentInvoiceTemplateApprovalRequest) returns (CommentInvoiceTemplateApprovalResponse);
+}
+
+// The request of `SubmitInvoiceTemplate`.
+message SubmitInvoiceTemplateRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string invoice_template_id = 2;
+  InvoiceTemplate invoice_template = 3;
+  SubmitInvoiceTemplateRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SubmitInvoiceTemplate`.
+message SubmitInvoiceTemplateResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  InvoiceTemplate invoice_template = 1;
+  SubmitInvoiceTemplateResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ApproveInvoiceTemplate`.
+message ApproveInvoiceTemplateRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string invoice_template_id = 2;
+  InvoiceTemplate invoice_template = 3;
+  ApproveInvoiceTemplateRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ApproveInvoiceTemplate`.
+message ApproveInvoiceTemplateResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  InvoiceTemplate invoice_template = 1;
+  ApproveInvoiceTemplateResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RejectInvoiceTemplate`.
+message RejectInvoiceTemplateRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string invoice_template_id = 2;
+  InvoiceTemplate invoice_template = 3;
+  RejectInvoiceTemplateRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RejectInvoiceTemplate`.
+message RejectInvoiceTemplateResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  InvoiceTemplate invoice_template = 1;
+  RejectInvoiceTemplateResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `EscalateInvoiceTemplate`.
+message EscalateInvoiceTemplateRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string invoice_template_id = 2;
+  InvoiceTemplate invoice_template = 3;
+  EscalateInvoiceTemplateRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `EscalateInvoiceTemplate`.
+message EscalateInvoiceTemplateResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  InvoiceTemplate invoice_template = 1;
+  EscalateInvoiceTemplateResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ListPendingInvoiceTemplates`.
+message ListPendingInvoiceTemplatesRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated InvoiceTemplateStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListPendingInvoiceTemplatesRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListPendingInvoiceTemplates`.
+message ListPendingInvoiceTemplatesResponse {
+  repeated InvoiceTemplate invoice_templates = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `DelegateInvoiceTemplateApproval`.
+message DelegateInvoiceTemplateApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string invoice_template_id = 2;
+  InvoiceTemplate invoice_template = 3;
+  DelegateInvoiceTemplateApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `DelegateInvoiceTemplateApproval`.
+message DelegateInvoiceTemplateApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  InvoiceTemplate invoice_template = 1;
+  DelegateInvoiceTemplateApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RecallInvoiceTemplate`.
+message RecallInvoiceTemplateRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string invoice_template_id = 2;
+  InvoiceTemplate invoice_template = 3;
+  RecallInvoiceTemplateRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RecallInvoiceTemplate`.
+message RecallInvoiceTemplateResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  InvoiceTemplate invoice_template = 1;
+  RecallInvoiceTemplateResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetInvoiceTemplateApprovalStatus`.
+message GetInvoiceTemplateApprovalStatusRequest {
+  acme.common.v1.RequestContext context = 1;
+  string invoice_template_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetInvoiceTemplateApprovalStatus`.
+message GetInvoiceTemplateApprovalStatusResponse {
+  InvoiceTemplate invoice_template = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `CommentInvoiceTemplateApproval`.
+message CommentInvoiceTemplateApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string invoice_template_id = 2;
+  InvoiceTemplate invoice_template = 3;
+  CommentInvoiceTemplateApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CommentInvoiceTemplateApproval`.
+message CommentInvoiceTemplateApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  InvoiceTemplate invoice_template = 1;
+  CommentInvoiceTemplateApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

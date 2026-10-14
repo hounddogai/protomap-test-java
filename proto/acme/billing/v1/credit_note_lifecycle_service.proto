@@ -1,0 +1,294 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.billing.v1;
+
+import "acme/billing/v1/billing.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/identity/v1/refs.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Billing.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/billing/v1;billingv1";
+option java_multiple_files = true;
+option java_outer_classname = "CreditNoteLifecycleServiceProto";
+option java_package = "com.acme.billing.v1";
+
+// Moves a credit note between the states of its lifecycle.
+service CreditNoteLifecycleService {
+  // Activates a credit note.
+  rpc ActivateCreditNote(ActivateCreditNoteRequest) returns (ActivateCreditNoteResponse);
+
+  // Suspends a credit note.
+  rpc SuspendCreditNote(SuspendCreditNoteRequest) returns (SuspendCreditNoteResponse);
+
+  // Reinstates a credit note.
+  rpc ReinstateCreditNote(ReinstateCreditNoteRequest) returns (ReinstateCreditNoteResponse);
+
+  // Terminates a credit note.
+  rpc TerminateCreditNote(TerminateCreditNoteRequest) returns (TerminateCreditNoteResponse);
+
+  // Renews a credit note.
+  rpc RenewCreditNote(RenewCreditNoteRequest) returns (RenewCreditNoteResponse);
+
+  // Expires a credit note.
+  rpc ExpireCreditNote(ExpireCreditNoteRequest) returns (ExpireCreditNoteResponse);
+
+  // Returns a credit note.
+  rpc GetCreditNoteLifecycle(GetCreditNoteLifecycleRequest) returns (GetCreditNoteLifecycleResponse);
+
+  // Schedules a credit note.
+  rpc ScheduleCreditNoteExpiry(ScheduleCreditNoteExpiryRequest) returns (ScheduleCreditNoteExpiryResponse);
+}
+
+// The request of `ActivateCreditNote`.
+message ActivateCreditNoteRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string credit_note_id = 2;
+  ActivateCreditNoteRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ActivateCreditNote`.
+message ActivateCreditNoteResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  CreditNote credit_note = 1;
+  ActivateCreditNoteResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SuspendCreditNote`.
+message SuspendCreditNoteRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string credit_note_id = 2;
+  SuspendCreditNoteRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `SuspendCreditNote`.
+message SuspendCreditNoteResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  CreditNote credit_note = 1;
+  SuspendCreditNoteResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ReinstateCreditNote`.
+message ReinstateCreditNoteRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string credit_note_id = 2;
+  ReinstateCreditNoteRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ReinstateCreditNote`.
+message ReinstateCreditNoteResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  CreditNote credit_note = 1;
+  ReinstateCreditNoteResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `TerminateCreditNote`.
+message TerminateCreditNoteRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string credit_note_id = 2;
+  TerminateCreditNoteRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `TerminateCreditNote`.
+message TerminateCreditNoteResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  CreditNote credit_note = 1;
+  TerminateCreditNoteResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RenewCreditNote`.
+message RenewCreditNoteRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string credit_note_id = 2;
+  RenewCreditNoteRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `RenewCreditNote`.
+message RenewCreditNoteResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  CreditNote credit_note = 1;
+  RenewCreditNoteResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExpireCreditNote`.
+message ExpireCreditNoteRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string credit_note_id = 2;
+  ExpireCreditNoteRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ExpireCreditNote`.
+message ExpireCreditNoteResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  CreditNote credit_note = 1;
+  ExpireCreditNoteResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetCreditNoteLifecycle`.
+message GetCreditNoteLifecycleRequest {
+  acme.common.v1.RequestContext context = 1;
+  string credit_note_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetCreditNoteLifecycle`.
+message GetCreditNoteLifecycleResponse {
+  CreditNote credit_note = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `ScheduleCreditNoteExpiry`.
+message ScheduleCreditNoteExpiryRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string credit_note_id = 2;
+  CreditNote credit_note = 3;
+  ScheduleCreditNoteExpiryRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ScheduleCreditNoteExpiry`.
+message ScheduleCreditNoteExpiryResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  CreditNote credit_note = 1;
+  ScheduleCreditNoteExpiryResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

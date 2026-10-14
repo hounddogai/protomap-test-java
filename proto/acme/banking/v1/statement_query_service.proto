@@ -1,0 +1,200 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.banking.v1;
+
+import "acme/banking/v1/banking.proto";
+import "acme/common/v1/audit.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Banking.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/banking/v1;bankingv1";
+option java_multiple_files = true;
+option java_outer_classname = "StatementQueryServiceProto";
+option java_package = "com.acme.banking.v1";
+
+// Answers read-only questions about statements, for screens and reports.
+service StatementQueryService {
+  // Returns a statement.
+  rpc LookupStatement(LookupStatementRequest) returns (LookupStatementResponse);
+
+  // Lists statements a page at a time.
+  rpc BrowseStatements(BrowseStatementsRequest) returns (BrowseStatementsResponse);
+
+  // Lists statements a page at a time.
+  rpc FindStatements(FindStatementsRequest) returns (FindStatementsResponse);
+
+  // Counts statements by status.
+  rpc CountStatements(CountStatementsRequest) returns (CountStatementsResponse);
+
+  // Streams every matching statement.
+  rpc ExportStatements(ExportStatementsRequest) returns (stream ExportStatementsResponse);
+
+  // Summarizes a statement.
+  rpc SummarizeStatements(SummarizeStatementsRequest) returns (SummarizeStatementsResponse);
+
+  // Returns a statement.
+  rpc PeekStatement(PeekStatementRequest) returns (PeekStatementResponse);
+}
+
+// The request of `LookupStatement`.
+message LookupStatementRequest {
+  acme.common.v1.RequestContext context = 1;
+  string statement_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `LookupStatement`.
+message LookupStatementResponse {
+  Statement statement = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `BrowseStatements`.
+message BrowseStatementsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated StatementStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  BrowseStatementsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `BrowseStatements`.
+message BrowseStatementsResponse {
+  repeated Statement statements = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `FindStatements`.
+message FindStatementsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated StatementStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  FindStatementsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `FindStatements`.
+message FindStatementsResponse {
+  repeated Statement statements = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CountStatements`.
+message CountStatementsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated StatementStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  CountStatementsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `CountStatements`.
+message CountStatementsResponse {
+  int64 count = 1;
+  map<string, int64> by_status = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExportStatements`.
+message ExportStatementsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated StatementStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  ExportStatementsRequest.Filter filter = 2;
+  string format = 3;
+  google.protobuf.FieldMask fields = 4;
+  string destination_uri = 5;
+}
+
+// The response of `ExportStatements`.
+message ExportStatementsResponse {
+  Statement statement = 1;
+  string change_type = 2;
+  google.protobuf.Timestamp changed_at = 3;
+  int64 sequence = 4;
+  acme.common.v1.OperationResult result = 5;
+}
+
+// The request of `SummarizeStatements`.
+message SummarizeStatementsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string format = 1;
+    acme.common.v1.TimeWindow period = 2;
+    repeated string recipient_emails = 3;
+    string cron = 4;
+    map<string, string> filters = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string statement_id = 2;
+  SummarizeStatementsRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `SummarizeStatements`.
+message SummarizeStatementsResponse {
+  string report_id = 1;
+  string download_uri = 2;
+  map<string, string> summary = 3;
+  acme.common.v1.TimeWindow period = 4;
+  acme.common.v1.OperationResult result = 5;
+}
+
+// The request of `PeekStatement`.
+message PeekStatementRequest {
+  acme.common.v1.RequestContext context = 1;
+  string statement_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `PeekStatement`.
+message PeekStatementResponse {
+  Statement statement = 1;
+  acme.common.v1.OperationResult result = 2;
+}

@@ -1,0 +1,334 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.suppliers.v1;
+
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/suppliers/v1/suppliers.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Suppliers.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/suppliers/v1;suppliersv1";
+option java_multiple_files = true;
+option java_outer_classname = "SupplierWorkflowServiceProto";
+option java_package = "com.acme.suppliers.v1";
+
+// Runs the long-lived workflow that takes a supplier from start to finish.
+service SupplierWorkflowService {
+  // Starts a supplier.
+  rpc StartSupplierWorkflow(StartSupplierWorkflowRequest) returns (StartSupplierWorkflowResponse);
+
+  // Advances a supplier.
+  rpc AdvanceSupplierWorkflow(AdvanceSupplierWorkflowRequest) returns (AdvanceSupplierWorkflowResponse);
+
+  // Cancels a supplier.
+  rpc CancelSupplierWorkflow(CancelSupplierWorkflowRequest) returns (CancelSupplierWorkflowResponse);
+
+  // Retrys a supplier.
+  rpc RetrySupplierWorkflow(RetrySupplierWorkflowRequest) returns (RetrySupplierWorkflowResponse);
+
+  // Pauses a supplier.
+  rpc PauseSupplierWorkflow(PauseSupplierWorkflowRequest) returns (PauseSupplierWorkflowResponse);
+
+  // Resumes a supplier.
+  rpc ResumeSupplierWorkflow(ResumeSupplierWorkflowRequest) returns (ResumeSupplierWorkflowResponse);
+
+  // Returns a supplier.
+  rpc InspectSupplierWorkflow(InspectSupplierWorkflowRequest) returns (InspectSupplierWorkflowResponse);
+
+  // Lists suppliers a page at a time.
+  rpc ListSupplierWorkflows(ListSupplierWorkflowsRequest) returns (ListSupplierWorkflowsResponse);
+
+  // Signals a supplier.
+  rpc SignalSupplierWorkflow(SignalSupplierWorkflowRequest) returns (SignalSupplierWorkflowResponse);
+}
+
+// The request of `StartSupplierWorkflow`.
+message StartSupplierWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string supplier_id = 2;
+  Supplier supplier = 3;
+  StartSupplierWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `StartSupplierWorkflow`.
+message StartSupplierWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Supplier supplier = 1;
+  StartSupplierWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `AdvanceSupplierWorkflow`.
+message AdvanceSupplierWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string supplier_id = 2;
+  Supplier supplier = 3;
+  AdvanceSupplierWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `AdvanceSupplierWorkflow`.
+message AdvanceSupplierWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Supplier supplier = 1;
+  AdvanceSupplierWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CancelSupplierWorkflow`.
+message CancelSupplierWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string supplier_id = 2;
+  Supplier supplier = 3;
+  CancelSupplierWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CancelSupplierWorkflow`.
+message CancelSupplierWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Supplier supplier = 1;
+  CancelSupplierWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RetrySupplierWorkflow`.
+message RetrySupplierWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string supplier_id = 2;
+  Supplier supplier = 3;
+  RetrySupplierWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RetrySupplierWorkflow`.
+message RetrySupplierWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Supplier supplier = 1;
+  RetrySupplierWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PauseSupplierWorkflow`.
+message PauseSupplierWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string supplier_id = 2;
+  Supplier supplier = 3;
+  PauseSupplierWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PauseSupplierWorkflow`.
+message PauseSupplierWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Supplier supplier = 1;
+  PauseSupplierWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ResumeSupplierWorkflow`.
+message ResumeSupplierWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string supplier_id = 2;
+  Supplier supplier = 3;
+  ResumeSupplierWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ResumeSupplierWorkflow`.
+message ResumeSupplierWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Supplier supplier = 1;
+  ResumeSupplierWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `InspectSupplierWorkflow`.
+message InspectSupplierWorkflowRequest {
+  acme.common.v1.RequestContext context = 1;
+  string supplier_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `InspectSupplierWorkflow`.
+message InspectSupplierWorkflowResponse {
+  Supplier supplier = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `ListSupplierWorkflows`.
+message ListSupplierWorkflowsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated SupplierStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListSupplierWorkflowsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListSupplierWorkflows`.
+message ListSupplierWorkflowsResponse {
+  repeated Supplier suppliers = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SignalSupplierWorkflow`.
+message SignalSupplierWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string supplier_id = 2;
+  Supplier supplier = 3;
+  SignalSupplierWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SignalSupplierWorkflow`.
+message SignalSupplierWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Supplier supplier = 1;
+  SignalSupplierWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

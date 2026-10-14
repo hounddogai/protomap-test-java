@@ -1,0 +1,292 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.treasury.v1;
+
+import "acme/common/v1/address.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/money.proto";
+import "acme/common/v1/operation.proto";
+import "acme/treasury/v1/treasury.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Treasury.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/treasury/v1;treasuryv1";
+option java_multiple_files = true;
+option java_outer_classname = "BankTransferCalculationServiceProto";
+option java_package = "com.acme.treasury.v1";
+
+// Computes the figures of a bank transfer, such as totals, taxes, and estimates.
+service BankTransferCalculationService {
+  // Calculates a bank transfer.
+  rpc CalculateBankTransfer(CalculateBankTransferRequest) returns (CalculateBankTransferResponse);
+
+  // Estimates a bank transfer.
+  rpc EstimateBankTransfer(EstimateBankTransferRequest) returns (EstimateBankTransferResponse);
+
+  // Compares a bank transfer.
+  rpc CompareBankTransferOptions(CompareBankTransferOptionsRequest) returns (CompareBankTransferOptionsResponse);
+
+  // Recalculates a bank transfer.
+  rpc RecalculateBankTransfers(RecalculateBankTransfersRequest) returns (RecalculateBankTransfersResponse);
+
+  // Simulates a bank transfer.
+  rpc SimulateBankTransfer(SimulateBankTransferRequest) returns (SimulateBankTransferResponse);
+
+  // Explains a bank transfer.
+  rpc ExplainBankTransferCalculation(ExplainBankTransferCalculationRequest) returns (ExplainBankTransferCalculationResponse);
+
+  // Returns a bank transfer.
+  rpc GetBankTransferRates(GetBankTransferRatesRequest) returns (GetBankTransferRatesResponse);
+}
+
+// The request of `CalculateBankTransfer`.
+message CalculateBankTransferRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string bank_transfer_id = 2;
+  BankTransfer bank_transfer = 3;
+  CalculateBankTransferRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CalculateBankTransfer`.
+message CalculateBankTransferResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated CalculateBankTransferResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  BankTransfer bank_transfer = 1;
+  CalculateBankTransferResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `EstimateBankTransfer`.
+message EstimateBankTransferRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string bank_transfer_id = 2;
+  BankTransfer bank_transfer = 3;
+  EstimateBankTransferRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `EstimateBankTransfer`.
+message EstimateBankTransferResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated EstimateBankTransferResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  BankTransfer bank_transfer = 1;
+  EstimateBankTransferResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CompareBankTransferOptions`.
+message CompareBankTransferOptionsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string bank_transfer_id = 2;
+  BankTransfer bank_transfer = 3;
+  CompareBankTransferOptionsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CompareBankTransferOptions`.
+message CompareBankTransferOptionsResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated CompareBankTransferOptionsResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  BankTransfer bank_transfer = 1;
+  CompareBankTransferOptionsResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RecalculateBankTransfers`.
+message RecalculateBankTransfersRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string bank_transfer_id = 2;
+  BankTransfer bank_transfer = 3;
+  RecalculateBankTransfersRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RecalculateBankTransfers`.
+message RecalculateBankTransfersResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated RecalculateBankTransfersResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  BankTransfer bank_transfer = 1;
+  RecalculateBankTransfersResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SimulateBankTransfer`.
+message SimulateBankTransferRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string bank_transfer_id = 2;
+  BankTransfer bank_transfer = 3;
+  SimulateBankTransferRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SimulateBankTransfer`.
+message SimulateBankTransferResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated SimulateBankTransferResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  BankTransfer bank_transfer = 1;
+  SimulateBankTransferResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExplainBankTransferCalculation`.
+message ExplainBankTransferCalculationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string bank_transfer_id = 2;
+  BankTransfer bank_transfer = 3;
+  ExplainBankTransferCalculationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ExplainBankTransferCalculation`.
+message ExplainBankTransferCalculationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  BankTransfer bank_transfer = 1;
+  ExplainBankTransferCalculationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetBankTransferRates`.
+message GetBankTransferRatesRequest {
+  acme.common.v1.RequestContext context = 1;
+  string bank_transfer_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetBankTransferRates`.
+message GetBankTransferRatesResponse {
+  BankTransfer bank_transfer = 1;
+  acme.common.v1.OperationResult result = 2;
+}

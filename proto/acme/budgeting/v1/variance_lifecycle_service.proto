@@ -1,0 +1,258 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.budgeting.v1;
+
+import "acme/budgeting/v1/budgeting.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/identity/v1/refs.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Budgeting.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/budgeting/v1;budgetingv1";
+option java_multiple_files = true;
+option java_outer_classname = "VarianceLifecycleServiceProto";
+option java_package = "com.acme.budgeting.v1";
+
+// Moves a variance between the states of its lifecycle.
+service VarianceLifecycleService {
+  // Activates a variance.
+  rpc ActivateVariance(ActivateVarianceRequest) returns (ActivateVarianceResponse);
+
+  // Suspends a variance.
+  rpc SuspendVariance(SuspendVarianceRequest) returns (SuspendVarianceResponse);
+
+  // Terminates a variance.
+  rpc TerminateVariance(TerminateVarianceRequest) returns (TerminateVarianceResponse);
+
+  // Renews a variance.
+  rpc RenewVariance(RenewVarianceRequest) returns (RenewVarianceResponse);
+
+  // Expires a variance.
+  rpc ExpireVariance(ExpireVarianceRequest) returns (ExpireVarianceResponse);
+
+  // Returns a variance.
+  rpc GetVarianceLifecycle(GetVarianceLifecycleRequest) returns (GetVarianceLifecycleResponse);
+
+  // Schedules a variance.
+  rpc ScheduleVarianceExpiry(ScheduleVarianceExpiryRequest) returns (ScheduleVarianceExpiryResponse);
+}
+
+// The request of `ActivateVariance`.
+message ActivateVarianceRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string variance_id = 2;
+  ActivateVarianceRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ActivateVariance`.
+message ActivateVarianceResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Variance variance = 1;
+  ActivateVarianceResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SuspendVariance`.
+message SuspendVarianceRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string variance_id = 2;
+  SuspendVarianceRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `SuspendVariance`.
+message SuspendVarianceResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Variance variance = 1;
+  SuspendVarianceResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `TerminateVariance`.
+message TerminateVarianceRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string variance_id = 2;
+  TerminateVarianceRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `TerminateVariance`.
+message TerminateVarianceResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Variance variance = 1;
+  TerminateVarianceResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RenewVariance`.
+message RenewVarianceRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string variance_id = 2;
+  RenewVarianceRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `RenewVariance`.
+message RenewVarianceResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Variance variance = 1;
+  RenewVarianceResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExpireVariance`.
+message ExpireVarianceRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string variance_id = 2;
+  ExpireVarianceRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ExpireVariance`.
+message ExpireVarianceResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Variance variance = 1;
+  ExpireVarianceResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetVarianceLifecycle`.
+message GetVarianceLifecycleRequest {
+  acme.common.v1.RequestContext context = 1;
+  string variance_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetVarianceLifecycle`.
+message GetVarianceLifecycleResponse {
+  Variance variance = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `ScheduleVarianceExpiry`.
+message ScheduleVarianceExpiryRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string variance_id = 2;
+  Variance variance = 3;
+  ScheduleVarianceExpiryRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ScheduleVarianceExpiry`.
+message ScheduleVarianceExpiryResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Variance variance = 1;
+  ScheduleVarianceExpiryResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

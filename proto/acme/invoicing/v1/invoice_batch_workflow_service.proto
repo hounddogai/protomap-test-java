@@ -1,0 +1,296 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.invoicing.v1;
+
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/invoicing/v1/invoicing.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Invoicing.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/invoicing/v1;invoicingv1";
+option java_multiple_files = true;
+option java_outer_classname = "InvoiceBatchWorkflowServiceProto";
+option java_package = "com.acme.invoicing.v1";
+
+// Runs the long-lived workflow that takes an invoice batch from start to finish.
+service InvoiceBatchWorkflowService {
+  // Starts an invoice batch.
+  rpc StartInvoiceBatchWorkflow(StartInvoiceBatchWorkflowRequest) returns (StartInvoiceBatchWorkflowResponse);
+
+  // Advances an invoice batch.
+  rpc AdvanceInvoiceBatchWorkflow(AdvanceInvoiceBatchWorkflowRequest) returns (AdvanceInvoiceBatchWorkflowResponse);
+
+  // Cancels an invoice batch.
+  rpc CancelInvoiceBatchWorkflow(CancelInvoiceBatchWorkflowRequest) returns (CancelInvoiceBatchWorkflowResponse);
+
+  // Retrys an invoice batch.
+  rpc RetryInvoiceBatchWorkflow(RetryInvoiceBatchWorkflowRequest) returns (RetryInvoiceBatchWorkflowResponse);
+
+  // Pauses an invoice batch.
+  rpc PauseInvoiceBatchWorkflow(PauseInvoiceBatchWorkflowRequest) returns (PauseInvoiceBatchWorkflowResponse);
+
+  // Resumes an invoice batch.
+  rpc ResumeInvoiceBatchWorkflow(ResumeInvoiceBatchWorkflowRequest) returns (ResumeInvoiceBatchWorkflowResponse);
+
+  // Returns an invoice batch.
+  rpc InspectInvoiceBatchWorkflow(InspectInvoiceBatchWorkflowRequest) returns (InspectInvoiceBatchWorkflowResponse);
+
+  // Lists invoice batches a page at a time.
+  rpc ListInvoiceBatchWorkflows(ListInvoiceBatchWorkflowsRequest) returns (ListInvoiceBatchWorkflowsResponse);
+}
+
+// The request of `StartInvoiceBatchWorkflow`.
+message StartInvoiceBatchWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string invoice_batch_id = 2;
+  InvoiceBatch invoice_batch = 3;
+  StartInvoiceBatchWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `StartInvoiceBatchWorkflow`.
+message StartInvoiceBatchWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  InvoiceBatch invoice_batch = 1;
+  StartInvoiceBatchWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `AdvanceInvoiceBatchWorkflow`.
+message AdvanceInvoiceBatchWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string invoice_batch_id = 2;
+  InvoiceBatch invoice_batch = 3;
+  AdvanceInvoiceBatchWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `AdvanceInvoiceBatchWorkflow`.
+message AdvanceInvoiceBatchWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  InvoiceBatch invoice_batch = 1;
+  AdvanceInvoiceBatchWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CancelInvoiceBatchWorkflow`.
+message CancelInvoiceBatchWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string invoice_batch_id = 2;
+  InvoiceBatch invoice_batch = 3;
+  CancelInvoiceBatchWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CancelInvoiceBatchWorkflow`.
+message CancelInvoiceBatchWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  InvoiceBatch invoice_batch = 1;
+  CancelInvoiceBatchWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RetryInvoiceBatchWorkflow`.
+message RetryInvoiceBatchWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string invoice_batch_id = 2;
+  InvoiceBatch invoice_batch = 3;
+  RetryInvoiceBatchWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RetryInvoiceBatchWorkflow`.
+message RetryInvoiceBatchWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  InvoiceBatch invoice_batch = 1;
+  RetryInvoiceBatchWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PauseInvoiceBatchWorkflow`.
+message PauseInvoiceBatchWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string invoice_batch_id = 2;
+  InvoiceBatch invoice_batch = 3;
+  PauseInvoiceBatchWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PauseInvoiceBatchWorkflow`.
+message PauseInvoiceBatchWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  InvoiceBatch invoice_batch = 1;
+  PauseInvoiceBatchWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ResumeInvoiceBatchWorkflow`.
+message ResumeInvoiceBatchWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string invoice_batch_id = 2;
+  InvoiceBatch invoice_batch = 3;
+  ResumeInvoiceBatchWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ResumeInvoiceBatchWorkflow`.
+message ResumeInvoiceBatchWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  InvoiceBatch invoice_batch = 1;
+  ResumeInvoiceBatchWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `InspectInvoiceBatchWorkflow`.
+message InspectInvoiceBatchWorkflowRequest {
+  acme.common.v1.RequestContext context = 1;
+  string invoice_batch_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `InspectInvoiceBatchWorkflow`.
+message InspectInvoiceBatchWorkflowResponse {
+  InvoiceBatch invoice_batch = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `ListInvoiceBatchWorkflows`.
+message ListInvoiceBatchWorkflowsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated InvoiceBatchStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListInvoiceBatchWorkflowsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListInvoiceBatchWorkflows`.
+message ListInvoiceBatchWorkflowsResponse {
+  repeated InvoiceBatch invoice_batches = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}

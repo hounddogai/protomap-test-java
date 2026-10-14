@@ -1,0 +1,232 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.ledger.v1;
+
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/ledger/v1/ledger.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Ledger.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/ledger/v1;ledgerv1";
+option java_multiple_files = true;
+option java_outer_classname = "LedgerAccountHistoryServiceProto";
+option java_package = "com.acme.ledger.v1";
+
+// Keeps every version of a ledger account and restores earlier ones.
+service LedgerAccountHistoryService {
+  // Records a ledger account.
+  rpc RecordLedgerAccountVersion(RecordLedgerAccountVersionRequest) returns (RecordLedgerAccountVersionResponse);
+
+  // Lists ledger accounts a page at a time.
+  rpc ListLedgerAccountVersions(ListLedgerAccountVersionsRequest) returns (ListLedgerAccountVersionsResponse);
+
+  // Returns a ledger account.
+  rpc GetLedgerAccountVersion(GetLedgerAccountVersionRequest) returns (GetLedgerAccountVersionResponse);
+
+  // Compares a ledger account.
+  rpc CompareLedgerAccountVersions(CompareLedgerAccountVersionsRequest) returns (CompareLedgerAccountVersionsResponse);
+
+  // Reverts a ledger account.
+  rpc RevertLedgerAccount(RevertLedgerAccountRequest) returns (RevertLedgerAccountResponse);
+
+  // Annotates a ledger account.
+  rpc AnnotateLedgerAccountVersion(AnnotateLedgerAccountVersionRequest) returns (AnnotateLedgerAccountVersionResponse);
+
+  // Deletes a ledger account.
+  rpc PruneLedgerAccountVersions(PruneLedgerAccountVersionsRequest) returns (PruneLedgerAccountVersionsResponse);
+}
+
+// The request of `RecordLedgerAccountVersion`.
+message RecordLedgerAccountVersionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    int64 version = 1;
+    int64 other_version = 2;
+    bytes snapshot = 3;
+    string author_email = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string ledger_account_id = 2;
+  LedgerAccount ledger_account = 3;
+  RecordLedgerAccountVersionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RecordLedgerAccountVersion`.
+message RecordLedgerAccountVersionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LedgerAccount ledger_account = 1;
+  RecordLedgerAccountVersionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ListLedgerAccountVersions`.
+message ListLedgerAccountVersionsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated LedgerAccountStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListLedgerAccountVersionsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListLedgerAccountVersions`.
+message ListLedgerAccountVersionsResponse {
+  repeated LedgerAccount ledger_accounts = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetLedgerAccountVersion`.
+message GetLedgerAccountVersionRequest {
+  acme.common.v1.RequestContext context = 1;
+  string ledger_account_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetLedgerAccountVersion`.
+message GetLedgerAccountVersionResponse {
+  LedgerAccount ledger_account = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `CompareLedgerAccountVersions`.
+message CompareLedgerAccountVersionsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    int64 version = 1;
+    int64 other_version = 2;
+    bytes snapshot = 3;
+    string author_email = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string ledger_account_id = 2;
+  LedgerAccount ledger_account = 3;
+  CompareLedgerAccountVersionsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CompareLedgerAccountVersions`.
+message CompareLedgerAccountVersionsResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LedgerAccount ledger_account = 1;
+  CompareLedgerAccountVersionsResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RevertLedgerAccount`.
+message RevertLedgerAccountRequest {
+  // What the operation needs besides the record.
+  message Details {
+    int64 version = 1;
+    int64 other_version = 2;
+    bytes snapshot = 3;
+    string author_email = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string ledger_account_id = 2;
+  LedgerAccount ledger_account = 3;
+  RevertLedgerAccountRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RevertLedgerAccount`.
+message RevertLedgerAccountResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LedgerAccount ledger_account = 1;
+  RevertLedgerAccountResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `AnnotateLedgerAccountVersion`.
+message AnnotateLedgerAccountVersionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    int64 version = 1;
+    int64 other_version = 2;
+    bytes snapshot = 3;
+    string author_email = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string ledger_account_id = 2;
+  LedgerAccount ledger_account = 3;
+  AnnotateLedgerAccountVersionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `AnnotateLedgerAccountVersion`.
+message AnnotateLedgerAccountVersionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LedgerAccount ledger_account = 1;
+  AnnotateLedgerAccountVersionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PruneLedgerAccountVersions`.
+message PruneLedgerAccountVersionsRequest {
+  acme.common.v1.RequestContext context = 1;
+  string ledger_account_id = 2;
+  string reason = 3;
+  string etag = 4;
+  bool force = 5;
+}
+
+// The response of `PruneLedgerAccountVersions`.
+message PruneLedgerAccountVersionsResponse {
+  acme.common.v1.OperationResult result = 1;
+  google.protobuf.Timestamp effective_at = 2;
+}

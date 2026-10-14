@@ -1,0 +1,241 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.risk.v1;
+
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/identity/v1/refs.proto";
+import "acme/risk/v1/risk.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Risk.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/risk/v1;riskv1";
+option java_multiple_files = true;
+option java_outer_classname = "StressTestLifecycleServiceProto";
+option java_package = "com.acme.risk.v1";
+
+// Moves a stress test between the states of its lifecycle.
+service StressTestLifecycleService {
+  // Activates a stress test.
+  rpc ActivateStressTest(ActivateStressTestRequest) returns (ActivateStressTestResponse);
+
+  // Suspends a stress test.
+  rpc SuspendStressTest(SuspendStressTestRequest) returns (SuspendStressTestResponse);
+
+  // Reinstates a stress test.
+  rpc ReinstateStressTest(ReinstateStressTestRequest) returns (ReinstateStressTestResponse);
+
+  // Terminates a stress test.
+  rpc TerminateStressTest(TerminateStressTestRequest) returns (TerminateStressTestResponse);
+
+  // Expires a stress test.
+  rpc ExpireStressTest(ExpireStressTestRequest) returns (ExpireStressTestResponse);
+
+  // Schedules a stress test.
+  rpc ScheduleStressTestExpiry(ScheduleStressTestExpiryRequest) returns (ScheduleStressTestExpiryResponse);
+}
+
+// The request of `ActivateStressTest`.
+message ActivateStressTestRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string stress_test_id = 2;
+  ActivateStressTestRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ActivateStressTest`.
+message ActivateStressTestResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  StressTest stress_test = 1;
+  ActivateStressTestResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SuspendStressTest`.
+message SuspendStressTestRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string stress_test_id = 2;
+  SuspendStressTestRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `SuspendStressTest`.
+message SuspendStressTestResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  StressTest stress_test = 1;
+  SuspendStressTestResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ReinstateStressTest`.
+message ReinstateStressTestRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string stress_test_id = 2;
+  ReinstateStressTestRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ReinstateStressTest`.
+message ReinstateStressTestResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  StressTest stress_test = 1;
+  ReinstateStressTestResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `TerminateStressTest`.
+message TerminateStressTestRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string stress_test_id = 2;
+  TerminateStressTestRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `TerminateStressTest`.
+message TerminateStressTestResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  StressTest stress_test = 1;
+  TerminateStressTestResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExpireStressTest`.
+message ExpireStressTestRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string stress_test_id = 2;
+  ExpireStressTestRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ExpireStressTest`.
+message ExpireStressTestResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  StressTest stress_test = 1;
+  ExpireStressTestResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ScheduleStressTestExpiry`.
+message ScheduleStressTestExpiryRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string stress_test_id = 2;
+  StressTest stress_test = 3;
+  ScheduleStressTestExpiryRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ScheduleStressTestExpiry`.
+message ScheduleStressTestExpiryResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  StressTest stress_test = 1;
+  ScheduleStressTestExpiryResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

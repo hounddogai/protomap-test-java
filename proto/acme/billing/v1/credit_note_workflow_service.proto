@@ -1,0 +1,334 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.billing.v1;
+
+import "acme/billing/v1/billing.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Billing.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/billing/v1;billingv1";
+option java_multiple_files = true;
+option java_outer_classname = "CreditNoteWorkflowServiceProto";
+option java_package = "com.acme.billing.v1";
+
+// Runs the long-lived workflow that takes a credit note from start to finish.
+service CreditNoteWorkflowService {
+  // Starts a credit note.
+  rpc StartCreditNoteWorkflow(StartCreditNoteWorkflowRequest) returns (StartCreditNoteWorkflowResponse);
+
+  // Advances a credit note.
+  rpc AdvanceCreditNoteWorkflow(AdvanceCreditNoteWorkflowRequest) returns (AdvanceCreditNoteWorkflowResponse);
+
+  // Cancels a credit note.
+  rpc CancelCreditNoteWorkflow(CancelCreditNoteWorkflowRequest) returns (CancelCreditNoteWorkflowResponse);
+
+  // Retrys a credit note.
+  rpc RetryCreditNoteWorkflow(RetryCreditNoteWorkflowRequest) returns (RetryCreditNoteWorkflowResponse);
+
+  // Pauses a credit note.
+  rpc PauseCreditNoteWorkflow(PauseCreditNoteWorkflowRequest) returns (PauseCreditNoteWorkflowResponse);
+
+  // Resumes a credit note.
+  rpc ResumeCreditNoteWorkflow(ResumeCreditNoteWorkflowRequest) returns (ResumeCreditNoteWorkflowResponse);
+
+  // Returns a credit note.
+  rpc InspectCreditNoteWorkflow(InspectCreditNoteWorkflowRequest) returns (InspectCreditNoteWorkflowResponse);
+
+  // Lists credit notes a page at a time.
+  rpc ListCreditNoteWorkflows(ListCreditNoteWorkflowsRequest) returns (ListCreditNoteWorkflowsResponse);
+
+  // Signals a credit note.
+  rpc SignalCreditNoteWorkflow(SignalCreditNoteWorkflowRequest) returns (SignalCreditNoteWorkflowResponse);
+}
+
+// The request of `StartCreditNoteWorkflow`.
+message StartCreditNoteWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string credit_note_id = 2;
+  CreditNote credit_note = 3;
+  StartCreditNoteWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `StartCreditNoteWorkflow`.
+message StartCreditNoteWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  CreditNote credit_note = 1;
+  StartCreditNoteWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `AdvanceCreditNoteWorkflow`.
+message AdvanceCreditNoteWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string credit_note_id = 2;
+  CreditNote credit_note = 3;
+  AdvanceCreditNoteWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `AdvanceCreditNoteWorkflow`.
+message AdvanceCreditNoteWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  CreditNote credit_note = 1;
+  AdvanceCreditNoteWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CancelCreditNoteWorkflow`.
+message CancelCreditNoteWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string credit_note_id = 2;
+  CreditNote credit_note = 3;
+  CancelCreditNoteWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CancelCreditNoteWorkflow`.
+message CancelCreditNoteWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  CreditNote credit_note = 1;
+  CancelCreditNoteWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RetryCreditNoteWorkflow`.
+message RetryCreditNoteWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string credit_note_id = 2;
+  CreditNote credit_note = 3;
+  RetryCreditNoteWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RetryCreditNoteWorkflow`.
+message RetryCreditNoteWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  CreditNote credit_note = 1;
+  RetryCreditNoteWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PauseCreditNoteWorkflow`.
+message PauseCreditNoteWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string credit_note_id = 2;
+  CreditNote credit_note = 3;
+  PauseCreditNoteWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PauseCreditNoteWorkflow`.
+message PauseCreditNoteWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  CreditNote credit_note = 1;
+  PauseCreditNoteWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ResumeCreditNoteWorkflow`.
+message ResumeCreditNoteWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string credit_note_id = 2;
+  CreditNote credit_note = 3;
+  ResumeCreditNoteWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ResumeCreditNoteWorkflow`.
+message ResumeCreditNoteWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  CreditNote credit_note = 1;
+  ResumeCreditNoteWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `InspectCreditNoteWorkflow`.
+message InspectCreditNoteWorkflowRequest {
+  acme.common.v1.RequestContext context = 1;
+  string credit_note_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `InspectCreditNoteWorkflow`.
+message InspectCreditNoteWorkflowResponse {
+  CreditNote credit_note = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `ListCreditNoteWorkflows`.
+message ListCreditNoteWorkflowsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated CreditNoteStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListCreditNoteWorkflowsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListCreditNoteWorkflows`.
+message ListCreditNoteWorkflowsResponse {
+  repeated CreditNote credit_notes = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SignalCreditNoteWorkflow`.
+message SignalCreditNoteWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string credit_note_id = 2;
+  CreditNote credit_note = 3;
+  SignalCreditNoteWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SignalCreditNoteWorkflow`.
+message SignalCreditNoteWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  CreditNote credit_note = 1;
+  SignalCreditNoteWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

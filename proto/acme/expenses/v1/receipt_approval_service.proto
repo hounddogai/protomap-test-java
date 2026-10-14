@@ -1,0 +1,295 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.expenses.v1;
+
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/expenses/v1/expenses.proto";
+import "acme/identity/v1/refs.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Expenses.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/expenses/v1;expensesv1";
+option java_multiple_files = true;
+option java_outer_classname = "ReceiptApprovalServiceProto";
+option java_package = "com.acme.expenses.v1";
+
+// Routes receipts through approval, with escalation and delegation.
+service ReceiptApprovalService {
+  // Submits a receipt.
+  rpc SubmitReceipt(SubmitReceiptRequest) returns (SubmitReceiptResponse);
+
+  // Approves a receipt.
+  rpc ApproveReceipt(ApproveReceiptRequest) returns (ApproveReceiptResponse);
+
+  // Rejects a receipt.
+  rpc RejectReceipt(RejectReceiptRequest) returns (RejectReceiptResponse);
+
+  // Escalates a receipt.
+  rpc EscalateReceipt(EscalateReceiptRequest) returns (EscalateReceiptResponse);
+
+  // Lists receipts a page at a time.
+  rpc ListPendingReceipts(ListPendingReceiptsRequest) returns (ListPendingReceiptsResponse);
+
+  // Delegates a receipt.
+  rpc DelegateReceiptApproval(DelegateReceiptApprovalRequest) returns (DelegateReceiptApprovalResponse);
+
+  // Returns a receipt.
+  rpc GetReceiptApprovalStatus(GetReceiptApprovalStatusRequest) returns (GetReceiptApprovalStatusResponse);
+
+  // Comments a receipt.
+  rpc CommentReceiptApproval(CommentReceiptApprovalRequest) returns (CommentReceiptApprovalResponse);
+}
+
+// The request of `SubmitReceipt`.
+message SubmitReceiptRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string receipt_id = 2;
+  Receipt receipt = 3;
+  SubmitReceiptRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SubmitReceipt`.
+message SubmitReceiptResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Receipt receipt = 1;
+  SubmitReceiptResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ApproveReceipt`.
+message ApproveReceiptRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string receipt_id = 2;
+  Receipt receipt = 3;
+  ApproveReceiptRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ApproveReceipt`.
+message ApproveReceiptResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Receipt receipt = 1;
+  ApproveReceiptResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RejectReceipt`.
+message RejectReceiptRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string receipt_id = 2;
+  Receipt receipt = 3;
+  RejectReceiptRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RejectReceipt`.
+message RejectReceiptResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Receipt receipt = 1;
+  RejectReceiptResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `EscalateReceipt`.
+message EscalateReceiptRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string receipt_id = 2;
+  Receipt receipt = 3;
+  EscalateReceiptRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `EscalateReceipt`.
+message EscalateReceiptResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Receipt receipt = 1;
+  EscalateReceiptResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ListPendingReceipts`.
+message ListPendingReceiptsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated ReceiptStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListPendingReceiptsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListPendingReceipts`.
+message ListPendingReceiptsResponse {
+  repeated Receipt receipts = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `DelegateReceiptApproval`.
+message DelegateReceiptApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string receipt_id = 2;
+  Receipt receipt = 3;
+  DelegateReceiptApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `DelegateReceiptApproval`.
+message DelegateReceiptApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Receipt receipt = 1;
+  DelegateReceiptApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetReceiptApprovalStatus`.
+message GetReceiptApprovalStatusRequest {
+  acme.common.v1.RequestContext context = 1;
+  string receipt_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetReceiptApprovalStatus`.
+message GetReceiptApprovalStatusResponse {
+  Receipt receipt = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `CommentReceiptApproval`.
+message CommentReceiptApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string receipt_id = 2;
+  Receipt receipt = 3;
+  CommentReceiptApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CommentReceiptApproval`.
+message CommentReceiptApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Receipt receipt = 1;
+  CommentReceiptApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

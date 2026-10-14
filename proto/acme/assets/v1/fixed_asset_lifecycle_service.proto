@@ -1,0 +1,294 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.assets.v1;
+
+import "acme/assets/v1/assets.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/identity/v1/refs.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Assets.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/assets/v1;assetsv1";
+option java_multiple_files = true;
+option java_outer_classname = "FixedAssetLifecycleServiceProto";
+option java_package = "com.acme.assets.v1";
+
+// Moves a fixed asset between the states of its lifecycle.
+service FixedAssetLifecycleService {
+  // Activates a fixed asset.
+  rpc ActivateFixedAsset(ActivateFixedAssetRequest) returns (ActivateFixedAssetResponse);
+
+  // Suspends a fixed asset.
+  rpc SuspendFixedAsset(SuspendFixedAssetRequest) returns (SuspendFixedAssetResponse);
+
+  // Reinstates a fixed asset.
+  rpc ReinstateFixedAsset(ReinstateFixedAssetRequest) returns (ReinstateFixedAssetResponse);
+
+  // Terminates a fixed asset.
+  rpc TerminateFixedAsset(TerminateFixedAssetRequest) returns (TerminateFixedAssetResponse);
+
+  // Renews a fixed asset.
+  rpc RenewFixedAsset(RenewFixedAssetRequest) returns (RenewFixedAssetResponse);
+
+  // Expires a fixed asset.
+  rpc ExpireFixedAsset(ExpireFixedAssetRequest) returns (ExpireFixedAssetResponse);
+
+  // Returns a fixed asset.
+  rpc GetFixedAssetLifecycle(GetFixedAssetLifecycleRequest) returns (GetFixedAssetLifecycleResponse);
+
+  // Schedules a fixed asset.
+  rpc ScheduleFixedAssetExpiry(ScheduleFixedAssetExpiryRequest) returns (ScheduleFixedAssetExpiryResponse);
+}
+
+// The request of `ActivateFixedAsset`.
+message ActivateFixedAssetRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string fixed_asset_id = 2;
+  ActivateFixedAssetRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ActivateFixedAsset`.
+message ActivateFixedAssetResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FixedAsset fixed_asset = 1;
+  ActivateFixedAssetResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SuspendFixedAsset`.
+message SuspendFixedAssetRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string fixed_asset_id = 2;
+  SuspendFixedAssetRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `SuspendFixedAsset`.
+message SuspendFixedAssetResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FixedAsset fixed_asset = 1;
+  SuspendFixedAssetResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ReinstateFixedAsset`.
+message ReinstateFixedAssetRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string fixed_asset_id = 2;
+  ReinstateFixedAssetRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ReinstateFixedAsset`.
+message ReinstateFixedAssetResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FixedAsset fixed_asset = 1;
+  ReinstateFixedAssetResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `TerminateFixedAsset`.
+message TerminateFixedAssetRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string fixed_asset_id = 2;
+  TerminateFixedAssetRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `TerminateFixedAsset`.
+message TerminateFixedAssetResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FixedAsset fixed_asset = 1;
+  TerminateFixedAssetResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RenewFixedAsset`.
+message RenewFixedAssetRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string fixed_asset_id = 2;
+  RenewFixedAssetRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `RenewFixedAsset`.
+message RenewFixedAssetResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FixedAsset fixed_asset = 1;
+  RenewFixedAssetResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExpireFixedAsset`.
+message ExpireFixedAssetRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string fixed_asset_id = 2;
+  ExpireFixedAssetRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ExpireFixedAsset`.
+message ExpireFixedAssetResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FixedAsset fixed_asset = 1;
+  ExpireFixedAssetResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetFixedAssetLifecycle`.
+message GetFixedAssetLifecycleRequest {
+  acme.common.v1.RequestContext context = 1;
+  string fixed_asset_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetFixedAssetLifecycle`.
+message GetFixedAssetLifecycleResponse {
+  FixedAsset fixed_asset = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `ScheduleFixedAssetExpiry`.
+message ScheduleFixedAssetExpiryRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string fixed_asset_id = 2;
+  FixedAsset fixed_asset = 3;
+  ScheduleFixedAssetExpiryRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ScheduleFixedAssetExpiry`.
+message ScheduleFixedAssetExpiryResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FixedAsset fixed_asset = 1;
+  ScheduleFixedAssetExpiryResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

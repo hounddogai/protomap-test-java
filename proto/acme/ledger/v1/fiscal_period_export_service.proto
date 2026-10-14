@@ -1,0 +1,214 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.ledger.v1;
+
+import "acme/common/v1/audit.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/identity/v1/refs.proto";
+import "acme/ledger/v1/ledger.proto";
+import "google/protobuf/any.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Ledger.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/ledger/v1;ledgerv1";
+option java_multiple_files = true;
+option java_outer_classname = "FiscalPeriodExportServiceProto";
+option java_package = "com.acme.ledger.v1";
+
+// Exports fiscal periods to files and other systems.
+service FiscalPeriodExportService {
+  // Streams every matching fiscal period.
+  rpc StreamFiscalPeriodExport(StreamFiscalPeriodExportRequest) returns (stream StreamFiscalPeriodExportResponse);
+
+  // Returns a fiscal period.
+  rpc GetFiscalPeriodExport(GetFiscalPeriodExportRequest) returns (GetFiscalPeriodExportResponse);
+
+  // Cancels a fiscal period.
+  rpc CancelFiscalPeriodExport(CancelFiscalPeriodExportRequest) returns (CancelFiscalPeriodExportResponse);
+
+  // Schedules a fiscal period.
+  rpc ScheduleFiscalPeriodExport(ScheduleFiscalPeriodExportRequest) returns (ScheduleFiscalPeriodExportResponse);
+
+  // Retrys a fiscal period.
+  rpc RetryFiscalPeriodExport(RetryFiscalPeriodExportRequest) returns (RetryFiscalPeriodExportResponse);
+
+  // Shares a fiscal period.
+  rpc ShareFiscalPeriodExport(ShareFiscalPeriodExportRequest) returns (ShareFiscalPeriodExportResponse);
+}
+
+// The request of `StreamFiscalPeriodExport`.
+message StreamFiscalPeriodExportRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated FiscalPeriodStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  StreamFiscalPeriodExportRequest.Filter filter = 2;
+  string format = 3;
+  google.protobuf.FieldMask fields = 4;
+  string destination_uri = 5;
+}
+
+// The response of `StreamFiscalPeriodExport`.
+message StreamFiscalPeriodExportResponse {
+  FiscalPeriod fiscal_period = 1;
+  string change_type = 2;
+  google.protobuf.Timestamp changed_at = 3;
+  int64 sequence = 4;
+  acme.common.v1.OperationResult result = 5;
+}
+
+// The request of `GetFiscalPeriodExport`.
+message GetFiscalPeriodExportRequest {
+  acme.common.v1.RequestContext context = 1;
+  string fiscal_period_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetFiscalPeriodExport`.
+message GetFiscalPeriodExportResponse {
+  FiscalPeriod fiscal_period = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `CancelFiscalPeriodExport`.
+message CancelFiscalPeriodExportRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string fiscal_period_id = 2;
+  CancelFiscalPeriodExportRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `CancelFiscalPeriodExport`.
+message CancelFiscalPeriodExportResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FiscalPeriod fiscal_period = 1;
+  CancelFiscalPeriodExportResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ScheduleFiscalPeriodExport`.
+message ScheduleFiscalPeriodExportRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string format = 1;
+    acme.common.v1.TimeWindow period = 2;
+    repeated string recipient_emails = 3;
+    string cron = 4;
+    map<string, string> filters = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string fiscal_period_id = 2;
+  ScheduleFiscalPeriodExportRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ScheduleFiscalPeriodExport`.
+message ScheduleFiscalPeriodExportResponse {
+  string report_id = 1;
+  string download_uri = 2;
+  map<string, string> summary = 3;
+  acme.common.v1.TimeWindow period = 4;
+  acme.common.v1.OperationResult result = 5;
+}
+
+// The request of `RetryFiscalPeriodExport`.
+message RetryFiscalPeriodExportRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string fiscal_period_id = 2;
+  FiscalPeriod fiscal_period = 3;
+  RetryFiscalPeriodExportRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RetryFiscalPeriodExport`.
+message RetryFiscalPeriodExportResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FiscalPeriod fiscal_period = 1;
+  RetryFiscalPeriodExportResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ShareFiscalPeriodExport`.
+message ShareFiscalPeriodExportRequest {
+  // What the operation needs besides the record.
+  message Details {
+    acme.common.v1.ContactInfo recipient = 1;
+    string template_id = 2;
+    map<string, string> variables = 3;
+    google.protobuf.Any payload = 4;
+    string channel = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string fiscal_period_id = 2;
+  ShareFiscalPeriodExportRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ShareFiscalPeriodExport`.
+message ShareFiscalPeriodExportResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FiscalPeriod fiscal_period = 1;
+  ShareFiscalPeriodExportResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

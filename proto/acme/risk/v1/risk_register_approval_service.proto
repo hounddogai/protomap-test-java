@@ -1,0 +1,333 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.risk.v1;
+
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/identity/v1/refs.proto";
+import "acme/risk/v1/risk.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Risk.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/risk/v1;riskv1";
+option java_multiple_files = true;
+option java_outer_classname = "RiskRegisterApprovalServiceProto";
+option java_package = "com.acme.risk.v1";
+
+// Routes risk registers through approval, with escalation and delegation.
+service RiskRegisterApprovalService {
+  // Submits a risk register.
+  rpc SubmitRiskRegister(SubmitRiskRegisterRequest) returns (SubmitRiskRegisterResponse);
+
+  // Approves a risk register.
+  rpc ApproveRiskRegister(ApproveRiskRegisterRequest) returns (ApproveRiskRegisterResponse);
+
+  // Rejects a risk register.
+  rpc RejectRiskRegister(RejectRiskRegisterRequest) returns (RejectRiskRegisterResponse);
+
+  // Escalates a risk register.
+  rpc EscalateRiskRegister(EscalateRiskRegisterRequest) returns (EscalateRiskRegisterResponse);
+
+  // Lists risk registers a page at a time.
+  rpc ListPendingRiskRegisters(ListPendingRiskRegistersRequest) returns (ListPendingRiskRegistersResponse);
+
+  // Delegates a risk register.
+  rpc DelegateRiskRegisterApproval(DelegateRiskRegisterApprovalRequest) returns (DelegateRiskRegisterApprovalResponse);
+
+  // Recalls a risk register.
+  rpc RecallRiskRegister(RecallRiskRegisterRequest) returns (RecallRiskRegisterResponse);
+
+  // Returns a risk register.
+  rpc GetRiskRegisterApprovalStatus(GetRiskRegisterApprovalStatusRequest) returns (GetRiskRegisterApprovalStatusResponse);
+
+  // Comments a risk register.
+  rpc CommentRiskRegisterApproval(CommentRiskRegisterApprovalRequest) returns (CommentRiskRegisterApprovalResponse);
+}
+
+// The request of `SubmitRiskRegister`.
+message SubmitRiskRegisterRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string risk_register_id = 2;
+  RiskRegister risk_register = 3;
+  SubmitRiskRegisterRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SubmitRiskRegister`.
+message SubmitRiskRegisterResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RiskRegister risk_register = 1;
+  SubmitRiskRegisterResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ApproveRiskRegister`.
+message ApproveRiskRegisterRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string risk_register_id = 2;
+  RiskRegister risk_register = 3;
+  ApproveRiskRegisterRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ApproveRiskRegister`.
+message ApproveRiskRegisterResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RiskRegister risk_register = 1;
+  ApproveRiskRegisterResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RejectRiskRegister`.
+message RejectRiskRegisterRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string risk_register_id = 2;
+  RiskRegister risk_register = 3;
+  RejectRiskRegisterRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RejectRiskRegister`.
+message RejectRiskRegisterResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RiskRegister risk_register = 1;
+  RejectRiskRegisterResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `EscalateRiskRegister`.
+message EscalateRiskRegisterRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string risk_register_id = 2;
+  RiskRegister risk_register = 3;
+  EscalateRiskRegisterRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `EscalateRiskRegister`.
+message EscalateRiskRegisterResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RiskRegister risk_register = 1;
+  EscalateRiskRegisterResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ListPendingRiskRegisters`.
+message ListPendingRiskRegistersRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated RiskRegisterStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListPendingRiskRegistersRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListPendingRiskRegisters`.
+message ListPendingRiskRegistersResponse {
+  repeated RiskRegister risk_registers = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `DelegateRiskRegisterApproval`.
+message DelegateRiskRegisterApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string risk_register_id = 2;
+  RiskRegister risk_register = 3;
+  DelegateRiskRegisterApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `DelegateRiskRegisterApproval`.
+message DelegateRiskRegisterApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RiskRegister risk_register = 1;
+  DelegateRiskRegisterApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RecallRiskRegister`.
+message RecallRiskRegisterRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string risk_register_id = 2;
+  RiskRegister risk_register = 3;
+  RecallRiskRegisterRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RecallRiskRegister`.
+message RecallRiskRegisterResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RiskRegister risk_register = 1;
+  RecallRiskRegisterResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetRiskRegisterApprovalStatus`.
+message GetRiskRegisterApprovalStatusRequest {
+  acme.common.v1.RequestContext context = 1;
+  string risk_register_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetRiskRegisterApprovalStatus`.
+message GetRiskRegisterApprovalStatusResponse {
+  RiskRegister risk_register = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `CommentRiskRegisterApproval`.
+message CommentRiskRegisterApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string risk_register_id = 2;
+  RiskRegister risk_register = 3;
+  CommentRiskRegisterApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CommentRiskRegisterApproval`.
+message CommentRiskRegisterApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RiskRegister risk_register = 1;
+  CommentRiskRegisterApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

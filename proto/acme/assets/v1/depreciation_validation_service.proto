@@ -1,0 +1,305 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.assets.v1;
+
+import "acme/assets/v1/assets.proto";
+import "acme/common/v1/address.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/money.proto";
+import "acme/common/v1/operation.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Assets.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/assets/v1;assetsv1";
+option java_multiple_files = true;
+option java_outer_classname = "DepreciationValidationServiceProto";
+option java_package = "com.acme.assets.v1";
+
+// Checks depreciations against the rules before anything acts on them.
+service DepreciationValidationService {
+  // Validates a depreciation.
+  rpc ValidateDepreciation(ValidateDepreciationRequest) returns (ValidateDepreciationResponse);
+
+  // Previews a depreciation.
+  rpc PreviewDepreciation(PreviewDepreciationRequest) returns (PreviewDepreciationResponse);
+
+  // Checks a depreciation.
+  rpc CheckDepreciationEligibility(CheckDepreciationEligibilityRequest) returns (CheckDepreciationEligibilityResponse);
+
+  // Normalizes a depreciation.
+  rpc NormalizeDepreciation(NormalizeDepreciationRequest) returns (NormalizeDepreciationResponse);
+
+  // Explains a depreciation.
+  rpc ExplainDepreciationDecision(ExplainDepreciationDecisionRequest) returns (ExplainDepreciationDecisionResponse);
+
+  // Scores a depreciation.
+  rpc ScoreDepreciation(ScoreDepreciationRequest) returns (ScoreDepreciationResponse);
+
+  // Lints a depreciation.
+  rpc LintDepreciations(LintDepreciationsRequest) returns (LintDepreciationsResponse);
+
+  // Returns a depreciation.
+  rpc GetDepreciationRules(GetDepreciationRulesRequest) returns (GetDepreciationRulesResponse);
+}
+
+// The request of `ValidateDepreciation`.
+message ValidateDepreciationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string depreciation_id = 2;
+  Depreciation depreciation = 3;
+  ValidateDepreciationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ValidateDepreciation`.
+message ValidateDepreciationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Depreciation depreciation = 1;
+  ValidateDepreciationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PreviewDepreciation`.
+message PreviewDepreciationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string depreciation_id = 2;
+  Depreciation depreciation = 3;
+  PreviewDepreciationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PreviewDepreciation`.
+message PreviewDepreciationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Depreciation depreciation = 1;
+  PreviewDepreciationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CheckDepreciationEligibility`.
+message CheckDepreciationEligibilityRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string depreciation_id = 2;
+  Depreciation depreciation = 3;
+  CheckDepreciationEligibilityRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CheckDepreciationEligibility`.
+message CheckDepreciationEligibilityResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Depreciation depreciation = 1;
+  CheckDepreciationEligibilityResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `NormalizeDepreciation`.
+message NormalizeDepreciationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string depreciation_id = 2;
+  Depreciation depreciation = 3;
+  NormalizeDepreciationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `NormalizeDepreciation`.
+message NormalizeDepreciationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Depreciation depreciation = 1;
+  NormalizeDepreciationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExplainDepreciationDecision`.
+message ExplainDepreciationDecisionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string depreciation_id = 2;
+  Depreciation depreciation = 3;
+  ExplainDepreciationDecisionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ExplainDepreciationDecision`.
+message ExplainDepreciationDecisionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Depreciation depreciation = 1;
+  ExplainDepreciationDecisionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ScoreDepreciation`.
+message ScoreDepreciationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string depreciation_id = 2;
+  Depreciation depreciation = 3;
+  ScoreDepreciationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ScoreDepreciation`.
+message ScoreDepreciationResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated ScoreDepreciationResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Depreciation depreciation = 1;
+  ScoreDepreciationResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `LintDepreciations`.
+message LintDepreciationsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string depreciation_id = 2;
+  Depreciation depreciation = 3;
+  LintDepreciationsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `LintDepreciations`.
+message LintDepreciationsResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Depreciation depreciation = 1;
+  LintDepreciationsResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetDepreciationRules`.
+message GetDepreciationRulesRequest {
+  acme.common.v1.RequestContext context = 1;
+  string depreciation_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetDepreciationRules`.
+message GetDepreciationRulesResponse {
+  Depreciation depreciation = 1;
+  acme.common.v1.OperationResult result = 2;
+}

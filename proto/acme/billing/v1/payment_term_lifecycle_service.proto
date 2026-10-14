@@ -1,0 +1,294 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.billing.v1;
+
+import "acme/billing/v1/billing.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/identity/v1/refs.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Billing.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/billing/v1;billingv1";
+option java_multiple_files = true;
+option java_outer_classname = "PaymentTermLifecycleServiceProto";
+option java_package = "com.acme.billing.v1";
+
+// Moves a payment term between the states of its lifecycle.
+service PaymentTermLifecycleService {
+  // Activates a payment term.
+  rpc ActivatePaymentTerm(ActivatePaymentTermRequest) returns (ActivatePaymentTermResponse);
+
+  // Suspends a payment term.
+  rpc SuspendPaymentTerm(SuspendPaymentTermRequest) returns (SuspendPaymentTermResponse);
+
+  // Reinstates a payment term.
+  rpc ReinstatePaymentTerm(ReinstatePaymentTermRequest) returns (ReinstatePaymentTermResponse);
+
+  // Terminates a payment term.
+  rpc TerminatePaymentTerm(TerminatePaymentTermRequest) returns (TerminatePaymentTermResponse);
+
+  // Renews a payment term.
+  rpc RenewPaymentTerm(RenewPaymentTermRequest) returns (RenewPaymentTermResponse);
+
+  // Expires a payment term.
+  rpc ExpirePaymentTerm(ExpirePaymentTermRequest) returns (ExpirePaymentTermResponse);
+
+  // Returns a payment term.
+  rpc GetPaymentTermLifecycle(GetPaymentTermLifecycleRequest) returns (GetPaymentTermLifecycleResponse);
+
+  // Schedules a payment term.
+  rpc SchedulePaymentTermExpiry(SchedulePaymentTermExpiryRequest) returns (SchedulePaymentTermExpiryResponse);
+}
+
+// The request of `ActivatePaymentTerm`.
+message ActivatePaymentTermRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string payment_term_id = 2;
+  ActivatePaymentTermRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ActivatePaymentTerm`.
+message ActivatePaymentTermResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PaymentTerm payment_term = 1;
+  ActivatePaymentTermResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SuspendPaymentTerm`.
+message SuspendPaymentTermRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string payment_term_id = 2;
+  SuspendPaymentTermRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `SuspendPaymentTerm`.
+message SuspendPaymentTermResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PaymentTerm payment_term = 1;
+  SuspendPaymentTermResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ReinstatePaymentTerm`.
+message ReinstatePaymentTermRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string payment_term_id = 2;
+  ReinstatePaymentTermRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ReinstatePaymentTerm`.
+message ReinstatePaymentTermResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PaymentTerm payment_term = 1;
+  ReinstatePaymentTermResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `TerminatePaymentTerm`.
+message TerminatePaymentTermRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string payment_term_id = 2;
+  TerminatePaymentTermRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `TerminatePaymentTerm`.
+message TerminatePaymentTermResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PaymentTerm payment_term = 1;
+  TerminatePaymentTermResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RenewPaymentTerm`.
+message RenewPaymentTermRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string payment_term_id = 2;
+  RenewPaymentTermRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `RenewPaymentTerm`.
+message RenewPaymentTermResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PaymentTerm payment_term = 1;
+  RenewPaymentTermResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExpirePaymentTerm`.
+message ExpirePaymentTermRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string payment_term_id = 2;
+  ExpirePaymentTermRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ExpirePaymentTerm`.
+message ExpirePaymentTermResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PaymentTerm payment_term = 1;
+  ExpirePaymentTermResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetPaymentTermLifecycle`.
+message GetPaymentTermLifecycleRequest {
+  acme.common.v1.RequestContext context = 1;
+  string payment_term_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetPaymentTermLifecycle`.
+message GetPaymentTermLifecycleResponse {
+  PaymentTerm payment_term = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `SchedulePaymentTermExpiry`.
+message SchedulePaymentTermExpiryRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string payment_term_id = 2;
+  PaymentTerm payment_term = 3;
+  SchedulePaymentTermExpiryRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SchedulePaymentTermExpiry`.
+message SchedulePaymentTermExpiryResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PaymentTerm payment_term = 1;
+  SchedulePaymentTermExpiryResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

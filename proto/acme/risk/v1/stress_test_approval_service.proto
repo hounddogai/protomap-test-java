@@ -1,0 +1,304 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.risk.v1;
+
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/identity/v1/refs.proto";
+import "acme/risk/v1/risk.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Risk.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/risk/v1;riskv1";
+option java_multiple_files = true;
+option java_outer_classname = "StressTestApprovalServiceProto";
+option java_package = "com.acme.risk.v1";
+
+// Routes stress tests through approval, with escalation and delegation.
+service StressTestApprovalService {
+  // Submits a stress test.
+  rpc SubmitStressTest(SubmitStressTestRequest) returns (SubmitStressTestResponse);
+
+  // Approves a stress test.
+  rpc ApproveStressTest(ApproveStressTestRequest) returns (ApproveStressTestResponse);
+
+  // Rejects a stress test.
+  rpc RejectStressTest(RejectStressTestRequest) returns (RejectStressTestResponse);
+
+  // Escalates a stress test.
+  rpc EscalateStressTest(EscalateStressTestRequest) returns (EscalateStressTestResponse);
+
+  // Delegates a stress test.
+  rpc DelegateStressTestApproval(DelegateStressTestApprovalRequest) returns (DelegateStressTestApprovalResponse);
+
+  // Recalls a stress test.
+  rpc RecallStressTest(RecallStressTestRequest) returns (RecallStressTestResponse);
+
+  // Returns a stress test.
+  rpc GetStressTestApprovalStatus(GetStressTestApprovalStatusRequest) returns (GetStressTestApprovalStatusResponse);
+
+  // Comments a stress test.
+  rpc CommentStressTestApproval(CommentStressTestApprovalRequest) returns (CommentStressTestApprovalResponse);
+}
+
+// The request of `SubmitStressTest`.
+message SubmitStressTestRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string stress_test_id = 2;
+  StressTest stress_test = 3;
+  SubmitStressTestRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SubmitStressTest`.
+message SubmitStressTestResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  StressTest stress_test = 1;
+  SubmitStressTestResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ApproveStressTest`.
+message ApproveStressTestRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string stress_test_id = 2;
+  StressTest stress_test = 3;
+  ApproveStressTestRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ApproveStressTest`.
+message ApproveStressTestResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  StressTest stress_test = 1;
+  ApproveStressTestResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RejectStressTest`.
+message RejectStressTestRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string stress_test_id = 2;
+  StressTest stress_test = 3;
+  RejectStressTestRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RejectStressTest`.
+message RejectStressTestResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  StressTest stress_test = 1;
+  RejectStressTestResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `EscalateStressTest`.
+message EscalateStressTestRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string stress_test_id = 2;
+  StressTest stress_test = 3;
+  EscalateStressTestRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `EscalateStressTest`.
+message EscalateStressTestResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  StressTest stress_test = 1;
+  EscalateStressTestResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `DelegateStressTestApproval`.
+message DelegateStressTestApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string stress_test_id = 2;
+  StressTest stress_test = 3;
+  DelegateStressTestApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `DelegateStressTestApproval`.
+message DelegateStressTestApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  StressTest stress_test = 1;
+  DelegateStressTestApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RecallStressTest`.
+message RecallStressTestRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string stress_test_id = 2;
+  StressTest stress_test = 3;
+  RecallStressTestRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RecallStressTest`.
+message RecallStressTestResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  StressTest stress_test = 1;
+  RecallStressTestResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetStressTestApprovalStatus`.
+message GetStressTestApprovalStatusRequest {
+  acme.common.v1.RequestContext context = 1;
+  string stress_test_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetStressTestApprovalStatus`.
+message GetStressTestApprovalStatusResponse {
+  StressTest stress_test = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `CommentStressTestApproval`.
+message CommentStressTestApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string stress_test_id = 2;
+  StressTest stress_test = 3;
+  CommentStressTestApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CommentStressTestApproval`.
+message CommentStressTestApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  StressTest stress_test = 1;
+  CommentStressTestApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

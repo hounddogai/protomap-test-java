@@ -1,0 +1,195 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.audit.v1;
+
+import "acme/audit/v1/audit.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Audit.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/audit/v1;auditv1";
+option java_multiple_files = true;
+option java_outer_classname = "RetentionPolicyHistoryServiceProto";
+option java_package = "com.acme.audit.v1";
+
+// Keeps every version of a retention policy and restores earlier ones.
+service RetentionPolicyHistoryService {
+  // Records a retention policy.
+  rpc RecordRetentionPolicyVersion(RecordRetentionPolicyVersionRequest) returns (RecordRetentionPolicyVersionResponse);
+
+  // Lists retention policies a page at a time.
+  rpc ListRetentionPolicyVersions(ListRetentionPolicyVersionsRequest) returns (ListRetentionPolicyVersionsResponse);
+
+  // Returns a retention policy.
+  rpc GetRetentionPolicyVersion(GetRetentionPolicyVersionRequest) returns (GetRetentionPolicyVersionResponse);
+
+  // Reverts a retention policy.
+  rpc RevertRetentionPolicy(RevertRetentionPolicyRequest) returns (RevertRetentionPolicyResponse);
+
+  // Annotates a retention policy.
+  rpc AnnotateRetentionPolicyVersion(AnnotateRetentionPolicyVersionRequest) returns (AnnotateRetentionPolicyVersionResponse);
+
+  // Deletes a retention policy.
+  rpc PruneRetentionPolicyVersions(PruneRetentionPolicyVersionsRequest) returns (PruneRetentionPolicyVersionsResponse);
+}
+
+// The request of `RecordRetentionPolicyVersion`.
+message RecordRetentionPolicyVersionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    int64 version = 1;
+    int64 other_version = 2;
+    bytes snapshot = 3;
+    string author_email = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string retention_policy_id = 2;
+  RetentionPolicy retention_policy = 3;
+  RecordRetentionPolicyVersionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RecordRetentionPolicyVersion`.
+message RecordRetentionPolicyVersionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RetentionPolicy retention_policy = 1;
+  RecordRetentionPolicyVersionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ListRetentionPolicyVersions`.
+message ListRetentionPolicyVersionsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated RetentionPolicyStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListRetentionPolicyVersionsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListRetentionPolicyVersions`.
+message ListRetentionPolicyVersionsResponse {
+  repeated RetentionPolicy retention_policies = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetRetentionPolicyVersion`.
+message GetRetentionPolicyVersionRequest {
+  acme.common.v1.RequestContext context = 1;
+  string retention_policy_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetRetentionPolicyVersion`.
+message GetRetentionPolicyVersionResponse {
+  RetentionPolicy retention_policy = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `RevertRetentionPolicy`.
+message RevertRetentionPolicyRequest {
+  // What the operation needs besides the record.
+  message Details {
+    int64 version = 1;
+    int64 other_version = 2;
+    bytes snapshot = 3;
+    string author_email = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string retention_policy_id = 2;
+  RetentionPolicy retention_policy = 3;
+  RevertRetentionPolicyRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RevertRetentionPolicy`.
+message RevertRetentionPolicyResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RetentionPolicy retention_policy = 1;
+  RevertRetentionPolicyResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `AnnotateRetentionPolicyVersion`.
+message AnnotateRetentionPolicyVersionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    int64 version = 1;
+    int64 other_version = 2;
+    bytes snapshot = 3;
+    string author_email = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string retention_policy_id = 2;
+  RetentionPolicy retention_policy = 3;
+  AnnotateRetentionPolicyVersionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `AnnotateRetentionPolicyVersion`.
+message AnnotateRetentionPolicyVersionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RetentionPolicy retention_policy = 1;
+  AnnotateRetentionPolicyVersionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PruneRetentionPolicyVersions`.
+message PruneRetentionPolicyVersionsRequest {
+  acme.common.v1.RequestContext context = 1;
+  string retention_policy_id = 2;
+  string reason = 3;
+  string etag = 4;
+  bool force = 5;
+}
+
+// The response of `PruneRetentionPolicyVersions`.
+message PruneRetentionPolicyVersionsResponse {
+  acme.common.v1.OperationResult result = 1;
+  google.protobuf.Timestamp effective_at = 2;
+}

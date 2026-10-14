@@ -1,0 +1,294 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.expenses.v1;
+
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/expenses/v1/expenses.proto";
+import "acme/identity/v1/refs.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Expenses.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/expenses/v1;expensesv1";
+option java_multiple_files = true;
+option java_outer_classname = "MileageClaimLifecycleServiceProto";
+option java_package = "com.acme.expenses.v1";
+
+// Moves a mileage claim between the states of its lifecycle.
+service MileageClaimLifecycleService {
+  // Activates a mileage claim.
+  rpc ActivateMileageClaim(ActivateMileageClaimRequest) returns (ActivateMileageClaimResponse);
+
+  // Suspends a mileage claim.
+  rpc SuspendMileageClaim(SuspendMileageClaimRequest) returns (SuspendMileageClaimResponse);
+
+  // Reinstates a mileage claim.
+  rpc ReinstateMileageClaim(ReinstateMileageClaimRequest) returns (ReinstateMileageClaimResponse);
+
+  // Terminates a mileage claim.
+  rpc TerminateMileageClaim(TerminateMileageClaimRequest) returns (TerminateMileageClaimResponse);
+
+  // Renews a mileage claim.
+  rpc RenewMileageClaim(RenewMileageClaimRequest) returns (RenewMileageClaimResponse);
+
+  // Expires a mileage claim.
+  rpc ExpireMileageClaim(ExpireMileageClaimRequest) returns (ExpireMileageClaimResponse);
+
+  // Returns a mileage claim.
+  rpc GetMileageClaimLifecycle(GetMileageClaimLifecycleRequest) returns (GetMileageClaimLifecycleResponse);
+
+  // Schedules a mileage claim.
+  rpc ScheduleMileageClaimExpiry(ScheduleMileageClaimExpiryRequest) returns (ScheduleMileageClaimExpiryResponse);
+}
+
+// The request of `ActivateMileageClaim`.
+message ActivateMileageClaimRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string mileage_claim_id = 2;
+  ActivateMileageClaimRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ActivateMileageClaim`.
+message ActivateMileageClaimResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  MileageClaim mileage_claim = 1;
+  ActivateMileageClaimResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SuspendMileageClaim`.
+message SuspendMileageClaimRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string mileage_claim_id = 2;
+  SuspendMileageClaimRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `SuspendMileageClaim`.
+message SuspendMileageClaimResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  MileageClaim mileage_claim = 1;
+  SuspendMileageClaimResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ReinstateMileageClaim`.
+message ReinstateMileageClaimRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string mileage_claim_id = 2;
+  ReinstateMileageClaimRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ReinstateMileageClaim`.
+message ReinstateMileageClaimResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  MileageClaim mileage_claim = 1;
+  ReinstateMileageClaimResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `TerminateMileageClaim`.
+message TerminateMileageClaimRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string mileage_claim_id = 2;
+  TerminateMileageClaimRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `TerminateMileageClaim`.
+message TerminateMileageClaimResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  MileageClaim mileage_claim = 1;
+  TerminateMileageClaimResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RenewMileageClaim`.
+message RenewMileageClaimRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string mileage_claim_id = 2;
+  RenewMileageClaimRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `RenewMileageClaim`.
+message RenewMileageClaimResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  MileageClaim mileage_claim = 1;
+  RenewMileageClaimResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExpireMileageClaim`.
+message ExpireMileageClaimRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string mileage_claim_id = 2;
+  ExpireMileageClaimRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ExpireMileageClaim`.
+message ExpireMileageClaimResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  MileageClaim mileage_claim = 1;
+  ExpireMileageClaimResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetMileageClaimLifecycle`.
+message GetMileageClaimLifecycleRequest {
+  acme.common.v1.RequestContext context = 1;
+  string mileage_claim_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetMileageClaimLifecycle`.
+message GetMileageClaimLifecycleResponse {
+  MileageClaim mileage_claim = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `ScheduleMileageClaimExpiry`.
+message ScheduleMileageClaimExpiryRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string mileage_claim_id = 2;
+  MileageClaim mileage_claim = 3;
+  ScheduleMileageClaimExpiryRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ScheduleMileageClaimExpiry`.
+message ScheduleMileageClaimExpiryResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  MileageClaim mileage_claim = 1;
+  ScheduleMileageClaimExpiryResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

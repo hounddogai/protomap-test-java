@@ -1,0 +1,295 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.banking.v1;
+
+import "acme/banking/v1/banking.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/identity/v1/refs.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Banking.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/banking/v1;bankingv1";
+option java_multiple_files = true;
+option java_outer_classname = "StatementApprovalServiceProto";
+option java_package = "com.acme.banking.v1";
+
+// Routes statements through approval, with escalation and delegation.
+service StatementApprovalService {
+  // Submits a statement.
+  rpc SubmitStatement(SubmitStatementRequest) returns (SubmitStatementResponse);
+
+  // Approves a statement.
+  rpc ApproveStatement(ApproveStatementRequest) returns (ApproveStatementResponse);
+
+  // Rejects a statement.
+  rpc RejectStatement(RejectStatementRequest) returns (RejectStatementResponse);
+
+  // Escalates a statement.
+  rpc EscalateStatement(EscalateStatementRequest) returns (EscalateStatementResponse);
+
+  // Lists statements a page at a time.
+  rpc ListPendingStatements(ListPendingStatementsRequest) returns (ListPendingStatementsResponse);
+
+  // Recalls a statement.
+  rpc RecallStatement(RecallStatementRequest) returns (RecallStatementResponse);
+
+  // Returns a statement.
+  rpc GetStatementApprovalStatus(GetStatementApprovalStatusRequest) returns (GetStatementApprovalStatusResponse);
+
+  // Comments a statement.
+  rpc CommentStatementApproval(CommentStatementApprovalRequest) returns (CommentStatementApprovalResponse);
+}
+
+// The request of `SubmitStatement`.
+message SubmitStatementRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string statement_id = 2;
+  Statement statement = 3;
+  SubmitStatementRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SubmitStatement`.
+message SubmitStatementResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Statement statement = 1;
+  SubmitStatementResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ApproveStatement`.
+message ApproveStatementRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string statement_id = 2;
+  Statement statement = 3;
+  ApproveStatementRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ApproveStatement`.
+message ApproveStatementResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Statement statement = 1;
+  ApproveStatementResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RejectStatement`.
+message RejectStatementRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string statement_id = 2;
+  Statement statement = 3;
+  RejectStatementRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RejectStatement`.
+message RejectStatementResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Statement statement = 1;
+  RejectStatementResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `EscalateStatement`.
+message EscalateStatementRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string statement_id = 2;
+  Statement statement = 3;
+  EscalateStatementRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `EscalateStatement`.
+message EscalateStatementResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Statement statement = 1;
+  EscalateStatementResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ListPendingStatements`.
+message ListPendingStatementsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated StatementStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListPendingStatementsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListPendingStatements`.
+message ListPendingStatementsResponse {
+  repeated Statement statements = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RecallStatement`.
+message RecallStatementRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string statement_id = 2;
+  Statement statement = 3;
+  RecallStatementRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RecallStatement`.
+message RecallStatementResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Statement statement = 1;
+  RecallStatementResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetStatementApprovalStatus`.
+message GetStatementApprovalStatusRequest {
+  acme.common.v1.RequestContext context = 1;
+  string statement_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetStatementApprovalStatus`.
+message GetStatementApprovalStatusResponse {
+  Statement statement = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `CommentStatementApproval`.
+message CommentStatementApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string statement_id = 2;
+  Statement statement = 3;
+  CommentStatementApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CommentStatementApproval`.
+message CommentStatementApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Statement statement = 1;
+  CommentStatementApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

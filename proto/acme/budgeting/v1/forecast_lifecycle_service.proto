@@ -1,0 +1,294 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.budgeting.v1;
+
+import "acme/budgeting/v1/budgeting.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/identity/v1/refs.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Budgeting.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/budgeting/v1;budgetingv1";
+option java_multiple_files = true;
+option java_outer_classname = "ForecastLifecycleServiceProto";
+option java_package = "com.acme.budgeting.v1";
+
+// Moves a forecast between the states of its lifecycle.
+service ForecastLifecycleService {
+  // Activates a forecast.
+  rpc ActivateForecast(ActivateForecastRequest) returns (ActivateForecastResponse);
+
+  // Suspends a forecast.
+  rpc SuspendForecast(SuspendForecastRequest) returns (SuspendForecastResponse);
+
+  // Reinstates a forecast.
+  rpc ReinstateForecast(ReinstateForecastRequest) returns (ReinstateForecastResponse);
+
+  // Terminates a forecast.
+  rpc TerminateForecast(TerminateForecastRequest) returns (TerminateForecastResponse);
+
+  // Renews a forecast.
+  rpc RenewForecast(RenewForecastRequest) returns (RenewForecastResponse);
+
+  // Expires a forecast.
+  rpc ExpireForecast(ExpireForecastRequest) returns (ExpireForecastResponse);
+
+  // Returns a forecast.
+  rpc GetForecastLifecycle(GetForecastLifecycleRequest) returns (GetForecastLifecycleResponse);
+
+  // Schedules a forecast.
+  rpc ScheduleForecastExpiry(ScheduleForecastExpiryRequest) returns (ScheduleForecastExpiryResponse);
+}
+
+// The request of `ActivateForecast`.
+message ActivateForecastRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string forecast_id = 2;
+  ActivateForecastRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ActivateForecast`.
+message ActivateForecastResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Forecast forecast = 1;
+  ActivateForecastResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SuspendForecast`.
+message SuspendForecastRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string forecast_id = 2;
+  SuspendForecastRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `SuspendForecast`.
+message SuspendForecastResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Forecast forecast = 1;
+  SuspendForecastResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ReinstateForecast`.
+message ReinstateForecastRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string forecast_id = 2;
+  ReinstateForecastRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ReinstateForecast`.
+message ReinstateForecastResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Forecast forecast = 1;
+  ReinstateForecastResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `TerminateForecast`.
+message TerminateForecastRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string forecast_id = 2;
+  TerminateForecastRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `TerminateForecast`.
+message TerminateForecastResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Forecast forecast = 1;
+  TerminateForecastResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RenewForecast`.
+message RenewForecastRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string forecast_id = 2;
+  RenewForecastRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `RenewForecast`.
+message RenewForecastResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Forecast forecast = 1;
+  RenewForecastResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExpireForecast`.
+message ExpireForecastRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string forecast_id = 2;
+  ExpireForecastRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ExpireForecast`.
+message ExpireForecastResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Forecast forecast = 1;
+  ExpireForecastResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetForecastLifecycle`.
+message GetForecastLifecycleRequest {
+  acme.common.v1.RequestContext context = 1;
+  string forecast_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetForecastLifecycle`.
+message GetForecastLifecycleResponse {
+  Forecast forecast = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `ScheduleForecastExpiry`.
+message ScheduleForecastExpiryRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string forecast_id = 2;
+  Forecast forecast = 3;
+  ScheduleForecastExpiryRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ScheduleForecastExpiry`.
+message ScheduleForecastExpiryResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Forecast forecast = 1;
+  ScheduleForecastExpiryResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

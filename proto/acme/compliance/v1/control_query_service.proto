@@ -1,0 +1,245 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.compliance.v1;
+
+import "acme/common/v1/audit.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/compliance/v1/compliance.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Compliance.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/compliance/v1;compliancev1";
+option java_multiple_files = true;
+option java_outer_classname = "ControlQueryServiceProto";
+option java_package = "com.acme.compliance.v1";
+
+// Answers read-only questions about controls, for screens and reports.
+service ControlQueryService {
+  // Returns a control.
+  rpc LookupControl(LookupControlRequest) returns (LookupControlResponse);
+
+  // Lists controls a page at a time.
+  rpc BrowseControls(BrowseControlsRequest) returns (BrowseControlsResponse);
+
+  // Lists controls a page at a time.
+  rpc FindControls(FindControlsRequest) returns (FindControlsResponse);
+
+  // Counts controls by status.
+  rpc CountControls(CountControlsRequest) returns (CountControlsResponse);
+
+  // Returns several controls at once.
+  rpc ResolveControls(ResolveControlsRequest) returns (ResolveControlsResponse);
+
+  // Streams every matching control.
+  rpc ExportControls(ExportControlsRequest) returns (stream ExportControlsResponse);
+
+  // Summarizes a control.
+  rpc SummarizeControls(SummarizeControlsRequest) returns (SummarizeControlsResponse);
+
+  // Lists controls a page at a time.
+  rpc SuggestControls(SuggestControlsRequest) returns (SuggestControlsResponse);
+
+  // Returns a control.
+  rpc PeekControl(PeekControlRequest) returns (PeekControlResponse);
+}
+
+// The request of `LookupControl`.
+message LookupControlRequest {
+  acme.common.v1.RequestContext context = 1;
+  string control_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `LookupControl`.
+message LookupControlResponse {
+  Control control = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `BrowseControls`.
+message BrowseControlsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated ControlStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  BrowseControlsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `BrowseControls`.
+message BrowseControlsResponse {
+  repeated Control controls = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `FindControls`.
+message FindControlsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated ControlStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  FindControlsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `FindControls`.
+message FindControlsResponse {
+  repeated Control controls = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CountControls`.
+message CountControlsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated ControlStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  CountControlsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `CountControls`.
+message CountControlsResponse {
+  int64 count = 1;
+  map<string, int64> by_status = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ResolveControls`.
+message ResolveControlsRequest {
+  acme.common.v1.RequestContext context = 1;
+  repeated string control_ids = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `ResolveControls`.
+message ResolveControlsResponse {
+  repeated Control controls = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExportControls`.
+message ExportControlsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated ControlStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  ExportControlsRequest.Filter filter = 2;
+  string format = 3;
+  google.protobuf.FieldMask fields = 4;
+  string destination_uri = 5;
+}
+
+// The response of `ExportControls`.
+message ExportControlsResponse {
+  Control control = 1;
+  string change_type = 2;
+  google.protobuf.Timestamp changed_at = 3;
+  int64 sequence = 4;
+  acme.common.v1.OperationResult result = 5;
+}
+
+// The request of `SummarizeControls`.
+message SummarizeControlsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string format = 1;
+    acme.common.v1.TimeWindow period = 2;
+    repeated string recipient_emails = 3;
+    string cron = 4;
+    map<string, string> filters = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string control_id = 2;
+  SummarizeControlsRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `SummarizeControls`.
+message SummarizeControlsResponse {
+  string report_id = 1;
+  string download_uri = 2;
+  map<string, string> summary = 3;
+  acme.common.v1.TimeWindow period = 4;
+  acme.common.v1.OperationResult result = 5;
+}
+
+// The request of `SuggestControls`.
+message SuggestControlsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated ControlStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  SuggestControlsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `SuggestControls`.
+message SuggestControlsResponse {
+  repeated Control controls = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PeekControl`.
+message PeekControlRequest {
+  acme.common.v1.RequestContext context = 1;
+  string control_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `PeekControl`.
+message PeekControlResponse {
+  Control control = 1;
+  acme.common.v1.OperationResult result = 2;
+}

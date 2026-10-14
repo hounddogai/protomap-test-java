@@ -1,0 +1,257 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.assets.v1;
+
+import "acme/assets/v1/assets.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/identity/v1/refs.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Assets.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/assets/v1;assetsv1";
+option java_multiple_files = true;
+option java_outer_classname = "AssetTransferApprovalServiceProto";
+option java_package = "com.acme.assets.v1";
+
+// Routes asset transfers through approval, with escalation and delegation.
+service AssetTransferApprovalService {
+  // Submits an asset transfer.
+  rpc SubmitAssetTransfer(SubmitAssetTransferRequest) returns (SubmitAssetTransferResponse);
+
+  // Approves an asset transfer.
+  rpc ApproveAssetTransfer(ApproveAssetTransferRequest) returns (ApproveAssetTransferResponse);
+
+  // Rejects an asset transfer.
+  rpc RejectAssetTransfer(RejectAssetTransferRequest) returns (RejectAssetTransferResponse);
+
+  // Escalates an asset transfer.
+  rpc EscalateAssetTransfer(EscalateAssetTransferRequest) returns (EscalateAssetTransferResponse);
+
+  // Lists asset transfers a page at a time.
+  rpc ListPendingAssetTransfers(ListPendingAssetTransfersRequest) returns (ListPendingAssetTransfersResponse);
+
+  // Delegates an asset transfer.
+  rpc DelegateAssetTransferApproval(DelegateAssetTransferApprovalRequest) returns (DelegateAssetTransferApprovalResponse);
+
+  // Returns an asset transfer.
+  rpc GetAssetTransferApprovalStatus(GetAssetTransferApprovalStatusRequest) returns (GetAssetTransferApprovalStatusResponse);
+}
+
+// The request of `SubmitAssetTransfer`.
+message SubmitAssetTransferRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string asset_transfer_id = 2;
+  AssetTransfer asset_transfer = 3;
+  SubmitAssetTransferRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SubmitAssetTransfer`.
+message SubmitAssetTransferResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  AssetTransfer asset_transfer = 1;
+  SubmitAssetTransferResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ApproveAssetTransfer`.
+message ApproveAssetTransferRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string asset_transfer_id = 2;
+  AssetTransfer asset_transfer = 3;
+  ApproveAssetTransferRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ApproveAssetTransfer`.
+message ApproveAssetTransferResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  AssetTransfer asset_transfer = 1;
+  ApproveAssetTransferResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RejectAssetTransfer`.
+message RejectAssetTransferRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string asset_transfer_id = 2;
+  AssetTransfer asset_transfer = 3;
+  RejectAssetTransferRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RejectAssetTransfer`.
+message RejectAssetTransferResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  AssetTransfer asset_transfer = 1;
+  RejectAssetTransferResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `EscalateAssetTransfer`.
+message EscalateAssetTransferRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string asset_transfer_id = 2;
+  AssetTransfer asset_transfer = 3;
+  EscalateAssetTransferRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `EscalateAssetTransfer`.
+message EscalateAssetTransferResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  AssetTransfer asset_transfer = 1;
+  EscalateAssetTransferResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ListPendingAssetTransfers`.
+message ListPendingAssetTransfersRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated AssetTransferStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListPendingAssetTransfersRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListPendingAssetTransfers`.
+message ListPendingAssetTransfersResponse {
+  repeated AssetTransfer asset_transfers = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `DelegateAssetTransferApproval`.
+message DelegateAssetTransferApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string asset_transfer_id = 2;
+  AssetTransfer asset_transfer = 3;
+  DelegateAssetTransferApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `DelegateAssetTransferApproval`.
+message DelegateAssetTransferApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  AssetTransfer asset_transfer = 1;
+  DelegateAssetTransferApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetAssetTransferApprovalStatus`.
+message GetAssetTransferApprovalStatusRequest {
+  acme.common.v1.RequestContext context = 1;
+  string asset_transfer_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetAssetTransferApprovalStatus`.
+message GetAssetTransferApprovalStatusResponse {
+  AssetTransfer asset_transfer = 1;
+  acme.common.v1.OperationResult result = 2;
+}

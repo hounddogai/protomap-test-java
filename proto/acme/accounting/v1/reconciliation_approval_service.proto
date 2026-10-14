@@ -1,0 +1,304 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.accounting.v1;
+
+import "acme/accounting/v1/accounting.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/identity/v1/refs.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Accounting.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/accounting/v1;accountingv1";
+option java_multiple_files = true;
+option java_outer_classname = "ReconciliationApprovalServiceProto";
+option java_package = "com.acme.accounting.v1";
+
+// Routes reconciliations through approval, with escalation and delegation.
+service ReconciliationApprovalService {
+  // Submits a reconciliation.
+  rpc SubmitReconciliation(SubmitReconciliationRequest) returns (SubmitReconciliationResponse);
+
+  // Approves a reconciliation.
+  rpc ApproveReconciliation(ApproveReconciliationRequest) returns (ApproveReconciliationResponse);
+
+  // Rejects a reconciliation.
+  rpc RejectReconciliation(RejectReconciliationRequest) returns (RejectReconciliationResponse);
+
+  // Escalates a reconciliation.
+  rpc EscalateReconciliation(EscalateReconciliationRequest) returns (EscalateReconciliationResponse);
+
+  // Delegates a reconciliation.
+  rpc DelegateReconciliationApproval(DelegateReconciliationApprovalRequest) returns (DelegateReconciliationApprovalResponse);
+
+  // Recalls a reconciliation.
+  rpc RecallReconciliation(RecallReconciliationRequest) returns (RecallReconciliationResponse);
+
+  // Returns a reconciliation.
+  rpc GetReconciliationApprovalStatus(GetReconciliationApprovalStatusRequest) returns (GetReconciliationApprovalStatusResponse);
+
+  // Comments a reconciliation.
+  rpc CommentReconciliationApproval(CommentReconciliationApprovalRequest) returns (CommentReconciliationApprovalResponse);
+}
+
+// The request of `SubmitReconciliation`.
+message SubmitReconciliationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string reconciliation_id = 2;
+  Reconciliation reconciliation = 3;
+  SubmitReconciliationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SubmitReconciliation`.
+message SubmitReconciliationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Reconciliation reconciliation = 1;
+  SubmitReconciliationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ApproveReconciliation`.
+message ApproveReconciliationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string reconciliation_id = 2;
+  Reconciliation reconciliation = 3;
+  ApproveReconciliationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ApproveReconciliation`.
+message ApproveReconciliationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Reconciliation reconciliation = 1;
+  ApproveReconciliationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RejectReconciliation`.
+message RejectReconciliationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string reconciliation_id = 2;
+  Reconciliation reconciliation = 3;
+  RejectReconciliationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RejectReconciliation`.
+message RejectReconciliationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Reconciliation reconciliation = 1;
+  RejectReconciliationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `EscalateReconciliation`.
+message EscalateReconciliationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string reconciliation_id = 2;
+  Reconciliation reconciliation = 3;
+  EscalateReconciliationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `EscalateReconciliation`.
+message EscalateReconciliationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Reconciliation reconciliation = 1;
+  EscalateReconciliationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `DelegateReconciliationApproval`.
+message DelegateReconciliationApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string reconciliation_id = 2;
+  Reconciliation reconciliation = 3;
+  DelegateReconciliationApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `DelegateReconciliationApproval`.
+message DelegateReconciliationApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Reconciliation reconciliation = 1;
+  DelegateReconciliationApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RecallReconciliation`.
+message RecallReconciliationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string reconciliation_id = 2;
+  Reconciliation reconciliation = 3;
+  RecallReconciliationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RecallReconciliation`.
+message RecallReconciliationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Reconciliation reconciliation = 1;
+  RecallReconciliationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetReconciliationApprovalStatus`.
+message GetReconciliationApprovalStatusRequest {
+  acme.common.v1.RequestContext context = 1;
+  string reconciliation_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetReconciliationApprovalStatus`.
+message GetReconciliationApprovalStatusResponse {
+  Reconciliation reconciliation = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `CommentReconciliationApproval`.
+message CommentReconciliationApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string reconciliation_id = 2;
+  Reconciliation reconciliation = 3;
+  CommentReconciliationApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CommentReconciliationApproval`.
+message CommentReconciliationApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Reconciliation reconciliation = 1;
+  CommentReconciliationApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

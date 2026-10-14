@@ -1,0 +1,215 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.lending.v1;
+
+import "acme/common/v1/audit.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/lending/v1/lending.proto";
+import "google/protobuf/any.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Lending.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/lending/v1;lendingv1";
+option java_multiple_files = true;
+option java_outer_classname = "RepaymentReportingServiceProto";
+option java_package = "com.acme.lending.v1";
+
+// Builds and schedules reports about repayments.
+service RepaymentReportingService {
+  // Generates a repayment.
+  rpc GenerateRepaymentReport(GenerateRepaymentReportRequest) returns (GenerateRepaymentReportResponse);
+
+  // Returns a repayment.
+  rpc FetchRepaymentReport(FetchRepaymentReportRequest) returns (FetchRepaymentReportResponse);
+
+  // Schedules a repayment.
+  rpc ScheduleRepaymentReport(ScheduleRepaymentReportRequest) returns (ScheduleRepaymentReportResponse);
+
+  // Streams the changes of repayments as they happen.
+  rpc StreamRepaymentMetrics(StreamRepaymentMetricsRequest) returns (stream StreamRepaymentMetricsResponse);
+
+  // Shares a repayment.
+  rpc ShareRepaymentReport(ShareRepaymentReportRequest) returns (ShareRepaymentReportResponse);
+
+  // Counts repayments by status.
+  rpc CountRepaymentTotals(CountRepaymentTotalsRequest) returns (CountRepaymentTotalsResponse);
+
+  // Deletes a repayment.
+  rpc DeleteRepaymentReport(DeleteRepaymentReportRequest) returns (DeleteRepaymentReportResponse);
+}
+
+// The request of `GenerateRepaymentReport`.
+message GenerateRepaymentReportRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string format = 1;
+    acme.common.v1.TimeWindow period = 2;
+    repeated string recipient_emails = 3;
+    string cron = 4;
+    map<string, string> filters = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string repayment_id = 2;
+  GenerateRepaymentReportRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `GenerateRepaymentReport`.
+message GenerateRepaymentReportResponse {
+  string report_id = 1;
+  string download_uri = 2;
+  map<string, string> summary = 3;
+  acme.common.v1.TimeWindow period = 4;
+  acme.common.v1.OperationResult result = 5;
+}
+
+// The request of `FetchRepaymentReport`.
+message FetchRepaymentReportRequest {
+  acme.common.v1.RequestContext context = 1;
+  string repayment_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `FetchRepaymentReport`.
+message FetchRepaymentReportResponse {
+  Repayment repayment = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `ScheduleRepaymentReport`.
+message ScheduleRepaymentReportRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string format = 1;
+    acme.common.v1.TimeWindow period = 2;
+    repeated string recipient_emails = 3;
+    string cron = 4;
+    map<string, string> filters = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string repayment_id = 2;
+  ScheduleRepaymentReportRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ScheduleRepaymentReport`.
+message ScheduleRepaymentReportResponse {
+  string report_id = 1;
+  string download_uri = 2;
+  map<string, string> summary = 3;
+  acme.common.v1.TimeWindow period = 4;
+  acme.common.v1.OperationResult result = 5;
+}
+
+// The request of `StreamRepaymentMetrics`.
+message StreamRepaymentMetricsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated RepaymentStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  StreamRepaymentMetricsRequest.Filter filter = 2;
+  google.protobuf.Timestamp since = 3;
+  int32 max_events = 4;
+  acme.common.v1.ContactInfo subscriber = 5;
+}
+
+// The response of `StreamRepaymentMetrics`.
+message StreamRepaymentMetricsResponse {
+  Repayment repayment = 1;
+  string change_type = 2;
+  google.protobuf.Timestamp changed_at = 3;
+  int64 sequence = 4;
+  acme.common.v1.OperationResult result = 5;
+}
+
+// The request of `ShareRepaymentReport`.
+message ShareRepaymentReportRequest {
+  // What the operation needs besides the record.
+  message Details {
+    acme.common.v1.ContactInfo recipient = 1;
+    string template_id = 2;
+    map<string, string> variables = 3;
+    google.protobuf.Any payload = 4;
+    string channel = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string repayment_id = 2;
+  ShareRepaymentReportRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ShareRepaymentReport`.
+message ShareRepaymentReportResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Repayment repayment = 1;
+  ShareRepaymentReportResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CountRepaymentTotals`.
+message CountRepaymentTotalsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated RepaymentStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  CountRepaymentTotalsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `CountRepaymentTotals`.
+message CountRepaymentTotalsResponse {
+  int64 count = 1;
+  map<string, int64> by_status = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `DeleteRepaymentReport`.
+message DeleteRepaymentReportRequest {
+  acme.common.v1.RequestContext context = 1;
+  string repayment_id = 2;
+  string reason = 3;
+  string etag = 4;
+  bool force = 5;
+}
+
+// The response of `DeleteRepaymentReport`.
+message DeleteRepaymentReportResponse {
+  acme.common.v1.OperationResult result = 1;
+  google.protobuf.Timestamp effective_at = 2;
+}

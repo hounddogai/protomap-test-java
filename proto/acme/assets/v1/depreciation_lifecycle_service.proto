@@ -1,0 +1,219 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.assets.v1;
+
+import "acme/assets/v1/assets.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/identity/v1/refs.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Assets.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/assets/v1;assetsv1";
+option java_multiple_files = true;
+option java_outer_classname = "DepreciationLifecycleServiceProto";
+option java_package = "com.acme.assets.v1";
+
+// Moves a depreciation between the states of its lifecycle.
+service DepreciationLifecycleService {
+  // Activates a depreciation.
+  rpc ActivateDepreciation(ActivateDepreciationRequest) returns (ActivateDepreciationResponse);
+
+  // Suspends a depreciation.
+  rpc SuspendDepreciation(SuspendDepreciationRequest) returns (SuspendDepreciationResponse);
+
+  // Reinstates a depreciation.
+  rpc ReinstateDepreciation(ReinstateDepreciationRequest) returns (ReinstateDepreciationResponse);
+
+  // Renews a depreciation.
+  rpc RenewDepreciation(RenewDepreciationRequest) returns (RenewDepreciationResponse);
+
+  // Expires a depreciation.
+  rpc ExpireDepreciation(ExpireDepreciationRequest) returns (ExpireDepreciationResponse);
+
+  // Returns a depreciation.
+  rpc GetDepreciationLifecycle(GetDepreciationLifecycleRequest) returns (GetDepreciationLifecycleResponse);
+}
+
+// The request of `ActivateDepreciation`.
+message ActivateDepreciationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string depreciation_id = 2;
+  ActivateDepreciationRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ActivateDepreciation`.
+message ActivateDepreciationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Depreciation depreciation = 1;
+  ActivateDepreciationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SuspendDepreciation`.
+message SuspendDepreciationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string depreciation_id = 2;
+  SuspendDepreciationRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `SuspendDepreciation`.
+message SuspendDepreciationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Depreciation depreciation = 1;
+  SuspendDepreciationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ReinstateDepreciation`.
+message ReinstateDepreciationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string depreciation_id = 2;
+  ReinstateDepreciationRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ReinstateDepreciation`.
+message ReinstateDepreciationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Depreciation depreciation = 1;
+  ReinstateDepreciationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RenewDepreciation`.
+message RenewDepreciationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string depreciation_id = 2;
+  RenewDepreciationRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `RenewDepreciation`.
+message RenewDepreciationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Depreciation depreciation = 1;
+  RenewDepreciationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExpireDepreciation`.
+message ExpireDepreciationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string depreciation_id = 2;
+  ExpireDepreciationRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ExpireDepreciation`.
+message ExpireDepreciationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Depreciation depreciation = 1;
+  ExpireDepreciationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetDepreciationLifecycle`.
+message GetDepreciationLifecycleRequest {
+  acme.common.v1.RequestContext context = 1;
+  string depreciation_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetDepreciationLifecycle`.
+message GetDepreciationLifecycleResponse {
+  Depreciation depreciation = 1;
+  acme.common.v1.OperationResult result = 2;
+}

@@ -1,0 +1,296 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.suppliers.v1;
+
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/suppliers/v1/suppliers.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Suppliers.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/suppliers/v1;suppliersv1";
+option java_multiple_files = true;
+option java_outer_classname = "SupplierRatingWorkflowServiceProto";
+option java_package = "com.acme.suppliers.v1";
+
+// Runs the long-lived workflow that takes a supplier rating from start to finish.
+service SupplierRatingWorkflowService {
+  // Starts a supplier rating.
+  rpc StartSupplierRatingWorkflow(StartSupplierRatingWorkflowRequest) returns (StartSupplierRatingWorkflowResponse);
+
+  // Advances a supplier rating.
+  rpc AdvanceSupplierRatingWorkflow(AdvanceSupplierRatingWorkflowRequest) returns (AdvanceSupplierRatingWorkflowResponse);
+
+  // Cancels a supplier rating.
+  rpc CancelSupplierRatingWorkflow(CancelSupplierRatingWorkflowRequest) returns (CancelSupplierRatingWorkflowResponse);
+
+  // Retrys a supplier rating.
+  rpc RetrySupplierRatingWorkflow(RetrySupplierRatingWorkflowRequest) returns (RetrySupplierRatingWorkflowResponse);
+
+  // Resumes a supplier rating.
+  rpc ResumeSupplierRatingWorkflow(ResumeSupplierRatingWorkflowRequest) returns (ResumeSupplierRatingWorkflowResponse);
+
+  // Returns a supplier rating.
+  rpc InspectSupplierRatingWorkflow(InspectSupplierRatingWorkflowRequest) returns (InspectSupplierRatingWorkflowResponse);
+
+  // Lists supplier ratings a page at a time.
+  rpc ListSupplierRatingWorkflows(ListSupplierRatingWorkflowsRequest) returns (ListSupplierRatingWorkflowsResponse);
+
+  // Signals a supplier rating.
+  rpc SignalSupplierRatingWorkflow(SignalSupplierRatingWorkflowRequest) returns (SignalSupplierRatingWorkflowResponse);
+}
+
+// The request of `StartSupplierRatingWorkflow`.
+message StartSupplierRatingWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string supplier_rating_id = 2;
+  SupplierRating supplier_rating = 3;
+  StartSupplierRatingWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `StartSupplierRatingWorkflow`.
+message StartSupplierRatingWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  SupplierRating supplier_rating = 1;
+  StartSupplierRatingWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `AdvanceSupplierRatingWorkflow`.
+message AdvanceSupplierRatingWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string supplier_rating_id = 2;
+  SupplierRating supplier_rating = 3;
+  AdvanceSupplierRatingWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `AdvanceSupplierRatingWorkflow`.
+message AdvanceSupplierRatingWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  SupplierRating supplier_rating = 1;
+  AdvanceSupplierRatingWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CancelSupplierRatingWorkflow`.
+message CancelSupplierRatingWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string supplier_rating_id = 2;
+  SupplierRating supplier_rating = 3;
+  CancelSupplierRatingWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CancelSupplierRatingWorkflow`.
+message CancelSupplierRatingWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  SupplierRating supplier_rating = 1;
+  CancelSupplierRatingWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RetrySupplierRatingWorkflow`.
+message RetrySupplierRatingWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string supplier_rating_id = 2;
+  SupplierRating supplier_rating = 3;
+  RetrySupplierRatingWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RetrySupplierRatingWorkflow`.
+message RetrySupplierRatingWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  SupplierRating supplier_rating = 1;
+  RetrySupplierRatingWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ResumeSupplierRatingWorkflow`.
+message ResumeSupplierRatingWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string supplier_rating_id = 2;
+  SupplierRating supplier_rating = 3;
+  ResumeSupplierRatingWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ResumeSupplierRatingWorkflow`.
+message ResumeSupplierRatingWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  SupplierRating supplier_rating = 1;
+  ResumeSupplierRatingWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `InspectSupplierRatingWorkflow`.
+message InspectSupplierRatingWorkflowRequest {
+  acme.common.v1.RequestContext context = 1;
+  string supplier_rating_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `InspectSupplierRatingWorkflow`.
+message InspectSupplierRatingWorkflowResponse {
+  SupplierRating supplier_rating = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `ListSupplierRatingWorkflows`.
+message ListSupplierRatingWorkflowsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated SupplierRatingStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListSupplierRatingWorkflowsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListSupplierRatingWorkflows`.
+message ListSupplierRatingWorkflowsResponse {
+  repeated SupplierRating supplier_ratings = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SignalSupplierRatingWorkflow`.
+message SignalSupplierRatingWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string supplier_rating_id = 2;
+  SupplierRating supplier_rating = 3;
+  SignalSupplierRatingWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SignalSupplierRatingWorkflow`.
+message SignalSupplierRatingWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  SupplierRating supplier_rating = 1;
+  SignalSupplierRatingWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

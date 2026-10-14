@@ -1,0 +1,295 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.contracts.v1;
+
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/contracts/v1/contracts.proto";
+import "acme/identity/v1/refs.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Contracts.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/contracts/v1;contractsv1";
+option java_multiple_files = true;
+option java_outer_classname = "ContractClauseApprovalServiceProto";
+option java_package = "com.acme.contracts.v1";
+
+// Routes contract clauses through approval, with escalation and delegation.
+service ContractClauseApprovalService {
+  // Submits a contract clause.
+  rpc SubmitContractClause(SubmitContractClauseRequest) returns (SubmitContractClauseResponse);
+
+  // Approves a contract clause.
+  rpc ApproveContractClause(ApproveContractClauseRequest) returns (ApproveContractClauseResponse);
+
+  // Rejects a contract clause.
+  rpc RejectContractClause(RejectContractClauseRequest) returns (RejectContractClauseResponse);
+
+  // Escalates a contract clause.
+  rpc EscalateContractClause(EscalateContractClauseRequest) returns (EscalateContractClauseResponse);
+
+  // Lists contract clauses a page at a time.
+  rpc ListPendingContractClauses(ListPendingContractClausesRequest) returns (ListPendingContractClausesResponse);
+
+  // Delegates a contract clause.
+  rpc DelegateContractClauseApproval(DelegateContractClauseApprovalRequest) returns (DelegateContractClauseApprovalResponse);
+
+  // Returns a contract clause.
+  rpc GetContractClauseApprovalStatus(GetContractClauseApprovalStatusRequest) returns (GetContractClauseApprovalStatusResponse);
+
+  // Comments a contract clause.
+  rpc CommentContractClauseApproval(CommentContractClauseApprovalRequest) returns (CommentContractClauseApprovalResponse);
+}
+
+// The request of `SubmitContractClause`.
+message SubmitContractClauseRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string contract_clause_id = 2;
+  ContractClause contract_clause = 3;
+  SubmitContractClauseRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SubmitContractClause`.
+message SubmitContractClauseResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ContractClause contract_clause = 1;
+  SubmitContractClauseResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ApproveContractClause`.
+message ApproveContractClauseRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string contract_clause_id = 2;
+  ContractClause contract_clause = 3;
+  ApproveContractClauseRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ApproveContractClause`.
+message ApproveContractClauseResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ContractClause contract_clause = 1;
+  ApproveContractClauseResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RejectContractClause`.
+message RejectContractClauseRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string contract_clause_id = 2;
+  ContractClause contract_clause = 3;
+  RejectContractClauseRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RejectContractClause`.
+message RejectContractClauseResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ContractClause contract_clause = 1;
+  RejectContractClauseResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `EscalateContractClause`.
+message EscalateContractClauseRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string contract_clause_id = 2;
+  ContractClause contract_clause = 3;
+  EscalateContractClauseRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `EscalateContractClause`.
+message EscalateContractClauseResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ContractClause contract_clause = 1;
+  EscalateContractClauseResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ListPendingContractClauses`.
+message ListPendingContractClausesRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated ContractClauseStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListPendingContractClausesRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListPendingContractClauses`.
+message ListPendingContractClausesResponse {
+  repeated ContractClause contract_clauses = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `DelegateContractClauseApproval`.
+message DelegateContractClauseApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string contract_clause_id = 2;
+  ContractClause contract_clause = 3;
+  DelegateContractClauseApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `DelegateContractClauseApproval`.
+message DelegateContractClauseApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ContractClause contract_clause = 1;
+  DelegateContractClauseApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetContractClauseApprovalStatus`.
+message GetContractClauseApprovalStatusRequest {
+  acme.common.v1.RequestContext context = 1;
+  string contract_clause_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetContractClauseApprovalStatus`.
+message GetContractClauseApprovalStatusResponse {
+  ContractClause contract_clause = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `CommentContractClauseApproval`.
+message CommentContractClauseApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string contract_clause_id = 2;
+  ContractClause contract_clause = 3;
+  CommentContractClauseApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CommentContractClauseApproval`.
+message CommentContractClauseApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ContractClause contract_clause = 1;
+  CommentContractClauseApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

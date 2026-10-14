@@ -1,0 +1,305 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.audit.v1;
+
+import "acme/audit/v1/audit.proto";
+import "acme/common/v1/address.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/money.proto";
+import "acme/common/v1/operation.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Audit.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/audit/v1;auditv1";
+option java_multiple_files = true;
+option java_outer_classname = "AuditTrailValidationServiceProto";
+option java_package = "com.acme.audit.v1";
+
+// Checks audit trails against the rules before anything acts on them.
+service AuditTrailValidationService {
+  // Validates an audit trail.
+  rpc ValidateAuditTrail(ValidateAuditTrailRequest) returns (ValidateAuditTrailResponse);
+
+  // Previews an audit trail.
+  rpc PreviewAuditTrail(PreviewAuditTrailRequest) returns (PreviewAuditTrailResponse);
+
+  // Checks an audit trail.
+  rpc CheckAuditTrailEligibility(CheckAuditTrailEligibilityRequest) returns (CheckAuditTrailEligibilityResponse);
+
+  // Normalizes an audit trail.
+  rpc NormalizeAuditTrail(NormalizeAuditTrailRequest) returns (NormalizeAuditTrailResponse);
+
+  // Explains an audit trail.
+  rpc ExplainAuditTrailDecision(ExplainAuditTrailDecisionRequest) returns (ExplainAuditTrailDecisionResponse);
+
+  // Scores an audit trail.
+  rpc ScoreAuditTrail(ScoreAuditTrailRequest) returns (ScoreAuditTrailResponse);
+
+  // Lints an audit trail.
+  rpc LintAuditTrails(LintAuditTrailsRequest) returns (LintAuditTrailsResponse);
+
+  // Returns an audit trail.
+  rpc GetAuditTrailRules(GetAuditTrailRulesRequest) returns (GetAuditTrailRulesResponse);
+}
+
+// The request of `ValidateAuditTrail`.
+message ValidateAuditTrailRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string audit_trail_id = 2;
+  AuditTrail audit_trail = 3;
+  ValidateAuditTrailRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ValidateAuditTrail`.
+message ValidateAuditTrailResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  AuditTrail audit_trail = 1;
+  ValidateAuditTrailResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PreviewAuditTrail`.
+message PreviewAuditTrailRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string audit_trail_id = 2;
+  AuditTrail audit_trail = 3;
+  PreviewAuditTrailRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PreviewAuditTrail`.
+message PreviewAuditTrailResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  AuditTrail audit_trail = 1;
+  PreviewAuditTrailResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CheckAuditTrailEligibility`.
+message CheckAuditTrailEligibilityRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string audit_trail_id = 2;
+  AuditTrail audit_trail = 3;
+  CheckAuditTrailEligibilityRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CheckAuditTrailEligibility`.
+message CheckAuditTrailEligibilityResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  AuditTrail audit_trail = 1;
+  CheckAuditTrailEligibilityResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `NormalizeAuditTrail`.
+message NormalizeAuditTrailRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string audit_trail_id = 2;
+  AuditTrail audit_trail = 3;
+  NormalizeAuditTrailRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `NormalizeAuditTrail`.
+message NormalizeAuditTrailResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  AuditTrail audit_trail = 1;
+  NormalizeAuditTrailResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExplainAuditTrailDecision`.
+message ExplainAuditTrailDecisionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string audit_trail_id = 2;
+  AuditTrail audit_trail = 3;
+  ExplainAuditTrailDecisionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ExplainAuditTrailDecision`.
+message ExplainAuditTrailDecisionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  AuditTrail audit_trail = 1;
+  ExplainAuditTrailDecisionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ScoreAuditTrail`.
+message ScoreAuditTrailRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string audit_trail_id = 2;
+  AuditTrail audit_trail = 3;
+  ScoreAuditTrailRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ScoreAuditTrail`.
+message ScoreAuditTrailResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated ScoreAuditTrailResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  AuditTrail audit_trail = 1;
+  ScoreAuditTrailResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `LintAuditTrails`.
+message LintAuditTrailsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string audit_trail_id = 2;
+  AuditTrail audit_trail = 3;
+  LintAuditTrailsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `LintAuditTrails`.
+message LintAuditTrailsResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  AuditTrail audit_trail = 1;
+  LintAuditTrailsResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetAuditTrailRules`.
+message GetAuditTrailRulesRequest {
+  acme.common.v1.RequestContext context = 1;
+  string audit_trail_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetAuditTrailRules`.
+message GetAuditTrailRulesResponse {
+  AuditTrail audit_trail = 1;
+  acme.common.v1.OperationResult result = 2;
+}

@@ -1,0 +1,305 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.risk.v1;
+
+import "acme/common/v1/address.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/money.proto";
+import "acme/common/v1/operation.proto";
+import "acme/risk/v1/risk.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Risk.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/risk/v1;riskv1";
+option java_multiple_files = true;
+option java_outer_classname = "RiskRegisterValidationServiceProto";
+option java_package = "com.acme.risk.v1";
+
+// Checks risk registers against the rules before anything acts on them.
+service RiskRegisterValidationService {
+  // Validates a risk register.
+  rpc ValidateRiskRegister(ValidateRiskRegisterRequest) returns (ValidateRiskRegisterResponse);
+
+  // Previews a risk register.
+  rpc PreviewRiskRegister(PreviewRiskRegisterRequest) returns (PreviewRiskRegisterResponse);
+
+  // Checks a risk register.
+  rpc CheckRiskRegisterEligibility(CheckRiskRegisterEligibilityRequest) returns (CheckRiskRegisterEligibilityResponse);
+
+  // Normalizes a risk register.
+  rpc NormalizeRiskRegister(NormalizeRiskRegisterRequest) returns (NormalizeRiskRegisterResponse);
+
+  // Explains a risk register.
+  rpc ExplainRiskRegisterDecision(ExplainRiskRegisterDecisionRequest) returns (ExplainRiskRegisterDecisionResponse);
+
+  // Scores a risk register.
+  rpc ScoreRiskRegister(ScoreRiskRegisterRequest) returns (ScoreRiskRegisterResponse);
+
+  // Lints a risk register.
+  rpc LintRiskRegisters(LintRiskRegistersRequest) returns (LintRiskRegistersResponse);
+
+  // Returns a risk register.
+  rpc GetRiskRegisterRules(GetRiskRegisterRulesRequest) returns (GetRiskRegisterRulesResponse);
+}
+
+// The request of `ValidateRiskRegister`.
+message ValidateRiskRegisterRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string risk_register_id = 2;
+  RiskRegister risk_register = 3;
+  ValidateRiskRegisterRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ValidateRiskRegister`.
+message ValidateRiskRegisterResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RiskRegister risk_register = 1;
+  ValidateRiskRegisterResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PreviewRiskRegister`.
+message PreviewRiskRegisterRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string risk_register_id = 2;
+  RiskRegister risk_register = 3;
+  PreviewRiskRegisterRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PreviewRiskRegister`.
+message PreviewRiskRegisterResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RiskRegister risk_register = 1;
+  PreviewRiskRegisterResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CheckRiskRegisterEligibility`.
+message CheckRiskRegisterEligibilityRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string risk_register_id = 2;
+  RiskRegister risk_register = 3;
+  CheckRiskRegisterEligibilityRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CheckRiskRegisterEligibility`.
+message CheckRiskRegisterEligibilityResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RiskRegister risk_register = 1;
+  CheckRiskRegisterEligibilityResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `NormalizeRiskRegister`.
+message NormalizeRiskRegisterRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string risk_register_id = 2;
+  RiskRegister risk_register = 3;
+  NormalizeRiskRegisterRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `NormalizeRiskRegister`.
+message NormalizeRiskRegisterResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RiskRegister risk_register = 1;
+  NormalizeRiskRegisterResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExplainRiskRegisterDecision`.
+message ExplainRiskRegisterDecisionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string risk_register_id = 2;
+  RiskRegister risk_register = 3;
+  ExplainRiskRegisterDecisionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ExplainRiskRegisterDecision`.
+message ExplainRiskRegisterDecisionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RiskRegister risk_register = 1;
+  ExplainRiskRegisterDecisionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ScoreRiskRegister`.
+message ScoreRiskRegisterRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string risk_register_id = 2;
+  RiskRegister risk_register = 3;
+  ScoreRiskRegisterRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ScoreRiskRegister`.
+message ScoreRiskRegisterResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated ScoreRiskRegisterResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  RiskRegister risk_register = 1;
+  ScoreRiskRegisterResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `LintRiskRegisters`.
+message LintRiskRegistersRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string risk_register_id = 2;
+  RiskRegister risk_register = 3;
+  LintRiskRegistersRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `LintRiskRegisters`.
+message LintRiskRegistersResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RiskRegister risk_register = 1;
+  LintRiskRegistersResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetRiskRegisterRules`.
+message GetRiskRegisterRulesRequest {
+  acme.common.v1.RequestContext context = 1;
+  string risk_register_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetRiskRegisterRules`.
+message GetRiskRegisterRulesResponse {
+  RiskRegister risk_register = 1;
+  acme.common.v1.OperationResult result = 2;
+}

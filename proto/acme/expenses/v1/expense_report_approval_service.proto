@@ -1,0 +1,316 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.expenses.v1;
+
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/expenses/v1/expenses.proto";
+import "acme/identity/v1/refs.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Expenses.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/expenses/v1;expensesv1";
+option java_multiple_files = true;
+option java_outer_classname = "ExpenseReportApprovalServiceProto";
+option java_package = "com.acme.expenses.v1";
+
+// Routes expense reports through approval, with escalation and delegation.
+service ExpenseReportApprovalService {
+  // Submits an expense report.
+  rpc SubmitExpenseReport(SubmitExpenseReportRequest) returns (SubmitExpenseReportResponse);
+
+  // Approves an expense report.
+  rpc ApproveExpenseReport(ApproveExpenseReportRequest) returns (ApproveExpenseReportResponse);
+
+  // Rejects an expense report.
+  rpc RejectExpenseReport(RejectExpenseReportRequest) returns (RejectExpenseReportResponse);
+
+  // Escalates an expense report.
+  rpc EscalateExpenseReport(EscalateExpenseReportRequest) returns (EscalateExpenseReportResponse);
+
+  // Lists expense reports a page at a time.
+  rpc ListPendingExpenseReports(ListPendingExpenseReportsRequest) returns (ListPendingExpenseReportsResponse);
+
+  // Delegates an expense report.
+  rpc DelegateExpenseReportApproval(DelegateExpenseReportApprovalRequest) returns (DelegateExpenseReportApprovalResponse);
+
+  // Recalls an expense report.
+  rpc RecallExpenseReport(RecallExpenseReportRequest) returns (RecallExpenseReportResponse);
+
+  // Comments an expense report.
+  rpc CommentExpenseReportApproval(CommentExpenseReportApprovalRequest) returns (CommentExpenseReportApprovalResponse);
+}
+
+// The request of `SubmitExpenseReport`.
+message SubmitExpenseReportRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string expense_report_id = 2;
+  ExpenseReport expense_report = 3;
+  SubmitExpenseReportRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SubmitExpenseReport`.
+message SubmitExpenseReportResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ExpenseReport expense_report = 1;
+  SubmitExpenseReportResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ApproveExpenseReport`.
+message ApproveExpenseReportRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string expense_report_id = 2;
+  ExpenseReport expense_report = 3;
+  ApproveExpenseReportRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ApproveExpenseReport`.
+message ApproveExpenseReportResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ExpenseReport expense_report = 1;
+  ApproveExpenseReportResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RejectExpenseReport`.
+message RejectExpenseReportRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string expense_report_id = 2;
+  ExpenseReport expense_report = 3;
+  RejectExpenseReportRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RejectExpenseReport`.
+message RejectExpenseReportResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ExpenseReport expense_report = 1;
+  RejectExpenseReportResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `EscalateExpenseReport`.
+message EscalateExpenseReportRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string expense_report_id = 2;
+  ExpenseReport expense_report = 3;
+  EscalateExpenseReportRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `EscalateExpenseReport`.
+message EscalateExpenseReportResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ExpenseReport expense_report = 1;
+  EscalateExpenseReportResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ListPendingExpenseReports`.
+message ListPendingExpenseReportsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated ExpenseReportStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListPendingExpenseReportsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListPendingExpenseReports`.
+message ListPendingExpenseReportsResponse {
+  repeated ExpenseReport expense_reports = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `DelegateExpenseReportApproval`.
+message DelegateExpenseReportApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string expense_report_id = 2;
+  ExpenseReport expense_report = 3;
+  DelegateExpenseReportApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `DelegateExpenseReportApproval`.
+message DelegateExpenseReportApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ExpenseReport expense_report = 1;
+  DelegateExpenseReportApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RecallExpenseReport`.
+message RecallExpenseReportRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string expense_report_id = 2;
+  ExpenseReport expense_report = 3;
+  RecallExpenseReportRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RecallExpenseReport`.
+message RecallExpenseReportResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ExpenseReport expense_report = 1;
+  RecallExpenseReportResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CommentExpenseReportApproval`.
+message CommentExpenseReportApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string expense_report_id = 2;
+  ExpenseReport expense_report = 3;
+  CommentExpenseReportApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CommentExpenseReportApproval`.
+message CommentExpenseReportApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ExpenseReport expense_report = 1;
+  CommentExpenseReportApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

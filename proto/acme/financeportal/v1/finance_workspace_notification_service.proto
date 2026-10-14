@@ -1,0 +1,247 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.financeportal.v1;
+
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/financeportal/v1/financeportal.proto";
+import "google/protobuf/any.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Financeportal.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/financeportal/v1;financeportalv1";
+option java_multiple_files = true;
+option java_outer_classname = "FinanceWorkspaceNotificationServiceProto";
+option java_package = "com.acme.financeportal.v1";
+
+// Tells the people who follow a finance workspace what changed.
+service FinanceWorkspaceNotificationService {
+  // Subscribes a finance workspace.
+  rpc SubscribeFinanceWorkspaceUpdates(SubscribeFinanceWorkspaceUpdatesRequest) returns (SubscribeFinanceWorkspaceUpdatesResponse);
+
+  // Unsubscribes a finance workspace.
+  rpc UnsubscribeFinanceWorkspaceUpdates(UnsubscribeFinanceWorkspaceUpdatesRequest) returns (UnsubscribeFinanceWorkspaceUpdatesResponse);
+
+  // Notifys a finance workspace.
+  rpc NotifyFinanceWorkspaceWatchers(NotifyFinanceWorkspaceWatchersRequest) returns (NotifyFinanceWorkspaceWatchersResponse);
+
+  // Lists finance workspaces a page at a time.
+  rpc ListFinanceWorkspaceSubscriptions(ListFinanceWorkspaceSubscriptionsRequest) returns (ListFinanceWorkspaceSubscriptionsResponse);
+
+  // Sends a finance workspace.
+  rpc SendFinanceWorkspaceTestNotice(SendFinanceWorkspaceTestNoticeRequest) returns (SendFinanceWorkspaceTestNoticeResponse);
+
+  // Returns a finance workspace.
+  rpc GetFinanceWorkspacePreferences(GetFinanceWorkspacePreferencesRequest) returns (GetFinanceWorkspacePreferencesResponse);
+
+  // Streams the changes of finance workspaces as they happen.
+  rpc StreamFinanceWorkspaceNotices(StreamFinanceWorkspaceNoticesRequest) returns (stream StreamFinanceWorkspaceNoticesResponse);
+}
+
+// The request of `SubscribeFinanceWorkspaceUpdates`.
+message SubscribeFinanceWorkspaceUpdatesRequest {
+  // What the operation needs besides the record.
+  message Details {
+    acme.common.v1.ContactInfo recipient = 1;
+    string template_id = 2;
+    map<string, string> variables = 3;
+    google.protobuf.Any payload = 4;
+    string channel = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string finance_workspace_id = 2;
+  SubscribeFinanceWorkspaceUpdatesRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `SubscribeFinanceWorkspaceUpdates`.
+message SubscribeFinanceWorkspaceUpdatesResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FinanceWorkspace finance_workspace = 1;
+  SubscribeFinanceWorkspaceUpdatesResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `UnsubscribeFinanceWorkspaceUpdates`.
+message UnsubscribeFinanceWorkspaceUpdatesRequest {
+  // What the operation needs besides the record.
+  message Details {
+    acme.common.v1.ContactInfo recipient = 1;
+    string template_id = 2;
+    map<string, string> variables = 3;
+    google.protobuf.Any payload = 4;
+    string channel = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string finance_workspace_id = 2;
+  UnsubscribeFinanceWorkspaceUpdatesRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `UnsubscribeFinanceWorkspaceUpdates`.
+message UnsubscribeFinanceWorkspaceUpdatesResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FinanceWorkspace finance_workspace = 1;
+  UnsubscribeFinanceWorkspaceUpdatesResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `NotifyFinanceWorkspaceWatchers`.
+message NotifyFinanceWorkspaceWatchersRequest {
+  // What the operation needs besides the record.
+  message Details {
+    acme.common.v1.ContactInfo recipient = 1;
+    string template_id = 2;
+    map<string, string> variables = 3;
+    google.protobuf.Any payload = 4;
+    string channel = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string finance_workspace_id = 2;
+  NotifyFinanceWorkspaceWatchersRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `NotifyFinanceWorkspaceWatchers`.
+message NotifyFinanceWorkspaceWatchersResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FinanceWorkspace finance_workspace = 1;
+  NotifyFinanceWorkspaceWatchersResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ListFinanceWorkspaceSubscriptions`.
+message ListFinanceWorkspaceSubscriptionsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated FinanceWorkspaceStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListFinanceWorkspaceSubscriptionsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListFinanceWorkspaceSubscriptions`.
+message ListFinanceWorkspaceSubscriptionsResponse {
+  repeated FinanceWorkspace finance_workspaces = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SendFinanceWorkspaceTestNotice`.
+message SendFinanceWorkspaceTestNoticeRequest {
+  // What the operation needs besides the record.
+  message Details {
+    acme.common.v1.ContactInfo recipient = 1;
+    string template_id = 2;
+    map<string, string> variables = 3;
+    google.protobuf.Any payload = 4;
+    string channel = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string finance_workspace_id = 2;
+  SendFinanceWorkspaceTestNoticeRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `SendFinanceWorkspaceTestNotice`.
+message SendFinanceWorkspaceTestNoticeResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FinanceWorkspace finance_workspace = 1;
+  SendFinanceWorkspaceTestNoticeResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetFinanceWorkspacePreferences`.
+message GetFinanceWorkspacePreferencesRequest {
+  acme.common.v1.RequestContext context = 1;
+  string finance_workspace_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetFinanceWorkspacePreferences`.
+message GetFinanceWorkspacePreferencesResponse {
+  FinanceWorkspace finance_workspace = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `StreamFinanceWorkspaceNotices`.
+message StreamFinanceWorkspaceNoticesRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated FinanceWorkspaceStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  StreamFinanceWorkspaceNoticesRequest.Filter filter = 2;
+  google.protobuf.Timestamp since = 3;
+  int32 max_events = 4;
+  acme.common.v1.ContactInfo subscriber = 5;
+}
+
+// The response of `StreamFinanceWorkspaceNotices`.
+message StreamFinanceWorkspaceNoticesResponse {
+  FinanceWorkspace finance_workspace = 1;
+  string change_type = 2;
+  google.protobuf.Timestamp changed_at = 3;
+  int64 sequence = 4;
+  acme.common.v1.OperationResult result = 5;
+}

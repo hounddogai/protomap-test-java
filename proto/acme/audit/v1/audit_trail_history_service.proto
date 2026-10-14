@@ -1,0 +1,215 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.audit.v1;
+
+import "acme/audit/v1/audit.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Audit.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/audit/v1;auditv1";
+option java_multiple_files = true;
+option java_outer_classname = "AuditTrailHistoryServiceProto";
+option java_package = "com.acme.audit.v1";
+
+// Keeps every version of an audit trail and restores earlier ones.
+service AuditTrailHistoryService {
+  // Records an audit trail.
+  rpc RecordAuditTrailVersion(RecordAuditTrailVersionRequest) returns (RecordAuditTrailVersionResponse);
+
+  // Lists audit trails a page at a time.
+  rpc ListAuditTrailVersions(ListAuditTrailVersionsRequest) returns (ListAuditTrailVersionsResponse);
+
+  // Compares an audit trail.
+  rpc CompareAuditTrailVersions(CompareAuditTrailVersionsRequest) returns (CompareAuditTrailVersionsResponse);
+
+  // Reverts an audit trail.
+  rpc RevertAuditTrail(RevertAuditTrailRequest) returns (RevertAuditTrailResponse);
+
+  // Annotates an audit trail.
+  rpc AnnotateAuditTrailVersion(AnnotateAuditTrailVersionRequest) returns (AnnotateAuditTrailVersionResponse);
+
+  // Deletes an audit trail.
+  rpc PruneAuditTrailVersions(PruneAuditTrailVersionsRequest) returns (PruneAuditTrailVersionsResponse);
+}
+
+// The request of `RecordAuditTrailVersion`.
+message RecordAuditTrailVersionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    int64 version = 1;
+    int64 other_version = 2;
+    bytes snapshot = 3;
+    string author_email = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string audit_trail_id = 2;
+  AuditTrail audit_trail = 3;
+  RecordAuditTrailVersionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RecordAuditTrailVersion`.
+message RecordAuditTrailVersionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  AuditTrail audit_trail = 1;
+  RecordAuditTrailVersionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ListAuditTrailVersions`.
+message ListAuditTrailVersionsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated AuditTrailStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListAuditTrailVersionsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListAuditTrailVersions`.
+message ListAuditTrailVersionsResponse {
+  repeated AuditTrail audit_trails = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CompareAuditTrailVersions`.
+message CompareAuditTrailVersionsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    int64 version = 1;
+    int64 other_version = 2;
+    bytes snapshot = 3;
+    string author_email = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string audit_trail_id = 2;
+  AuditTrail audit_trail = 3;
+  CompareAuditTrailVersionsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CompareAuditTrailVersions`.
+message CompareAuditTrailVersionsResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  AuditTrail audit_trail = 1;
+  CompareAuditTrailVersionsResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RevertAuditTrail`.
+message RevertAuditTrailRequest {
+  // What the operation needs besides the record.
+  message Details {
+    int64 version = 1;
+    int64 other_version = 2;
+    bytes snapshot = 3;
+    string author_email = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string audit_trail_id = 2;
+  AuditTrail audit_trail = 3;
+  RevertAuditTrailRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RevertAuditTrail`.
+message RevertAuditTrailResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  AuditTrail audit_trail = 1;
+  RevertAuditTrailResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `AnnotateAuditTrailVersion`.
+message AnnotateAuditTrailVersionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    int64 version = 1;
+    int64 other_version = 2;
+    bytes snapshot = 3;
+    string author_email = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string audit_trail_id = 2;
+  AuditTrail audit_trail = 3;
+  AnnotateAuditTrailVersionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `AnnotateAuditTrailVersion`.
+message AnnotateAuditTrailVersionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  AuditTrail audit_trail = 1;
+  AnnotateAuditTrailVersionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PruneAuditTrailVersions`.
+message PruneAuditTrailVersionsRequest {
+  acme.common.v1.RequestContext context = 1;
+  string audit_trail_id = 2;
+  string reason = 3;
+  string etag = 4;
+  bool force = 5;
+}
+
+// The response of `PruneAuditTrailVersions`.
+message PruneAuditTrailVersionsResponse {
+  acme.common.v1.OperationResult result = 1;
+  google.protobuf.Timestamp effective_at = 2;
+}

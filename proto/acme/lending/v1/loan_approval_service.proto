@@ -1,0 +1,295 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.lending.v1;
+
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/identity/v1/refs.proto";
+import "acme/lending/v1/lending.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Lending.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/lending/v1;lendingv1";
+option java_multiple_files = true;
+option java_outer_classname = "LoanApprovalServiceProto";
+option java_package = "com.acme.lending.v1";
+
+// Routes loans through approval, with escalation and delegation.
+service LoanApprovalService {
+  // Submits a loan.
+  rpc SubmitLoan(SubmitLoanRequest) returns (SubmitLoanResponse);
+
+  // Approves a loan.
+  rpc ApproveLoan(ApproveLoanRequest) returns (ApproveLoanResponse);
+
+  // Rejects a loan.
+  rpc RejectLoan(RejectLoanRequest) returns (RejectLoanResponse);
+
+  // Escalates a loan.
+  rpc EscalateLoan(EscalateLoanRequest) returns (EscalateLoanResponse);
+
+  // Lists loans a page at a time.
+  rpc ListPendingLoans(ListPendingLoansRequest) returns (ListPendingLoansResponse);
+
+  // Recalls a loan.
+  rpc RecallLoan(RecallLoanRequest) returns (RecallLoanResponse);
+
+  // Returns a loan.
+  rpc GetLoanApprovalStatus(GetLoanApprovalStatusRequest) returns (GetLoanApprovalStatusResponse);
+
+  // Comments a loan.
+  rpc CommentLoanApproval(CommentLoanApprovalRequest) returns (CommentLoanApprovalResponse);
+}
+
+// The request of `SubmitLoan`.
+message SubmitLoanRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string loan_id = 2;
+  Loan loan = 3;
+  SubmitLoanRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SubmitLoan`.
+message SubmitLoanResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Loan loan = 1;
+  SubmitLoanResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ApproveLoan`.
+message ApproveLoanRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string loan_id = 2;
+  Loan loan = 3;
+  ApproveLoanRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ApproveLoan`.
+message ApproveLoanResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Loan loan = 1;
+  ApproveLoanResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RejectLoan`.
+message RejectLoanRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string loan_id = 2;
+  Loan loan = 3;
+  RejectLoanRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RejectLoan`.
+message RejectLoanResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Loan loan = 1;
+  RejectLoanResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `EscalateLoan`.
+message EscalateLoanRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string loan_id = 2;
+  Loan loan = 3;
+  EscalateLoanRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `EscalateLoan`.
+message EscalateLoanResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Loan loan = 1;
+  EscalateLoanResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ListPendingLoans`.
+message ListPendingLoansRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated LoanStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListPendingLoansRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListPendingLoans`.
+message ListPendingLoansResponse {
+  repeated Loan loans = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RecallLoan`.
+message RecallLoanRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string loan_id = 2;
+  Loan loan = 3;
+  RecallLoanRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RecallLoan`.
+message RecallLoanResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Loan loan = 1;
+  RecallLoanResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetLoanApprovalStatus`.
+message GetLoanApprovalStatusRequest {
+  acme.common.v1.RequestContext context = 1;
+  string loan_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetLoanApprovalStatus`.
+message GetLoanApprovalStatusResponse {
+  Loan loan = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `CommentLoanApproval`.
+message CommentLoanApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string loan_id = 2;
+  Loan loan = 3;
+  CommentLoanApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CommentLoanApproval`.
+message CommentLoanApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Loan loan = 1;
+  CommentLoanApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

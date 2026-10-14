@@ -1,0 +1,305 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.risk.v1;
+
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/risk/v1/risk.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Risk.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/risk/v1;riskv1";
+option java_multiple_files = true;
+option java_outer_classname = "RiskRegisterWorkflowServiceProto";
+option java_package = "com.acme.risk.v1";
+
+// Runs the long-lived workflow that takes a risk register from start to finish.
+service RiskRegisterWorkflowService {
+  // Starts a risk register.
+  rpc StartRiskRegisterWorkflow(StartRiskRegisterWorkflowRequest) returns (StartRiskRegisterWorkflowResponse);
+
+  // Advances a risk register.
+  rpc AdvanceRiskRegisterWorkflow(AdvanceRiskRegisterWorkflowRequest) returns (AdvanceRiskRegisterWorkflowResponse);
+
+  // Cancels a risk register.
+  rpc CancelRiskRegisterWorkflow(CancelRiskRegisterWorkflowRequest) returns (CancelRiskRegisterWorkflowResponse);
+
+  // Retrys a risk register.
+  rpc RetryRiskRegisterWorkflow(RetryRiskRegisterWorkflowRequest) returns (RetryRiskRegisterWorkflowResponse);
+
+  // Pauses a risk register.
+  rpc PauseRiskRegisterWorkflow(PauseRiskRegisterWorkflowRequest) returns (PauseRiskRegisterWorkflowResponse);
+
+  // Resumes a risk register.
+  rpc ResumeRiskRegisterWorkflow(ResumeRiskRegisterWorkflowRequest) returns (ResumeRiskRegisterWorkflowResponse);
+
+  // Returns a risk register.
+  rpc InspectRiskRegisterWorkflow(InspectRiskRegisterWorkflowRequest) returns (InspectRiskRegisterWorkflowResponse);
+
+  // Signals a risk register.
+  rpc SignalRiskRegisterWorkflow(SignalRiskRegisterWorkflowRequest) returns (SignalRiskRegisterWorkflowResponse);
+}
+
+// The request of `StartRiskRegisterWorkflow`.
+message StartRiskRegisterWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string risk_register_id = 2;
+  RiskRegister risk_register = 3;
+  StartRiskRegisterWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `StartRiskRegisterWorkflow`.
+message StartRiskRegisterWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RiskRegister risk_register = 1;
+  StartRiskRegisterWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `AdvanceRiskRegisterWorkflow`.
+message AdvanceRiskRegisterWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string risk_register_id = 2;
+  RiskRegister risk_register = 3;
+  AdvanceRiskRegisterWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `AdvanceRiskRegisterWorkflow`.
+message AdvanceRiskRegisterWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RiskRegister risk_register = 1;
+  AdvanceRiskRegisterWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CancelRiskRegisterWorkflow`.
+message CancelRiskRegisterWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string risk_register_id = 2;
+  RiskRegister risk_register = 3;
+  CancelRiskRegisterWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CancelRiskRegisterWorkflow`.
+message CancelRiskRegisterWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RiskRegister risk_register = 1;
+  CancelRiskRegisterWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RetryRiskRegisterWorkflow`.
+message RetryRiskRegisterWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string risk_register_id = 2;
+  RiskRegister risk_register = 3;
+  RetryRiskRegisterWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RetryRiskRegisterWorkflow`.
+message RetryRiskRegisterWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RiskRegister risk_register = 1;
+  RetryRiskRegisterWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PauseRiskRegisterWorkflow`.
+message PauseRiskRegisterWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string risk_register_id = 2;
+  RiskRegister risk_register = 3;
+  PauseRiskRegisterWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PauseRiskRegisterWorkflow`.
+message PauseRiskRegisterWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RiskRegister risk_register = 1;
+  PauseRiskRegisterWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ResumeRiskRegisterWorkflow`.
+message ResumeRiskRegisterWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string risk_register_id = 2;
+  RiskRegister risk_register = 3;
+  ResumeRiskRegisterWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ResumeRiskRegisterWorkflow`.
+message ResumeRiskRegisterWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RiskRegister risk_register = 1;
+  ResumeRiskRegisterWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `InspectRiskRegisterWorkflow`.
+message InspectRiskRegisterWorkflowRequest {
+  acme.common.v1.RequestContext context = 1;
+  string risk_register_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `InspectRiskRegisterWorkflow`.
+message InspectRiskRegisterWorkflowResponse {
+  RiskRegister risk_register = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `SignalRiskRegisterWorkflow`.
+message SignalRiskRegisterWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string risk_register_id = 2;
+  RiskRegister risk_register = 3;
+  SignalRiskRegisterWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SignalRiskRegisterWorkflow`.
+message SignalRiskRegisterWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RiskRegister risk_register = 1;
+  SignalRiskRegisterWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

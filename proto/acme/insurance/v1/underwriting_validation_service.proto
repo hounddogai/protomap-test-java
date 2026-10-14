@@ -1,0 +1,268 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.insurance.v1;
+
+import "acme/common/v1/address.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/money.proto";
+import "acme/common/v1/operation.proto";
+import "acme/insurance/v1/insurance.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Insurance.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/insurance/v1;insurancev1";
+option java_multiple_files = true;
+option java_outer_classname = "UnderwritingValidationServiceProto";
+option java_package = "com.acme.insurance.v1";
+
+// Checks underwritings against the rules before anything acts on them.
+service UnderwritingValidationService {
+  // Validates an underwriting.
+  rpc ValidateUnderwriting(ValidateUnderwritingRequest) returns (ValidateUnderwritingResponse);
+
+  // Previews an underwriting.
+  rpc PreviewUnderwriting(PreviewUnderwritingRequest) returns (PreviewUnderwritingResponse);
+
+  // Checks an underwriting.
+  rpc CheckUnderwritingEligibility(CheckUnderwritingEligibilityRequest) returns (CheckUnderwritingEligibilityResponse);
+
+  // Normalizes an underwriting.
+  rpc NormalizeUnderwriting(NormalizeUnderwritingRequest) returns (NormalizeUnderwritingResponse);
+
+  // Explains an underwriting.
+  rpc ExplainUnderwritingDecision(ExplainUnderwritingDecisionRequest) returns (ExplainUnderwritingDecisionResponse);
+
+  // Scores an underwriting.
+  rpc ScoreUnderwriting(ScoreUnderwritingRequest) returns (ScoreUnderwritingResponse);
+
+  // Returns an underwriting.
+  rpc GetUnderwritingRules(GetUnderwritingRulesRequest) returns (GetUnderwritingRulesResponse);
+}
+
+// The request of `ValidateUnderwriting`.
+message ValidateUnderwritingRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string underwriting_id = 2;
+  Underwriting underwriting = 3;
+  ValidateUnderwritingRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ValidateUnderwriting`.
+message ValidateUnderwritingResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Underwriting underwriting = 1;
+  ValidateUnderwritingResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PreviewUnderwriting`.
+message PreviewUnderwritingRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string underwriting_id = 2;
+  Underwriting underwriting = 3;
+  PreviewUnderwritingRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PreviewUnderwriting`.
+message PreviewUnderwritingResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Underwriting underwriting = 1;
+  PreviewUnderwritingResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CheckUnderwritingEligibility`.
+message CheckUnderwritingEligibilityRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string underwriting_id = 2;
+  Underwriting underwriting = 3;
+  CheckUnderwritingEligibilityRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CheckUnderwritingEligibility`.
+message CheckUnderwritingEligibilityResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Underwriting underwriting = 1;
+  CheckUnderwritingEligibilityResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `NormalizeUnderwriting`.
+message NormalizeUnderwritingRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string underwriting_id = 2;
+  Underwriting underwriting = 3;
+  NormalizeUnderwritingRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `NormalizeUnderwriting`.
+message NormalizeUnderwritingResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Underwriting underwriting = 1;
+  NormalizeUnderwritingResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExplainUnderwritingDecision`.
+message ExplainUnderwritingDecisionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string underwriting_id = 2;
+  Underwriting underwriting = 3;
+  ExplainUnderwritingDecisionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ExplainUnderwritingDecision`.
+message ExplainUnderwritingDecisionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Underwriting underwriting = 1;
+  ExplainUnderwritingDecisionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ScoreUnderwriting`.
+message ScoreUnderwritingRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string underwriting_id = 2;
+  Underwriting underwriting = 3;
+  ScoreUnderwritingRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ScoreUnderwriting`.
+message ScoreUnderwritingResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated ScoreUnderwritingResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Underwriting underwriting = 1;
+  ScoreUnderwritingResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetUnderwritingRules`.
+message GetUnderwritingRulesRequest {
+  acme.common.v1.RequestContext context = 1;
+  string underwriting_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetUnderwritingRules`.
+message GetUnderwritingRulesResponse {
+  Underwriting underwriting = 1;
+  acme.common.v1.OperationResult result = 2;
+}

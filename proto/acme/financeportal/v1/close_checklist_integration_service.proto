@@ -1,0 +1,300 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.financeportal.v1;
+
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/financeportal/v1/financeportal.proto";
+import "google/protobuf/any.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Financeportal.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/financeportal/v1;financeportalv1";
+option java_multiple_files = true;
+option java_outer_classname = "CloseChecklistIntegrationServiceProto";
+option java_package = "com.acme.financeportal.v1";
+
+// Connects external systems that send close checklist events.
+service CloseChecklistIntegrationService {
+  // Connects a close checklist.
+  rpc ConnectCloseChecklistSource(ConnectCloseChecklistSourceRequest) returns (ConnectCloseChecklistSourceResponse);
+
+  // Disconnects a close checklist.
+  rpc DisconnectCloseChecklistSource(DisconnectCloseChecklistSourceRequest) returns (DisconnectCloseChecklistSourceResponse);
+
+  // Takes a stream of close checklists and answers once at the end.
+  rpc IngestCloseChecklistEvents(stream IngestCloseChecklistEventsRequest) returns (IngestCloseChecklistEventsResponse);
+
+  // Replays a close checklist.
+  rpc ReplayCloseChecklistEvents(ReplayCloseChecklistEventsRequest) returns (ReplayCloseChecklistEventsResponse);
+
+  // Acknowledges a close checklist.
+  rpc AcknowledgeCloseChecklistEvent(AcknowledgeCloseChecklistEventRequest) returns (AcknowledgeCloseChecklistEventResponse);
+
+  // Exchanges changes of close checklists with a peer.
+  rpc RelayCloseChecklistMessages(stream RelayCloseChecklistMessagesRequest) returns (stream RelayCloseChecklistMessagesResponse);
+
+  // Lists close checklists a page at a time.
+  rpc ListCloseChecklistSources(ListCloseChecklistSourcesRequest) returns (ListCloseChecklistSourcesResponse);
+
+  // Tests a close checklist.
+  rpc TestCloseChecklistConnection(TestCloseChecklistConnectionRequest) returns (TestCloseChecklistConnectionResponse);
+}
+
+// The request of `ConnectCloseChecklistSource`.
+message ConnectCloseChecklistSourceRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string endpoint = 1;
+    google.protobuf.Any envelope = 2;
+    string message_id = 3;
+    string source_system = 4;
+    google.protobuf.Timestamp received_at = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string close_checklist_id = 2;
+  ConnectCloseChecklistSourceRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ConnectCloseChecklistSource`.
+message ConnectCloseChecklistSourceResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  CloseChecklist close_checklist = 1;
+  ConnectCloseChecklistSourceResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `DisconnectCloseChecklistSource`.
+message DisconnectCloseChecklistSourceRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string endpoint = 1;
+    google.protobuf.Any envelope = 2;
+    string message_id = 3;
+    string source_system = 4;
+    google.protobuf.Timestamp received_at = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string close_checklist_id = 2;
+  DisconnectCloseChecklistSourceRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `DisconnectCloseChecklistSource`.
+message DisconnectCloseChecklistSourceResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  CloseChecklist close_checklist = 1;
+  DisconnectCloseChecklistSourceResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `IngestCloseChecklistEvents`.
+message IngestCloseChecklistEventsRequest {
+  // What a stream of records starts with.
+  message StreamHeader {
+    string source = 1;
+    string format = 2;
+    int64 total_records = 3;
+    acme.common.v1.ContactInfo submitted_by = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  oneof chunk {
+    IngestCloseChecklistEventsRequest.StreamHeader header = 2;
+    CloseChecklist record = 3;
+  }
+  int64 sequence = 4;
+}
+
+// The response of `IngestCloseChecklistEvents`.
+message IngestCloseChecklistEventsResponse {
+  // A record the import turned down.
+  message Rejection {
+    int64 sequence = 1;
+    string reason = 2;
+    string close_checklist_id = 3;
+  }
+
+  int64 accepted = 1;
+  int64 rejected = 2;
+  repeated IngestCloseChecklistEventsResponse.Rejection rejections = 3;
+  acme.common.v1.OperationResult result = 4;
+}
+
+// The request of `ReplayCloseChecklistEvents`.
+message ReplayCloseChecklistEventsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string endpoint = 1;
+    google.protobuf.Any envelope = 2;
+    string message_id = 3;
+    string source_system = 4;
+    google.protobuf.Timestamp received_at = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string close_checklist_id = 2;
+  ReplayCloseChecklistEventsRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ReplayCloseChecklistEvents`.
+message ReplayCloseChecklistEventsResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  CloseChecklist close_checklist = 1;
+  ReplayCloseChecklistEventsResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `AcknowledgeCloseChecklistEvent`.
+message AcknowledgeCloseChecklistEventRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string endpoint = 1;
+    google.protobuf.Any envelope = 2;
+    string message_id = 3;
+    string source_system = 4;
+    google.protobuf.Timestamp received_at = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string close_checklist_id = 2;
+  AcknowledgeCloseChecklistEventRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `AcknowledgeCloseChecklistEvent`.
+message AcknowledgeCloseChecklistEventResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  CloseChecklist close_checklist = 1;
+  AcknowledgeCloseChecklistEventResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RelayCloseChecklistMessages`.
+message RelayCloseChecklistMessagesRequest {
+  // An acknowledgment of a change the peer sent.
+  message ChangeAck {
+    int64 sequence = 1;
+    string status = 2;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  oneof frame {
+    CloseChecklist change = 2;
+    RelayCloseChecklistMessagesRequest.ChangeAck ack = 3;
+  }
+  string cursor = 4;
+}
+
+// The response of `RelayCloseChecklistMessages`.
+message RelayCloseChecklistMessagesResponse {
+  CloseChecklist close_checklist = 1;
+  string change_type = 2;
+  google.protobuf.Timestamp changed_at = 3;
+  int64 sequence = 4;
+  acme.common.v1.OperationResult result = 5;
+}
+
+// The request of `ListCloseChecklistSources`.
+message ListCloseChecklistSourcesRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated CloseChecklistStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListCloseChecklistSourcesRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListCloseChecklistSources`.
+message ListCloseChecklistSourcesResponse {
+  repeated CloseChecklist close_checklists = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `TestCloseChecklistConnection`.
+message TestCloseChecklistConnectionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string endpoint = 1;
+    google.protobuf.Any envelope = 2;
+    string message_id = 3;
+    string source_system = 4;
+    google.protobuf.Timestamp received_at = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string close_checklist_id = 2;
+  TestCloseChecklistConnectionRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `TestCloseChecklistConnection`.
+message TestCloseChecklistConnectionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  CloseChecklist close_checklist = 1;
+  TestCloseChecklistConnectionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

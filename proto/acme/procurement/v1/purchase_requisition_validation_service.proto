@@ -1,0 +1,305 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.procurement.v1;
+
+import "acme/common/v1/address.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/money.proto";
+import "acme/common/v1/operation.proto";
+import "acme/procurement/v1/procurement.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Procurement.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/procurement/v1;procurementv1";
+option java_multiple_files = true;
+option java_outer_classname = "PurchaseRequisitionValidationServiceProto";
+option java_package = "com.acme.procurement.v1";
+
+// Checks purchase requisitions against the rules before anything acts on them.
+service PurchaseRequisitionValidationService {
+  // Validates a purchase requisition.
+  rpc ValidatePurchaseRequisition(ValidatePurchaseRequisitionRequest) returns (ValidatePurchaseRequisitionResponse);
+
+  // Previews a purchase requisition.
+  rpc PreviewPurchaseRequisition(PreviewPurchaseRequisitionRequest) returns (PreviewPurchaseRequisitionResponse);
+
+  // Checks a purchase requisition.
+  rpc CheckPurchaseRequisitionEligibility(CheckPurchaseRequisitionEligibilityRequest) returns (CheckPurchaseRequisitionEligibilityResponse);
+
+  // Normalizes a purchase requisition.
+  rpc NormalizePurchaseRequisition(NormalizePurchaseRequisitionRequest) returns (NormalizePurchaseRequisitionResponse);
+
+  // Explains a purchase requisition.
+  rpc ExplainPurchaseRequisitionDecision(ExplainPurchaseRequisitionDecisionRequest) returns (ExplainPurchaseRequisitionDecisionResponse);
+
+  // Scores a purchase requisition.
+  rpc ScorePurchaseRequisition(ScorePurchaseRequisitionRequest) returns (ScorePurchaseRequisitionResponse);
+
+  // Lints a purchase requisition.
+  rpc LintPurchaseRequisitions(LintPurchaseRequisitionsRequest) returns (LintPurchaseRequisitionsResponse);
+
+  // Returns a purchase requisition.
+  rpc GetPurchaseRequisitionRules(GetPurchaseRequisitionRulesRequest) returns (GetPurchaseRequisitionRulesResponse);
+}
+
+// The request of `ValidatePurchaseRequisition`.
+message ValidatePurchaseRequisitionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string purchase_requisition_id = 2;
+  PurchaseRequisition purchase_requisition = 3;
+  ValidatePurchaseRequisitionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ValidatePurchaseRequisition`.
+message ValidatePurchaseRequisitionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PurchaseRequisition purchase_requisition = 1;
+  ValidatePurchaseRequisitionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PreviewPurchaseRequisition`.
+message PreviewPurchaseRequisitionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string purchase_requisition_id = 2;
+  PurchaseRequisition purchase_requisition = 3;
+  PreviewPurchaseRequisitionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PreviewPurchaseRequisition`.
+message PreviewPurchaseRequisitionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PurchaseRequisition purchase_requisition = 1;
+  PreviewPurchaseRequisitionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CheckPurchaseRequisitionEligibility`.
+message CheckPurchaseRequisitionEligibilityRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string purchase_requisition_id = 2;
+  PurchaseRequisition purchase_requisition = 3;
+  CheckPurchaseRequisitionEligibilityRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CheckPurchaseRequisitionEligibility`.
+message CheckPurchaseRequisitionEligibilityResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PurchaseRequisition purchase_requisition = 1;
+  CheckPurchaseRequisitionEligibilityResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `NormalizePurchaseRequisition`.
+message NormalizePurchaseRequisitionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string purchase_requisition_id = 2;
+  PurchaseRequisition purchase_requisition = 3;
+  NormalizePurchaseRequisitionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `NormalizePurchaseRequisition`.
+message NormalizePurchaseRequisitionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PurchaseRequisition purchase_requisition = 1;
+  NormalizePurchaseRequisitionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExplainPurchaseRequisitionDecision`.
+message ExplainPurchaseRequisitionDecisionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string purchase_requisition_id = 2;
+  PurchaseRequisition purchase_requisition = 3;
+  ExplainPurchaseRequisitionDecisionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ExplainPurchaseRequisitionDecision`.
+message ExplainPurchaseRequisitionDecisionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PurchaseRequisition purchase_requisition = 1;
+  ExplainPurchaseRequisitionDecisionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ScorePurchaseRequisition`.
+message ScorePurchaseRequisitionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string purchase_requisition_id = 2;
+  PurchaseRequisition purchase_requisition = 3;
+  ScorePurchaseRequisitionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ScorePurchaseRequisition`.
+message ScorePurchaseRequisitionResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated ScorePurchaseRequisitionResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  PurchaseRequisition purchase_requisition = 1;
+  ScorePurchaseRequisitionResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `LintPurchaseRequisitions`.
+message LintPurchaseRequisitionsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string purchase_requisition_id = 2;
+  PurchaseRequisition purchase_requisition = 3;
+  LintPurchaseRequisitionsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `LintPurchaseRequisitions`.
+message LintPurchaseRequisitionsResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PurchaseRequisition purchase_requisition = 1;
+  LintPurchaseRequisitionsResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetPurchaseRequisitionRules`.
+message GetPurchaseRequisitionRulesRequest {
+  acme.common.v1.RequestContext context = 1;
+  string purchase_requisition_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetPurchaseRequisitionRules`.
+message GetPurchaseRequisitionRulesResponse {
+  PurchaseRequisition purchase_requisition = 1;
+  acme.common.v1.OperationResult result = 2;
+}

@@ -1,0 +1,333 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.procurement.v1;
+
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/identity/v1/refs.proto";
+import "acme/procurement/v1/procurement.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Procurement.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/procurement/v1;procurementv1";
+option java_multiple_files = true;
+option java_outer_classname = "GoodsReceiptApprovalServiceProto";
+option java_package = "com.acme.procurement.v1";
+
+// Routes goods receipts through approval, with escalation and delegation.
+service GoodsReceiptApprovalService {
+  // Submits a goods receipt.
+  rpc SubmitGoodsReceipt(SubmitGoodsReceiptRequest) returns (SubmitGoodsReceiptResponse);
+
+  // Approves a goods receipt.
+  rpc ApproveGoodsReceipt(ApproveGoodsReceiptRequest) returns (ApproveGoodsReceiptResponse);
+
+  // Rejects a goods receipt.
+  rpc RejectGoodsReceipt(RejectGoodsReceiptRequest) returns (RejectGoodsReceiptResponse);
+
+  // Escalates a goods receipt.
+  rpc EscalateGoodsReceipt(EscalateGoodsReceiptRequest) returns (EscalateGoodsReceiptResponse);
+
+  // Lists goods receipts a page at a time.
+  rpc ListPendingGoodsReceipts(ListPendingGoodsReceiptsRequest) returns (ListPendingGoodsReceiptsResponse);
+
+  // Delegates a goods receipt.
+  rpc DelegateGoodsReceiptApproval(DelegateGoodsReceiptApprovalRequest) returns (DelegateGoodsReceiptApprovalResponse);
+
+  // Recalls a goods receipt.
+  rpc RecallGoodsReceipt(RecallGoodsReceiptRequest) returns (RecallGoodsReceiptResponse);
+
+  // Returns a goods receipt.
+  rpc GetGoodsReceiptApprovalStatus(GetGoodsReceiptApprovalStatusRequest) returns (GetGoodsReceiptApprovalStatusResponse);
+
+  // Comments a goods receipt.
+  rpc CommentGoodsReceiptApproval(CommentGoodsReceiptApprovalRequest) returns (CommentGoodsReceiptApprovalResponse);
+}
+
+// The request of `SubmitGoodsReceipt`.
+message SubmitGoodsReceiptRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string goods_receipt_id = 2;
+  GoodsReceipt goods_receipt = 3;
+  SubmitGoodsReceiptRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SubmitGoodsReceipt`.
+message SubmitGoodsReceiptResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  GoodsReceipt goods_receipt = 1;
+  SubmitGoodsReceiptResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ApproveGoodsReceipt`.
+message ApproveGoodsReceiptRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string goods_receipt_id = 2;
+  GoodsReceipt goods_receipt = 3;
+  ApproveGoodsReceiptRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ApproveGoodsReceipt`.
+message ApproveGoodsReceiptResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  GoodsReceipt goods_receipt = 1;
+  ApproveGoodsReceiptResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RejectGoodsReceipt`.
+message RejectGoodsReceiptRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string goods_receipt_id = 2;
+  GoodsReceipt goods_receipt = 3;
+  RejectGoodsReceiptRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RejectGoodsReceipt`.
+message RejectGoodsReceiptResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  GoodsReceipt goods_receipt = 1;
+  RejectGoodsReceiptResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `EscalateGoodsReceipt`.
+message EscalateGoodsReceiptRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string goods_receipt_id = 2;
+  GoodsReceipt goods_receipt = 3;
+  EscalateGoodsReceiptRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `EscalateGoodsReceipt`.
+message EscalateGoodsReceiptResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  GoodsReceipt goods_receipt = 1;
+  EscalateGoodsReceiptResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ListPendingGoodsReceipts`.
+message ListPendingGoodsReceiptsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated GoodsReceiptStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListPendingGoodsReceiptsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListPendingGoodsReceipts`.
+message ListPendingGoodsReceiptsResponse {
+  repeated GoodsReceipt goods_receipts = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `DelegateGoodsReceiptApproval`.
+message DelegateGoodsReceiptApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string goods_receipt_id = 2;
+  GoodsReceipt goods_receipt = 3;
+  DelegateGoodsReceiptApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `DelegateGoodsReceiptApproval`.
+message DelegateGoodsReceiptApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  GoodsReceipt goods_receipt = 1;
+  DelegateGoodsReceiptApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RecallGoodsReceipt`.
+message RecallGoodsReceiptRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string goods_receipt_id = 2;
+  GoodsReceipt goods_receipt = 3;
+  RecallGoodsReceiptRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RecallGoodsReceipt`.
+message RecallGoodsReceiptResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  GoodsReceipt goods_receipt = 1;
+  RecallGoodsReceiptResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetGoodsReceiptApprovalStatus`.
+message GetGoodsReceiptApprovalStatusRequest {
+  acme.common.v1.RequestContext context = 1;
+  string goods_receipt_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetGoodsReceiptApprovalStatus`.
+message GetGoodsReceiptApprovalStatusResponse {
+  GoodsReceipt goods_receipt = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `CommentGoodsReceiptApproval`.
+message CommentGoodsReceiptApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string goods_receipt_id = 2;
+  GoodsReceipt goods_receipt = 3;
+  CommentGoodsReceiptApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CommentGoodsReceiptApproval`.
+message CommentGoodsReceiptApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  GoodsReceipt goods_receipt = 1;
+  CommentGoodsReceiptApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

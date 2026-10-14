@@ -1,0 +1,243 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.payroll.v1;
+
+import "acme/common/v1/audit.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/payroll/v1/payroll.proto";
+import "google/protobuf/any.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Payroll.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/payroll/v1;payrollv1";
+option java_multiple_files = true;
+option java_outer_classname = "DeductionReportingServiceProto";
+option java_package = "com.acme.payroll.v1";
+
+// Builds and schedules reports about deductions.
+service DeductionReportingService {
+  // Generates a deduction.
+  rpc GenerateDeductionReport(GenerateDeductionReportRequest) returns (GenerateDeductionReportResponse);
+
+  // Returns a deduction.
+  rpc FetchDeductionReport(FetchDeductionReportRequest) returns (FetchDeductionReportResponse);
+
+  // Schedules a deduction.
+  rpc ScheduleDeductionReport(ScheduleDeductionReportRequest) returns (ScheduleDeductionReportResponse);
+
+  // Streams the changes of deductions as they happen.
+  rpc StreamDeductionMetrics(StreamDeductionMetricsRequest) returns (stream StreamDeductionMetricsResponse);
+
+  // Lists deductions a page at a time.
+  rpc ListDeductionReports(ListDeductionReportsRequest) returns (ListDeductionReportsResponse);
+
+  // Shares a deduction.
+  rpc ShareDeductionReport(ShareDeductionReportRequest) returns (ShareDeductionReportResponse);
+
+  // Counts deductions by status.
+  rpc CountDeductionTotals(CountDeductionTotalsRequest) returns (CountDeductionTotalsResponse);
+
+  // Deletes a deduction.
+  rpc DeleteDeductionReport(DeleteDeductionReportRequest) returns (DeleteDeductionReportResponse);
+}
+
+// The request of `GenerateDeductionReport`.
+message GenerateDeductionReportRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string format = 1;
+    acme.common.v1.TimeWindow period = 2;
+    repeated string recipient_emails = 3;
+    string cron = 4;
+    map<string, string> filters = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string deduction_id = 2;
+  GenerateDeductionReportRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `GenerateDeductionReport`.
+message GenerateDeductionReportResponse {
+  string report_id = 1;
+  string download_uri = 2;
+  map<string, string> summary = 3;
+  acme.common.v1.TimeWindow period = 4;
+  acme.common.v1.OperationResult result = 5;
+}
+
+// The request of `FetchDeductionReport`.
+message FetchDeductionReportRequest {
+  acme.common.v1.RequestContext context = 1;
+  string deduction_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `FetchDeductionReport`.
+message FetchDeductionReportResponse {
+  Deduction deduction = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `ScheduleDeductionReport`.
+message ScheduleDeductionReportRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string format = 1;
+    acme.common.v1.TimeWindow period = 2;
+    repeated string recipient_emails = 3;
+    string cron = 4;
+    map<string, string> filters = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string deduction_id = 2;
+  ScheduleDeductionReportRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ScheduleDeductionReport`.
+message ScheduleDeductionReportResponse {
+  string report_id = 1;
+  string download_uri = 2;
+  map<string, string> summary = 3;
+  acme.common.v1.TimeWindow period = 4;
+  acme.common.v1.OperationResult result = 5;
+}
+
+// The request of `StreamDeductionMetrics`.
+message StreamDeductionMetricsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated DeductionStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  StreamDeductionMetricsRequest.Filter filter = 2;
+  google.protobuf.Timestamp since = 3;
+  int32 max_events = 4;
+  acme.common.v1.ContactInfo subscriber = 5;
+}
+
+// The response of `StreamDeductionMetrics`.
+message StreamDeductionMetricsResponse {
+  Deduction deduction = 1;
+  string change_type = 2;
+  google.protobuf.Timestamp changed_at = 3;
+  int64 sequence = 4;
+  acme.common.v1.OperationResult result = 5;
+}
+
+// The request of `ListDeductionReports`.
+message ListDeductionReportsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated DeductionStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListDeductionReportsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListDeductionReports`.
+message ListDeductionReportsResponse {
+  repeated Deduction deductions = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ShareDeductionReport`.
+message ShareDeductionReportRequest {
+  // What the operation needs besides the record.
+  message Details {
+    acme.common.v1.ContactInfo recipient = 1;
+    string template_id = 2;
+    map<string, string> variables = 3;
+    google.protobuf.Any payload = 4;
+    string channel = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string deduction_id = 2;
+  ShareDeductionReportRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ShareDeductionReport`.
+message ShareDeductionReportResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Deduction deduction = 1;
+  ShareDeductionReportResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CountDeductionTotals`.
+message CountDeductionTotalsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated DeductionStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  CountDeductionTotalsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `CountDeductionTotals`.
+message CountDeductionTotalsResponse {
+  int64 count = 1;
+  map<string, int64> by_status = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `DeleteDeductionReport`.
+message DeleteDeductionReportRequest {
+  acme.common.v1.RequestContext context = 1;
+  string deduction_id = 2;
+  string reason = 3;
+  string etag = 4;
+  bool force = 5;
+}
+
+// The response of `DeleteDeductionReport`.
+message DeleteDeductionReportResponse {
+  acme.common.v1.OperationResult result = 1;
+  google.protobuf.Timestamp effective_at = 2;
+}

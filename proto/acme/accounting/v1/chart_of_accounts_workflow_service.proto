@@ -1,0 +1,334 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.accounting.v1;
+
+import "acme/accounting/v1/accounting.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Accounting.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/accounting/v1;accountingv1";
+option java_multiple_files = true;
+option java_outer_classname = "ChartOfAccountsWorkflowServiceProto";
+option java_package = "com.acme.accounting.v1";
+
+// Runs the long-lived workflow that takes a chart of accounts from start to finish.
+service ChartOfAccountsWorkflowService {
+  // Starts a chart of accounts.
+  rpc StartChartOfAccountsWorkflow(StartChartOfAccountsWorkflowRequest) returns (StartChartOfAccountsWorkflowResponse);
+
+  // Advances a chart of accounts.
+  rpc AdvanceChartOfAccountsWorkflow(AdvanceChartOfAccountsWorkflowRequest) returns (AdvanceChartOfAccountsWorkflowResponse);
+
+  // Cancels a chart of accounts.
+  rpc CancelChartOfAccountsWorkflow(CancelChartOfAccountsWorkflowRequest) returns (CancelChartOfAccountsWorkflowResponse);
+
+  // Retrys a chart of accounts.
+  rpc RetryChartOfAccountsWorkflow(RetryChartOfAccountsWorkflowRequest) returns (RetryChartOfAccountsWorkflowResponse);
+
+  // Pauses a chart of accounts.
+  rpc PauseChartOfAccountsWorkflow(PauseChartOfAccountsWorkflowRequest) returns (PauseChartOfAccountsWorkflowResponse);
+
+  // Resumes a chart of accounts.
+  rpc ResumeChartOfAccountsWorkflow(ResumeChartOfAccountsWorkflowRequest) returns (ResumeChartOfAccountsWorkflowResponse);
+
+  // Returns a chart of accounts.
+  rpc InspectChartOfAccountsWorkflow(InspectChartOfAccountsWorkflowRequest) returns (InspectChartOfAccountsWorkflowResponse);
+
+  // Lists chart of accountses a page at a time.
+  rpc ListChartOfAccountsWorkflows(ListChartOfAccountsWorkflowsRequest) returns (ListChartOfAccountsWorkflowsResponse);
+
+  // Signals a chart of accounts.
+  rpc SignalChartOfAccountsWorkflow(SignalChartOfAccountsWorkflowRequest) returns (SignalChartOfAccountsWorkflowResponse);
+}
+
+// The request of `StartChartOfAccountsWorkflow`.
+message StartChartOfAccountsWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string chart_of_accounts_id = 2;
+  ChartOfAccounts chart_of_accounts = 3;
+  StartChartOfAccountsWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `StartChartOfAccountsWorkflow`.
+message StartChartOfAccountsWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ChartOfAccounts chart_of_accounts = 1;
+  StartChartOfAccountsWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `AdvanceChartOfAccountsWorkflow`.
+message AdvanceChartOfAccountsWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string chart_of_accounts_id = 2;
+  ChartOfAccounts chart_of_accounts = 3;
+  AdvanceChartOfAccountsWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `AdvanceChartOfAccountsWorkflow`.
+message AdvanceChartOfAccountsWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ChartOfAccounts chart_of_accounts = 1;
+  AdvanceChartOfAccountsWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CancelChartOfAccountsWorkflow`.
+message CancelChartOfAccountsWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string chart_of_accounts_id = 2;
+  ChartOfAccounts chart_of_accounts = 3;
+  CancelChartOfAccountsWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CancelChartOfAccountsWorkflow`.
+message CancelChartOfAccountsWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ChartOfAccounts chart_of_accounts = 1;
+  CancelChartOfAccountsWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RetryChartOfAccountsWorkflow`.
+message RetryChartOfAccountsWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string chart_of_accounts_id = 2;
+  ChartOfAccounts chart_of_accounts = 3;
+  RetryChartOfAccountsWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RetryChartOfAccountsWorkflow`.
+message RetryChartOfAccountsWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ChartOfAccounts chart_of_accounts = 1;
+  RetryChartOfAccountsWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PauseChartOfAccountsWorkflow`.
+message PauseChartOfAccountsWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string chart_of_accounts_id = 2;
+  ChartOfAccounts chart_of_accounts = 3;
+  PauseChartOfAccountsWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PauseChartOfAccountsWorkflow`.
+message PauseChartOfAccountsWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ChartOfAccounts chart_of_accounts = 1;
+  PauseChartOfAccountsWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ResumeChartOfAccountsWorkflow`.
+message ResumeChartOfAccountsWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string chart_of_accounts_id = 2;
+  ChartOfAccounts chart_of_accounts = 3;
+  ResumeChartOfAccountsWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ResumeChartOfAccountsWorkflow`.
+message ResumeChartOfAccountsWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ChartOfAccounts chart_of_accounts = 1;
+  ResumeChartOfAccountsWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `InspectChartOfAccountsWorkflow`.
+message InspectChartOfAccountsWorkflowRequest {
+  acme.common.v1.RequestContext context = 1;
+  string chart_of_accounts_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `InspectChartOfAccountsWorkflow`.
+message InspectChartOfAccountsWorkflowResponse {
+  ChartOfAccounts chart_of_accounts = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `ListChartOfAccountsWorkflows`.
+message ListChartOfAccountsWorkflowsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated ChartOfAccountsStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListChartOfAccountsWorkflowsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListChartOfAccountsWorkflows`.
+message ListChartOfAccountsWorkflowsResponse {
+  repeated ChartOfAccounts chart_of_accountses = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SignalChartOfAccountsWorkflow`.
+message SignalChartOfAccountsWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string chart_of_accounts_id = 2;
+  ChartOfAccounts chart_of_accounts = 3;
+  SignalChartOfAccountsWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SignalChartOfAccountsWorkflow`.
+message SignalChartOfAccountsWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ChartOfAccounts chart_of_accounts = 1;
+  SignalChartOfAccountsWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

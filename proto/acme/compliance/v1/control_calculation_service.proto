@@ -1,0 +1,335 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.compliance.v1;
+
+import "acme/common/v1/address.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/money.proto";
+import "acme/common/v1/operation.proto";
+import "acme/compliance/v1/compliance.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Compliance.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/compliance/v1;compliancev1";
+option java_multiple_files = true;
+option java_outer_classname = "ControlCalculationServiceProto";
+option java_package = "com.acme.compliance.v1";
+
+// Computes the figures of a control, such as totals, taxes, and estimates.
+service ControlCalculationService {
+  // Calculates a control.
+  rpc CalculateControl(CalculateControlRequest) returns (CalculateControlResponse);
+
+  // Estimates a control.
+  rpc EstimateControl(EstimateControlRequest) returns (EstimateControlResponse);
+
+  // Quotes a control.
+  rpc QuoteControl(QuoteControlRequest) returns (QuoteControlResponse);
+
+  // Compares a control.
+  rpc CompareControlOptions(CompareControlOptionsRequest) returns (CompareControlOptionsResponse);
+
+  // Recalculates a control.
+  rpc RecalculateControls(RecalculateControlsRequest) returns (RecalculateControlsResponse);
+
+  // Simulates a control.
+  rpc SimulateControl(SimulateControlRequest) returns (SimulateControlResponse);
+
+  // Explains a control.
+  rpc ExplainControlCalculation(ExplainControlCalculationRequest) returns (ExplainControlCalculationResponse);
+
+  // Returns a control.
+  rpc GetControlRates(GetControlRatesRequest) returns (GetControlRatesResponse);
+}
+
+// The request of `CalculateControl`.
+message CalculateControlRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string control_id = 2;
+  Control control = 3;
+  CalculateControlRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CalculateControl`.
+message CalculateControlResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated CalculateControlResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Control control = 1;
+  CalculateControlResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `EstimateControl`.
+message EstimateControlRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string control_id = 2;
+  Control control = 3;
+  EstimateControlRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `EstimateControl`.
+message EstimateControlResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated EstimateControlResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Control control = 1;
+  EstimateControlResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `QuoteControl`.
+message QuoteControlRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string control_id = 2;
+  Control control = 3;
+  QuoteControlRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `QuoteControl`.
+message QuoteControlResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated QuoteControlResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Control control = 1;
+  QuoteControlResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CompareControlOptions`.
+message CompareControlOptionsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string control_id = 2;
+  Control control = 3;
+  CompareControlOptionsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CompareControlOptions`.
+message CompareControlOptionsResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated CompareControlOptionsResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Control control = 1;
+  CompareControlOptionsResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RecalculateControls`.
+message RecalculateControlsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string control_id = 2;
+  Control control = 3;
+  RecalculateControlsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RecalculateControls`.
+message RecalculateControlsResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated RecalculateControlsResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Control control = 1;
+  RecalculateControlsResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SimulateControl`.
+message SimulateControlRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string control_id = 2;
+  Control control = 3;
+  SimulateControlRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SimulateControl`.
+message SimulateControlResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated SimulateControlResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Control control = 1;
+  SimulateControlResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExplainControlCalculation`.
+message ExplainControlCalculationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string control_id = 2;
+  Control control = 3;
+  ExplainControlCalculationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ExplainControlCalculation`.
+message ExplainControlCalculationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Control control = 1;
+  ExplainControlCalculationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetControlRates`.
+message GetControlRatesRequest {
+  acme.common.v1.RequestContext context = 1;
+  string control_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetControlRates`.
+message GetControlRatesResponse {
+  Control control = 1;
+  acme.common.v1.OperationResult result = 2;
+}

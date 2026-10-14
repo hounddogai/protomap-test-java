@@ -1,0 +1,318 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.payroll.v1;
+
+import "acme/common/v1/address.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/money.proto";
+import "acme/common/v1/operation.proto";
+import "acme/payroll/v1/payroll.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Payroll.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/payroll/v1;payrollv1";
+option java_multiple_files = true;
+option java_outer_classname = "TaxWithholdingCalculationServiceProto";
+option java_package = "com.acme.payroll.v1";
+
+// Computes the figures of a tax withholding, such as totals, taxes, and estimates.
+service TaxWithholdingCalculationService {
+  // Calculates a tax withholding.
+  rpc CalculateTaxWithholding(CalculateTaxWithholdingRequest) returns (CalculateTaxWithholdingResponse);
+
+  // Estimates a tax withholding.
+  rpc EstimateTaxWithholding(EstimateTaxWithholdingRequest) returns (EstimateTaxWithholdingResponse);
+
+  // Quotes a tax withholding.
+  rpc QuoteTaxWithholding(QuoteTaxWithholdingRequest) returns (QuoteTaxWithholdingResponse);
+
+  // Compares a tax withholding.
+  rpc CompareTaxWithholdingOptions(CompareTaxWithholdingOptionsRequest) returns (CompareTaxWithholdingOptionsResponse);
+
+  // Recalculates a tax withholding.
+  rpc RecalculateTaxWithholdings(RecalculateTaxWithholdingsRequest) returns (RecalculateTaxWithholdingsResponse);
+
+  // Simulates a tax withholding.
+  rpc SimulateTaxWithholding(SimulateTaxWithholdingRequest) returns (SimulateTaxWithholdingResponse);
+
+  // Explains a tax withholding.
+  rpc ExplainTaxWithholdingCalculation(ExplainTaxWithholdingCalculationRequest) returns (ExplainTaxWithholdingCalculationResponse);
+}
+
+// The request of `CalculateTaxWithholding`.
+message CalculateTaxWithholdingRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string tax_withholding_id = 2;
+  TaxWithholding tax_withholding = 3;
+  CalculateTaxWithholdingRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CalculateTaxWithholding`.
+message CalculateTaxWithholdingResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated CalculateTaxWithholdingResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  TaxWithholding tax_withholding = 1;
+  CalculateTaxWithholdingResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `EstimateTaxWithholding`.
+message EstimateTaxWithholdingRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string tax_withholding_id = 2;
+  TaxWithholding tax_withholding = 3;
+  EstimateTaxWithholdingRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `EstimateTaxWithholding`.
+message EstimateTaxWithholdingResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated EstimateTaxWithholdingResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  TaxWithholding tax_withholding = 1;
+  EstimateTaxWithholdingResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `QuoteTaxWithholding`.
+message QuoteTaxWithholdingRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string tax_withholding_id = 2;
+  TaxWithholding tax_withholding = 3;
+  QuoteTaxWithholdingRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `QuoteTaxWithholding`.
+message QuoteTaxWithholdingResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated QuoteTaxWithholdingResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  TaxWithholding tax_withholding = 1;
+  QuoteTaxWithholdingResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CompareTaxWithholdingOptions`.
+message CompareTaxWithholdingOptionsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string tax_withholding_id = 2;
+  TaxWithholding tax_withholding = 3;
+  CompareTaxWithholdingOptionsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CompareTaxWithholdingOptions`.
+message CompareTaxWithholdingOptionsResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated CompareTaxWithholdingOptionsResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  TaxWithholding tax_withholding = 1;
+  CompareTaxWithholdingOptionsResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RecalculateTaxWithholdings`.
+message RecalculateTaxWithholdingsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string tax_withholding_id = 2;
+  TaxWithholding tax_withholding = 3;
+  RecalculateTaxWithholdingsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RecalculateTaxWithholdings`.
+message RecalculateTaxWithholdingsResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated RecalculateTaxWithholdingsResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  TaxWithholding tax_withholding = 1;
+  RecalculateTaxWithholdingsResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SimulateTaxWithholding`.
+message SimulateTaxWithholdingRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string tax_withholding_id = 2;
+  TaxWithholding tax_withholding = 3;
+  SimulateTaxWithholdingRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SimulateTaxWithholding`.
+message SimulateTaxWithholdingResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated SimulateTaxWithholdingResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  TaxWithholding tax_withholding = 1;
+  SimulateTaxWithholdingResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExplainTaxWithholdingCalculation`.
+message ExplainTaxWithholdingCalculationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string tax_withholding_id = 2;
+  TaxWithholding tax_withholding = 3;
+  ExplainTaxWithholdingCalculationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ExplainTaxWithholdingCalculation`.
+message ExplainTaxWithholdingCalculationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  TaxWithholding tax_withholding = 1;
+  ExplainTaxWithholdingCalculationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

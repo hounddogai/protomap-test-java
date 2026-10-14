@@ -1,0 +1,296 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.procurement.v1;
+
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/procurement/v1/procurement.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Procurement.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/procurement/v1;procurementv1";
+option java_multiple_files = true;
+option java_outer_classname = "PurchaseRequisitionWorkflowServiceProto";
+option java_package = "com.acme.procurement.v1";
+
+// Runs the long-lived workflow that takes a purchase requisition from start to finish.
+service PurchaseRequisitionWorkflowService {
+  // Starts a purchase requisition.
+  rpc StartPurchaseRequisitionWorkflow(StartPurchaseRequisitionWorkflowRequest) returns (StartPurchaseRequisitionWorkflowResponse);
+
+  // Advances a purchase requisition.
+  rpc AdvancePurchaseRequisitionWorkflow(AdvancePurchaseRequisitionWorkflowRequest) returns (AdvancePurchaseRequisitionWorkflowResponse);
+
+  // Cancels a purchase requisition.
+  rpc CancelPurchaseRequisitionWorkflow(CancelPurchaseRequisitionWorkflowRequest) returns (CancelPurchaseRequisitionWorkflowResponse);
+
+  // Retrys a purchase requisition.
+  rpc RetryPurchaseRequisitionWorkflow(RetryPurchaseRequisitionWorkflowRequest) returns (RetryPurchaseRequisitionWorkflowResponse);
+
+  // Resumes a purchase requisition.
+  rpc ResumePurchaseRequisitionWorkflow(ResumePurchaseRequisitionWorkflowRequest) returns (ResumePurchaseRequisitionWorkflowResponse);
+
+  // Returns a purchase requisition.
+  rpc InspectPurchaseRequisitionWorkflow(InspectPurchaseRequisitionWorkflowRequest) returns (InspectPurchaseRequisitionWorkflowResponse);
+
+  // Lists purchase requisitions a page at a time.
+  rpc ListPurchaseRequisitionWorkflows(ListPurchaseRequisitionWorkflowsRequest) returns (ListPurchaseRequisitionWorkflowsResponse);
+
+  // Signals a purchase requisition.
+  rpc SignalPurchaseRequisitionWorkflow(SignalPurchaseRequisitionWorkflowRequest) returns (SignalPurchaseRequisitionWorkflowResponse);
+}
+
+// The request of `StartPurchaseRequisitionWorkflow`.
+message StartPurchaseRequisitionWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string purchase_requisition_id = 2;
+  PurchaseRequisition purchase_requisition = 3;
+  StartPurchaseRequisitionWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `StartPurchaseRequisitionWorkflow`.
+message StartPurchaseRequisitionWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PurchaseRequisition purchase_requisition = 1;
+  StartPurchaseRequisitionWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `AdvancePurchaseRequisitionWorkflow`.
+message AdvancePurchaseRequisitionWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string purchase_requisition_id = 2;
+  PurchaseRequisition purchase_requisition = 3;
+  AdvancePurchaseRequisitionWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `AdvancePurchaseRequisitionWorkflow`.
+message AdvancePurchaseRequisitionWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PurchaseRequisition purchase_requisition = 1;
+  AdvancePurchaseRequisitionWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CancelPurchaseRequisitionWorkflow`.
+message CancelPurchaseRequisitionWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string purchase_requisition_id = 2;
+  PurchaseRequisition purchase_requisition = 3;
+  CancelPurchaseRequisitionWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CancelPurchaseRequisitionWorkflow`.
+message CancelPurchaseRequisitionWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PurchaseRequisition purchase_requisition = 1;
+  CancelPurchaseRequisitionWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RetryPurchaseRequisitionWorkflow`.
+message RetryPurchaseRequisitionWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string purchase_requisition_id = 2;
+  PurchaseRequisition purchase_requisition = 3;
+  RetryPurchaseRequisitionWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RetryPurchaseRequisitionWorkflow`.
+message RetryPurchaseRequisitionWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PurchaseRequisition purchase_requisition = 1;
+  RetryPurchaseRequisitionWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ResumePurchaseRequisitionWorkflow`.
+message ResumePurchaseRequisitionWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string purchase_requisition_id = 2;
+  PurchaseRequisition purchase_requisition = 3;
+  ResumePurchaseRequisitionWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ResumePurchaseRequisitionWorkflow`.
+message ResumePurchaseRequisitionWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PurchaseRequisition purchase_requisition = 1;
+  ResumePurchaseRequisitionWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `InspectPurchaseRequisitionWorkflow`.
+message InspectPurchaseRequisitionWorkflowRequest {
+  acme.common.v1.RequestContext context = 1;
+  string purchase_requisition_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `InspectPurchaseRequisitionWorkflow`.
+message InspectPurchaseRequisitionWorkflowResponse {
+  PurchaseRequisition purchase_requisition = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `ListPurchaseRequisitionWorkflows`.
+message ListPurchaseRequisitionWorkflowsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated PurchaseRequisitionStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListPurchaseRequisitionWorkflowsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListPurchaseRequisitionWorkflows`.
+message ListPurchaseRequisitionWorkflowsResponse {
+  repeated PurchaseRequisition purchase_requisitions = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SignalPurchaseRequisitionWorkflow`.
+message SignalPurchaseRequisitionWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string purchase_requisition_id = 2;
+  PurchaseRequisition purchase_requisition = 3;
+  SignalPurchaseRequisitionWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SignalPurchaseRequisitionWorkflow`.
+message SignalPurchaseRequisitionWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PurchaseRequisition purchase_requisition = 1;
+  SignalPurchaseRequisitionWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

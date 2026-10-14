@@ -1,0 +1,295 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.suppliers.v1;
+
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/identity/v1/refs.proto";
+import "acme/suppliers/v1/suppliers.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Suppliers.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/suppliers/v1;suppliersv1";
+option java_multiple_files = true;
+option java_outer_classname = "SupplierRiskApprovalServiceProto";
+option java_package = "com.acme.suppliers.v1";
+
+// Routes supplier risks through approval, with escalation and delegation.
+service SupplierRiskApprovalService {
+  // Submits a supplier risk.
+  rpc SubmitSupplierRisk(SubmitSupplierRiskRequest) returns (SubmitSupplierRiskResponse);
+
+  // Approves a supplier risk.
+  rpc ApproveSupplierRisk(ApproveSupplierRiskRequest) returns (ApproveSupplierRiskResponse);
+
+  // Rejects a supplier risk.
+  rpc RejectSupplierRisk(RejectSupplierRiskRequest) returns (RejectSupplierRiskResponse);
+
+  // Escalates a supplier risk.
+  rpc EscalateSupplierRisk(EscalateSupplierRiskRequest) returns (EscalateSupplierRiskResponse);
+
+  // Lists supplier risks a page at a time.
+  rpc ListPendingSupplierRisks(ListPendingSupplierRisksRequest) returns (ListPendingSupplierRisksResponse);
+
+  // Recalls a supplier risk.
+  rpc RecallSupplierRisk(RecallSupplierRiskRequest) returns (RecallSupplierRiskResponse);
+
+  // Returns a supplier risk.
+  rpc GetSupplierRiskApprovalStatus(GetSupplierRiskApprovalStatusRequest) returns (GetSupplierRiskApprovalStatusResponse);
+
+  // Comments a supplier risk.
+  rpc CommentSupplierRiskApproval(CommentSupplierRiskApprovalRequest) returns (CommentSupplierRiskApprovalResponse);
+}
+
+// The request of `SubmitSupplierRisk`.
+message SubmitSupplierRiskRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string supplier_risk_id = 2;
+  SupplierRisk supplier_risk = 3;
+  SubmitSupplierRiskRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SubmitSupplierRisk`.
+message SubmitSupplierRiskResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  SupplierRisk supplier_risk = 1;
+  SubmitSupplierRiskResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ApproveSupplierRisk`.
+message ApproveSupplierRiskRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string supplier_risk_id = 2;
+  SupplierRisk supplier_risk = 3;
+  ApproveSupplierRiskRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ApproveSupplierRisk`.
+message ApproveSupplierRiskResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  SupplierRisk supplier_risk = 1;
+  ApproveSupplierRiskResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RejectSupplierRisk`.
+message RejectSupplierRiskRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string supplier_risk_id = 2;
+  SupplierRisk supplier_risk = 3;
+  RejectSupplierRiskRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RejectSupplierRisk`.
+message RejectSupplierRiskResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  SupplierRisk supplier_risk = 1;
+  RejectSupplierRiskResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `EscalateSupplierRisk`.
+message EscalateSupplierRiskRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string supplier_risk_id = 2;
+  SupplierRisk supplier_risk = 3;
+  EscalateSupplierRiskRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `EscalateSupplierRisk`.
+message EscalateSupplierRiskResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  SupplierRisk supplier_risk = 1;
+  EscalateSupplierRiskResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ListPendingSupplierRisks`.
+message ListPendingSupplierRisksRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated SupplierRiskStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListPendingSupplierRisksRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListPendingSupplierRisks`.
+message ListPendingSupplierRisksResponse {
+  repeated SupplierRisk supplier_risks = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RecallSupplierRisk`.
+message RecallSupplierRiskRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string supplier_risk_id = 2;
+  SupplierRisk supplier_risk = 3;
+  RecallSupplierRiskRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RecallSupplierRisk`.
+message RecallSupplierRiskResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  SupplierRisk supplier_risk = 1;
+  RecallSupplierRiskResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetSupplierRiskApprovalStatus`.
+message GetSupplierRiskApprovalStatusRequest {
+  acme.common.v1.RequestContext context = 1;
+  string supplier_risk_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetSupplierRiskApprovalStatus`.
+message GetSupplierRiskApprovalStatusResponse {
+  SupplierRisk supplier_risk = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `CommentSupplierRiskApproval`.
+message CommentSupplierRiskApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string supplier_risk_id = 2;
+  SupplierRisk supplier_risk = 3;
+  CommentSupplierRiskApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CommentSupplierRiskApproval`.
+message CommentSupplierRiskApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  SupplierRisk supplier_risk = 1;
+  CommentSupplierRiskApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

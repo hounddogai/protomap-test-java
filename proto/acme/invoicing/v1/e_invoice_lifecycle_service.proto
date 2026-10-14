@@ -1,0 +1,294 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.invoicing.v1;
+
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/identity/v1/refs.proto";
+import "acme/invoicing/v1/invoicing.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Invoicing.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/invoicing/v1;invoicingv1";
+option java_multiple_files = true;
+option java_outer_classname = "EInvoiceLifecycleServiceProto";
+option java_package = "com.acme.invoicing.v1";
+
+// Moves an e invoice between the states of its lifecycle.
+service EInvoiceLifecycleService {
+  // Activates an e invoice.
+  rpc ActivateEInvoice(ActivateEInvoiceRequest) returns (ActivateEInvoiceResponse);
+
+  // Suspends an e invoice.
+  rpc SuspendEInvoice(SuspendEInvoiceRequest) returns (SuspendEInvoiceResponse);
+
+  // Reinstates an e invoice.
+  rpc ReinstateEInvoice(ReinstateEInvoiceRequest) returns (ReinstateEInvoiceResponse);
+
+  // Terminates an e invoice.
+  rpc TerminateEInvoice(TerminateEInvoiceRequest) returns (TerminateEInvoiceResponse);
+
+  // Renews an e invoice.
+  rpc RenewEInvoice(RenewEInvoiceRequest) returns (RenewEInvoiceResponse);
+
+  // Expires an e invoice.
+  rpc ExpireEInvoice(ExpireEInvoiceRequest) returns (ExpireEInvoiceResponse);
+
+  // Returns an e invoice.
+  rpc GetEInvoiceLifecycle(GetEInvoiceLifecycleRequest) returns (GetEInvoiceLifecycleResponse);
+
+  // Schedules an e invoice.
+  rpc ScheduleEInvoiceExpiry(ScheduleEInvoiceExpiryRequest) returns (ScheduleEInvoiceExpiryResponse);
+}
+
+// The request of `ActivateEInvoice`.
+message ActivateEInvoiceRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string e_invoice_id = 2;
+  ActivateEInvoiceRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ActivateEInvoice`.
+message ActivateEInvoiceResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  EInvoice e_invoice = 1;
+  ActivateEInvoiceResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SuspendEInvoice`.
+message SuspendEInvoiceRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string e_invoice_id = 2;
+  SuspendEInvoiceRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `SuspendEInvoice`.
+message SuspendEInvoiceResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  EInvoice e_invoice = 1;
+  SuspendEInvoiceResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ReinstateEInvoice`.
+message ReinstateEInvoiceRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string e_invoice_id = 2;
+  ReinstateEInvoiceRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ReinstateEInvoice`.
+message ReinstateEInvoiceResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  EInvoice e_invoice = 1;
+  ReinstateEInvoiceResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `TerminateEInvoice`.
+message TerminateEInvoiceRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string e_invoice_id = 2;
+  TerminateEInvoiceRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `TerminateEInvoice`.
+message TerminateEInvoiceResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  EInvoice e_invoice = 1;
+  TerminateEInvoiceResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RenewEInvoice`.
+message RenewEInvoiceRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string e_invoice_id = 2;
+  RenewEInvoiceRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `RenewEInvoice`.
+message RenewEInvoiceResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  EInvoice e_invoice = 1;
+  RenewEInvoiceResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExpireEInvoice`.
+message ExpireEInvoiceRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string e_invoice_id = 2;
+  ExpireEInvoiceRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ExpireEInvoice`.
+message ExpireEInvoiceResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  EInvoice e_invoice = 1;
+  ExpireEInvoiceResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetEInvoiceLifecycle`.
+message GetEInvoiceLifecycleRequest {
+  acme.common.v1.RequestContext context = 1;
+  string e_invoice_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetEInvoiceLifecycle`.
+message GetEInvoiceLifecycleResponse {
+  EInvoice e_invoice = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `ScheduleEInvoiceExpiry`.
+message ScheduleEInvoiceExpiryRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string e_invoice_id = 2;
+  EInvoice e_invoice = 3;
+  ScheduleEInvoiceExpiryRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ScheduleEInvoiceExpiry`.
+message ScheduleEInvoiceExpiryResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  EInvoice e_invoice = 1;
+  ScheduleEInvoiceExpiryResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

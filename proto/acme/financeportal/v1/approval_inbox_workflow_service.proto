@@ -1,0 +1,334 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.financeportal.v1;
+
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/financeportal/v1/financeportal.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Financeportal.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/financeportal/v1;financeportalv1";
+option java_multiple_files = true;
+option java_outer_classname = "ApprovalInboxWorkflowServiceProto";
+option java_package = "com.acme.financeportal.v1";
+
+// Runs the long-lived workflow that takes an approval inbox from start to finish.
+service ApprovalInboxWorkflowService {
+  // Starts an approval inbox.
+  rpc StartApprovalInboxWorkflow(StartApprovalInboxWorkflowRequest) returns (StartApprovalInboxWorkflowResponse);
+
+  // Advances an approval inbox.
+  rpc AdvanceApprovalInboxWorkflow(AdvanceApprovalInboxWorkflowRequest) returns (AdvanceApprovalInboxWorkflowResponse);
+
+  // Cancels an approval inbox.
+  rpc CancelApprovalInboxWorkflow(CancelApprovalInboxWorkflowRequest) returns (CancelApprovalInboxWorkflowResponse);
+
+  // Retrys an approval inbox.
+  rpc RetryApprovalInboxWorkflow(RetryApprovalInboxWorkflowRequest) returns (RetryApprovalInboxWorkflowResponse);
+
+  // Pauses an approval inbox.
+  rpc PauseApprovalInboxWorkflow(PauseApprovalInboxWorkflowRequest) returns (PauseApprovalInboxWorkflowResponse);
+
+  // Resumes an approval inbox.
+  rpc ResumeApprovalInboxWorkflow(ResumeApprovalInboxWorkflowRequest) returns (ResumeApprovalInboxWorkflowResponse);
+
+  // Returns an approval inbox.
+  rpc InspectApprovalInboxWorkflow(InspectApprovalInboxWorkflowRequest) returns (InspectApprovalInboxWorkflowResponse);
+
+  // Lists approval inboxes a page at a time.
+  rpc ListApprovalInboxWorkflows(ListApprovalInboxWorkflowsRequest) returns (ListApprovalInboxWorkflowsResponse);
+
+  // Signals an approval inbox.
+  rpc SignalApprovalInboxWorkflow(SignalApprovalInboxWorkflowRequest) returns (SignalApprovalInboxWorkflowResponse);
+}
+
+// The request of `StartApprovalInboxWorkflow`.
+message StartApprovalInboxWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string approval_inbox_id = 2;
+  ApprovalInbox approval_inbox = 3;
+  StartApprovalInboxWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `StartApprovalInboxWorkflow`.
+message StartApprovalInboxWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ApprovalInbox approval_inbox = 1;
+  StartApprovalInboxWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `AdvanceApprovalInboxWorkflow`.
+message AdvanceApprovalInboxWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string approval_inbox_id = 2;
+  ApprovalInbox approval_inbox = 3;
+  AdvanceApprovalInboxWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `AdvanceApprovalInboxWorkflow`.
+message AdvanceApprovalInboxWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ApprovalInbox approval_inbox = 1;
+  AdvanceApprovalInboxWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CancelApprovalInboxWorkflow`.
+message CancelApprovalInboxWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string approval_inbox_id = 2;
+  ApprovalInbox approval_inbox = 3;
+  CancelApprovalInboxWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CancelApprovalInboxWorkflow`.
+message CancelApprovalInboxWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ApprovalInbox approval_inbox = 1;
+  CancelApprovalInboxWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RetryApprovalInboxWorkflow`.
+message RetryApprovalInboxWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string approval_inbox_id = 2;
+  ApprovalInbox approval_inbox = 3;
+  RetryApprovalInboxWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RetryApprovalInboxWorkflow`.
+message RetryApprovalInboxWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ApprovalInbox approval_inbox = 1;
+  RetryApprovalInboxWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PauseApprovalInboxWorkflow`.
+message PauseApprovalInboxWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string approval_inbox_id = 2;
+  ApprovalInbox approval_inbox = 3;
+  PauseApprovalInboxWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PauseApprovalInboxWorkflow`.
+message PauseApprovalInboxWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ApprovalInbox approval_inbox = 1;
+  PauseApprovalInboxWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ResumeApprovalInboxWorkflow`.
+message ResumeApprovalInboxWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string approval_inbox_id = 2;
+  ApprovalInbox approval_inbox = 3;
+  ResumeApprovalInboxWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ResumeApprovalInboxWorkflow`.
+message ResumeApprovalInboxWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ApprovalInbox approval_inbox = 1;
+  ResumeApprovalInboxWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `InspectApprovalInboxWorkflow`.
+message InspectApprovalInboxWorkflowRequest {
+  acme.common.v1.RequestContext context = 1;
+  string approval_inbox_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `InspectApprovalInboxWorkflow`.
+message InspectApprovalInboxWorkflowResponse {
+  ApprovalInbox approval_inbox = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `ListApprovalInboxWorkflows`.
+message ListApprovalInboxWorkflowsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated ApprovalInboxStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListApprovalInboxWorkflowsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListApprovalInboxWorkflows`.
+message ListApprovalInboxWorkflowsResponse {
+  repeated ApprovalInbox approval_inboxes = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SignalApprovalInboxWorkflow`.
+message SignalApprovalInboxWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string approval_inbox_id = 2;
+  ApprovalInbox approval_inbox = 3;
+  SignalApprovalInboxWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SignalApprovalInboxWorkflow`.
+message SignalApprovalInboxWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ApprovalInbox approval_inbox = 1;
+  SignalApprovalInboxWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

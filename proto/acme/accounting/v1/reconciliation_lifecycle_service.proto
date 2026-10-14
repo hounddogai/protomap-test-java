@@ -1,0 +1,258 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.accounting.v1;
+
+import "acme/accounting/v1/accounting.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/identity/v1/refs.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Accounting.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/accounting/v1;accountingv1";
+option java_multiple_files = true;
+option java_outer_classname = "ReconciliationLifecycleServiceProto";
+option java_package = "com.acme.accounting.v1";
+
+// Moves a reconciliation between the states of its lifecycle.
+service ReconciliationLifecycleService {
+  // Activates a reconciliation.
+  rpc ActivateReconciliation(ActivateReconciliationRequest) returns (ActivateReconciliationResponse);
+
+  // Suspends a reconciliation.
+  rpc SuspendReconciliation(SuspendReconciliationRequest) returns (SuspendReconciliationResponse);
+
+  // Terminates a reconciliation.
+  rpc TerminateReconciliation(TerminateReconciliationRequest) returns (TerminateReconciliationResponse);
+
+  // Renews a reconciliation.
+  rpc RenewReconciliation(RenewReconciliationRequest) returns (RenewReconciliationResponse);
+
+  // Expires a reconciliation.
+  rpc ExpireReconciliation(ExpireReconciliationRequest) returns (ExpireReconciliationResponse);
+
+  // Returns a reconciliation.
+  rpc GetReconciliationLifecycle(GetReconciliationLifecycleRequest) returns (GetReconciliationLifecycleResponse);
+
+  // Schedules a reconciliation.
+  rpc ScheduleReconciliationExpiry(ScheduleReconciliationExpiryRequest) returns (ScheduleReconciliationExpiryResponse);
+}
+
+// The request of `ActivateReconciliation`.
+message ActivateReconciliationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string reconciliation_id = 2;
+  ActivateReconciliationRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ActivateReconciliation`.
+message ActivateReconciliationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Reconciliation reconciliation = 1;
+  ActivateReconciliationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SuspendReconciliation`.
+message SuspendReconciliationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string reconciliation_id = 2;
+  SuspendReconciliationRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `SuspendReconciliation`.
+message SuspendReconciliationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Reconciliation reconciliation = 1;
+  SuspendReconciliationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `TerminateReconciliation`.
+message TerminateReconciliationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string reconciliation_id = 2;
+  TerminateReconciliationRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `TerminateReconciliation`.
+message TerminateReconciliationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Reconciliation reconciliation = 1;
+  TerminateReconciliationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RenewReconciliation`.
+message RenewReconciliationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string reconciliation_id = 2;
+  RenewReconciliationRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `RenewReconciliation`.
+message RenewReconciliationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Reconciliation reconciliation = 1;
+  RenewReconciliationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExpireReconciliation`.
+message ExpireReconciliationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string reconciliation_id = 2;
+  ExpireReconciliationRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ExpireReconciliation`.
+message ExpireReconciliationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Reconciliation reconciliation = 1;
+  ExpireReconciliationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetReconciliationLifecycle`.
+message GetReconciliationLifecycleRequest {
+  acme.common.v1.RequestContext context = 1;
+  string reconciliation_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetReconciliationLifecycle`.
+message GetReconciliationLifecycleResponse {
+  Reconciliation reconciliation = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `ScheduleReconciliationExpiry`.
+message ScheduleReconciliationExpiryRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string reconciliation_id = 2;
+  Reconciliation reconciliation = 3;
+  ScheduleReconciliationExpiryRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ScheduleReconciliationExpiry`.
+message ScheduleReconciliationExpiryResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Reconciliation reconciliation = 1;
+  ScheduleReconciliationExpiryResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

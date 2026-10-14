@@ -1,0 +1,223 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.compliance.v1;
+
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/compliance/v1/compliance.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Compliance.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/compliance/v1;compliancev1";
+option java_multiple_files = true;
+option java_outer_classname = "AttestationValidationServiceProto";
+option java_package = "com.acme.compliance.v1";
+
+// Checks attestations against the rules before anything acts on them.
+service AttestationValidationService {
+  // Validates an attestation.
+  rpc ValidateAttestation(ValidateAttestationRequest) returns (ValidateAttestationResponse);
+
+  // Previews an attestation.
+  rpc PreviewAttestation(PreviewAttestationRequest) returns (PreviewAttestationResponse);
+
+  // Normalizes an attestation.
+  rpc NormalizeAttestation(NormalizeAttestationRequest) returns (NormalizeAttestationResponse);
+
+  // Explains an attestation.
+  rpc ExplainAttestationDecision(ExplainAttestationDecisionRequest) returns (ExplainAttestationDecisionResponse);
+
+  // Lints an attestation.
+  rpc LintAttestations(LintAttestationsRequest) returns (LintAttestationsResponse);
+
+  // Returns an attestation.
+  rpc GetAttestationRules(GetAttestationRulesRequest) returns (GetAttestationRulesResponse);
+}
+
+// The request of `ValidateAttestation`.
+message ValidateAttestationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string attestation_id = 2;
+  Attestation attestation = 3;
+  ValidateAttestationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ValidateAttestation`.
+message ValidateAttestationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Attestation attestation = 1;
+  ValidateAttestationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PreviewAttestation`.
+message PreviewAttestationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string attestation_id = 2;
+  Attestation attestation = 3;
+  PreviewAttestationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PreviewAttestation`.
+message PreviewAttestationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Attestation attestation = 1;
+  PreviewAttestationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `NormalizeAttestation`.
+message NormalizeAttestationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string attestation_id = 2;
+  Attestation attestation = 3;
+  NormalizeAttestationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `NormalizeAttestation`.
+message NormalizeAttestationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Attestation attestation = 1;
+  NormalizeAttestationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExplainAttestationDecision`.
+message ExplainAttestationDecisionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string attestation_id = 2;
+  Attestation attestation = 3;
+  ExplainAttestationDecisionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ExplainAttestationDecision`.
+message ExplainAttestationDecisionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Attestation attestation = 1;
+  ExplainAttestationDecisionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `LintAttestations`.
+message LintAttestationsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string attestation_id = 2;
+  Attestation attestation = 3;
+  LintAttestationsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `LintAttestations`.
+message LintAttestationsResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Attestation attestation = 1;
+  LintAttestationsResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetAttestationRules`.
+message GetAttestationRulesRequest {
+  acme.common.v1.RequestContext context = 1;
+  string attestation_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetAttestationRules`.
+message GetAttestationRulesResponse {
+  Attestation attestation = 1;
+  acme.common.v1.OperationResult result = 2;
+}

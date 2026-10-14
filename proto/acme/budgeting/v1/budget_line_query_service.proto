@@ -1,0 +1,245 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.budgeting.v1;
+
+import "acme/budgeting/v1/budgeting.proto";
+import "acme/common/v1/audit.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Budgeting.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/budgeting/v1;budgetingv1";
+option java_multiple_files = true;
+option java_outer_classname = "BudgetLineQueryServiceProto";
+option java_package = "com.acme.budgeting.v1";
+
+// Answers read-only questions about budget lines, for screens and reports.
+service BudgetLineQueryService {
+  // Returns a budget line.
+  rpc LookupBudgetLine(LookupBudgetLineRequest) returns (LookupBudgetLineResponse);
+
+  // Lists budget lines a page at a time.
+  rpc BrowseBudgetLines(BrowseBudgetLinesRequest) returns (BrowseBudgetLinesResponse);
+
+  // Lists budget lines a page at a time.
+  rpc FindBudgetLines(FindBudgetLinesRequest) returns (FindBudgetLinesResponse);
+
+  // Counts budget lines by status.
+  rpc CountBudgetLines(CountBudgetLinesRequest) returns (CountBudgetLinesResponse);
+
+  // Returns several budget lines at once.
+  rpc ResolveBudgetLines(ResolveBudgetLinesRequest) returns (ResolveBudgetLinesResponse);
+
+  // Streams every matching budget line.
+  rpc ExportBudgetLines(ExportBudgetLinesRequest) returns (stream ExportBudgetLinesResponse);
+
+  // Summarizes a budget line.
+  rpc SummarizeBudgetLines(SummarizeBudgetLinesRequest) returns (SummarizeBudgetLinesResponse);
+
+  // Lists budget lines a page at a time.
+  rpc SuggestBudgetLines(SuggestBudgetLinesRequest) returns (SuggestBudgetLinesResponse);
+
+  // Returns a budget line.
+  rpc PeekBudgetLine(PeekBudgetLineRequest) returns (PeekBudgetLineResponse);
+}
+
+// The request of `LookupBudgetLine`.
+message LookupBudgetLineRequest {
+  acme.common.v1.RequestContext context = 1;
+  string budget_line_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `LookupBudgetLine`.
+message LookupBudgetLineResponse {
+  BudgetLine budget_line = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `BrowseBudgetLines`.
+message BrowseBudgetLinesRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated BudgetLineStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  BrowseBudgetLinesRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `BrowseBudgetLines`.
+message BrowseBudgetLinesResponse {
+  repeated BudgetLine budget_lines = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `FindBudgetLines`.
+message FindBudgetLinesRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated BudgetLineStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  FindBudgetLinesRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `FindBudgetLines`.
+message FindBudgetLinesResponse {
+  repeated BudgetLine budget_lines = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CountBudgetLines`.
+message CountBudgetLinesRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated BudgetLineStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  CountBudgetLinesRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `CountBudgetLines`.
+message CountBudgetLinesResponse {
+  int64 count = 1;
+  map<string, int64> by_status = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ResolveBudgetLines`.
+message ResolveBudgetLinesRequest {
+  acme.common.v1.RequestContext context = 1;
+  repeated string budget_line_ids = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `ResolveBudgetLines`.
+message ResolveBudgetLinesResponse {
+  repeated BudgetLine budget_lines = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExportBudgetLines`.
+message ExportBudgetLinesRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated BudgetLineStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  ExportBudgetLinesRequest.Filter filter = 2;
+  string format = 3;
+  google.protobuf.FieldMask fields = 4;
+  string destination_uri = 5;
+}
+
+// The response of `ExportBudgetLines`.
+message ExportBudgetLinesResponse {
+  BudgetLine budget_line = 1;
+  string change_type = 2;
+  google.protobuf.Timestamp changed_at = 3;
+  int64 sequence = 4;
+  acme.common.v1.OperationResult result = 5;
+}
+
+// The request of `SummarizeBudgetLines`.
+message SummarizeBudgetLinesRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string format = 1;
+    acme.common.v1.TimeWindow period = 2;
+    repeated string recipient_emails = 3;
+    string cron = 4;
+    map<string, string> filters = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string budget_line_id = 2;
+  SummarizeBudgetLinesRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `SummarizeBudgetLines`.
+message SummarizeBudgetLinesResponse {
+  string report_id = 1;
+  string download_uri = 2;
+  map<string, string> summary = 3;
+  acme.common.v1.TimeWindow period = 4;
+  acme.common.v1.OperationResult result = 5;
+}
+
+// The request of `SuggestBudgetLines`.
+message SuggestBudgetLinesRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated BudgetLineStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  SuggestBudgetLinesRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `SuggestBudgetLines`.
+message SuggestBudgetLinesResponse {
+  repeated BudgetLine budget_lines = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PeekBudgetLine`.
+message PeekBudgetLineRequest {
+  acme.common.v1.RequestContext context = 1;
+  string budget_line_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `PeekBudgetLine`.
+message PeekBudgetLineResponse {
+  BudgetLine budget_line = 1;
+  acme.common.v1.OperationResult result = 2;
+}

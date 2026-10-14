@@ -1,0 +1,260 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.assets.v1;
+
+import "acme/assets/v1/assets.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Assets.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/assets/v1;assetsv1";
+option java_multiple_files = true;
+option java_outer_classname = "AssetTransferValidationServiceProto";
+option java_package = "com.acme.assets.v1";
+
+// Checks asset transfers against the rules before anything acts on them.
+service AssetTransferValidationService {
+  // Validates an asset transfer.
+  rpc ValidateAssetTransfer(ValidateAssetTransferRequest) returns (ValidateAssetTransferResponse);
+
+  // Previews an asset transfer.
+  rpc PreviewAssetTransfer(PreviewAssetTransferRequest) returns (PreviewAssetTransferResponse);
+
+  // Checks an asset transfer.
+  rpc CheckAssetTransferEligibility(CheckAssetTransferEligibilityRequest) returns (CheckAssetTransferEligibilityResponse);
+
+  // Normalizes an asset transfer.
+  rpc NormalizeAssetTransfer(NormalizeAssetTransferRequest) returns (NormalizeAssetTransferResponse);
+
+  // Explains an asset transfer.
+  rpc ExplainAssetTransferDecision(ExplainAssetTransferDecisionRequest) returns (ExplainAssetTransferDecisionResponse);
+
+  // Lints an asset transfer.
+  rpc LintAssetTransfers(LintAssetTransfersRequest) returns (LintAssetTransfersResponse);
+
+  // Returns an asset transfer.
+  rpc GetAssetTransferRules(GetAssetTransferRulesRequest) returns (GetAssetTransferRulesResponse);
+}
+
+// The request of `ValidateAssetTransfer`.
+message ValidateAssetTransferRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string asset_transfer_id = 2;
+  AssetTransfer asset_transfer = 3;
+  ValidateAssetTransferRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ValidateAssetTransfer`.
+message ValidateAssetTransferResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  AssetTransfer asset_transfer = 1;
+  ValidateAssetTransferResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PreviewAssetTransfer`.
+message PreviewAssetTransferRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string asset_transfer_id = 2;
+  AssetTransfer asset_transfer = 3;
+  PreviewAssetTransferRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PreviewAssetTransfer`.
+message PreviewAssetTransferResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  AssetTransfer asset_transfer = 1;
+  PreviewAssetTransferResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CheckAssetTransferEligibility`.
+message CheckAssetTransferEligibilityRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string asset_transfer_id = 2;
+  AssetTransfer asset_transfer = 3;
+  CheckAssetTransferEligibilityRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CheckAssetTransferEligibility`.
+message CheckAssetTransferEligibilityResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  AssetTransfer asset_transfer = 1;
+  CheckAssetTransferEligibilityResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `NormalizeAssetTransfer`.
+message NormalizeAssetTransferRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string asset_transfer_id = 2;
+  AssetTransfer asset_transfer = 3;
+  NormalizeAssetTransferRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `NormalizeAssetTransfer`.
+message NormalizeAssetTransferResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  AssetTransfer asset_transfer = 1;
+  NormalizeAssetTransferResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExplainAssetTransferDecision`.
+message ExplainAssetTransferDecisionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string asset_transfer_id = 2;
+  AssetTransfer asset_transfer = 3;
+  ExplainAssetTransferDecisionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ExplainAssetTransferDecision`.
+message ExplainAssetTransferDecisionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  AssetTransfer asset_transfer = 1;
+  ExplainAssetTransferDecisionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `LintAssetTransfers`.
+message LintAssetTransfersRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string asset_transfer_id = 2;
+  AssetTransfer asset_transfer = 3;
+  LintAssetTransfersRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `LintAssetTransfers`.
+message LintAssetTransfersResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  AssetTransfer asset_transfer = 1;
+  LintAssetTransfersResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetAssetTransferRules`.
+message GetAssetTransferRulesRequest {
+  acme.common.v1.RequestContext context = 1;
+  string asset_transfer_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetAssetTransferRules`.
+message GetAssetTransferRulesResponse {
+  AssetTransfer asset_transfer = 1;
+  acme.common.v1.OperationResult result = 2;
+}

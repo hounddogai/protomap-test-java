@@ -1,0 +1,333 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.banking.v1;
+
+import "acme/banking/v1/banking.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/identity/v1/refs.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Banking.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/banking/v1;bankingv1";
+option java_multiple_files = true;
+option java_outer_classname = "MandateApprovalServiceProto";
+option java_package = "com.acme.banking.v1";
+
+// Routes mandates through approval, with escalation and delegation.
+service MandateApprovalService {
+  // Submits a mandate.
+  rpc SubmitMandate(SubmitMandateRequest) returns (SubmitMandateResponse);
+
+  // Approves a mandate.
+  rpc ApproveMandate(ApproveMandateRequest) returns (ApproveMandateResponse);
+
+  // Rejects a mandate.
+  rpc RejectMandate(RejectMandateRequest) returns (RejectMandateResponse);
+
+  // Escalates a mandate.
+  rpc EscalateMandate(EscalateMandateRequest) returns (EscalateMandateResponse);
+
+  // Lists mandates a page at a time.
+  rpc ListPendingMandates(ListPendingMandatesRequest) returns (ListPendingMandatesResponse);
+
+  // Delegates a mandate.
+  rpc DelegateMandateApproval(DelegateMandateApprovalRequest) returns (DelegateMandateApprovalResponse);
+
+  // Recalls a mandate.
+  rpc RecallMandate(RecallMandateRequest) returns (RecallMandateResponse);
+
+  // Returns a mandate.
+  rpc GetMandateApprovalStatus(GetMandateApprovalStatusRequest) returns (GetMandateApprovalStatusResponse);
+
+  // Comments a mandate.
+  rpc CommentMandateApproval(CommentMandateApprovalRequest) returns (CommentMandateApprovalResponse);
+}
+
+// The request of `SubmitMandate`.
+message SubmitMandateRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string mandate_id = 2;
+  Mandate mandate = 3;
+  SubmitMandateRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SubmitMandate`.
+message SubmitMandateResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Mandate mandate = 1;
+  SubmitMandateResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ApproveMandate`.
+message ApproveMandateRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string mandate_id = 2;
+  Mandate mandate = 3;
+  ApproveMandateRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ApproveMandate`.
+message ApproveMandateResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Mandate mandate = 1;
+  ApproveMandateResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RejectMandate`.
+message RejectMandateRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string mandate_id = 2;
+  Mandate mandate = 3;
+  RejectMandateRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RejectMandate`.
+message RejectMandateResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Mandate mandate = 1;
+  RejectMandateResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `EscalateMandate`.
+message EscalateMandateRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string mandate_id = 2;
+  Mandate mandate = 3;
+  EscalateMandateRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `EscalateMandate`.
+message EscalateMandateResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Mandate mandate = 1;
+  EscalateMandateResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ListPendingMandates`.
+message ListPendingMandatesRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated MandateStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListPendingMandatesRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListPendingMandates`.
+message ListPendingMandatesResponse {
+  repeated Mandate mandates = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `DelegateMandateApproval`.
+message DelegateMandateApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string mandate_id = 2;
+  Mandate mandate = 3;
+  DelegateMandateApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `DelegateMandateApproval`.
+message DelegateMandateApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Mandate mandate = 1;
+  DelegateMandateApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RecallMandate`.
+message RecallMandateRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string mandate_id = 2;
+  Mandate mandate = 3;
+  RecallMandateRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RecallMandate`.
+message RecallMandateResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Mandate mandate = 1;
+  RecallMandateResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetMandateApprovalStatus`.
+message GetMandateApprovalStatusRequest {
+  acme.common.v1.RequestContext context = 1;
+  string mandate_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetMandateApprovalStatus`.
+message GetMandateApprovalStatusResponse {
+  Mandate mandate = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `CommentMandateApproval`.
+message CommentMandateApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string mandate_id = 2;
+  Mandate mandate = 3;
+  CommentMandateApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CommentMandateApproval`.
+message CommentMandateApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Mandate mandate = 1;
+  CommentMandateApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

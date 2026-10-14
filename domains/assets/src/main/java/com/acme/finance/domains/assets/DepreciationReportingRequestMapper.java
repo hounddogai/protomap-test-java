@@ -1,0 +1,84 @@
+package com.acme.finance.domains.assets;
+
+import com.acme.assets.v1.AssetTransfer;
+import com.acme.assets.v1.AssetTransferBankSettlement;
+import com.acme.assets.v1.AssetTransferSyncServiceGrpc;
+import com.acme.assets.v1.AssetTransferValidationServiceGrpc;
+import com.acme.assets.v1.CheckAssetTransferEligibilityRequest;
+import com.acme.assets.v1.CheckAssetTransferEligibilityResponse;
+import com.acme.assets.v1.CheckDepreciationEligibilityRequest;
+import com.acme.assets.v1.CheckDepreciationEligibilityResponse;
+import com.acme.assets.v1.DeleteDepreciationReportRequest;
+import com.acme.assets.v1.DeleteDepreciationReportResponse;
+import com.acme.assets.v1.Depreciation;
+import com.acme.assets.v1.DepreciationParticipant;
+import com.acme.assets.v1.DepreciationQueryServiceGrpc;
+import com.acme.assets.v1.DepreciationValidationServiceGrpc;
+import com.acme.assets.v1.FetchDepreciationReportRequest;
+import com.acme.assets.v1.FetchDepreciationReportResponse;
+import com.acme.assets.v1.FixedAssetServiceGrpc;
+import com.acme.assets.v1.GenerateDepreciationReportRequest;
+import com.acme.assets.v1.GenerateDepreciationReportResponse;
+import com.acme.assets.v1.GetDepreciationRulesRequest;
+import com.acme.assets.v1.GetDepreciationRulesResponse;
+import com.acme.assets.v1.ListDepreciationReportsRequest;
+import com.acme.assets.v1.ListDepreciationReportsResponse;
+import com.acme.assets.v1.PeekDepreciationRequest;
+import com.acme.assets.v1.PeekDepreciationResponse;
+import com.acme.assets.v1.PullAssetTransfersRequest;
+import com.acme.assets.v1.PullAssetTransfersResponse;
+import com.acme.assets.v1.QuoteAssetTransferRequest;
+import com.acme.assets.v1.QuoteAssetTransferResponse;
+import com.acme.assets.v1.ScoreDepreciationRequest;
+import com.acme.assets.v1.ScoreDepreciationResponse;
+import com.acme.assets.v1.ShareDepreciationReportRequest;
+import com.acme.assets.v1.ShareDepreciationReportResponse;
+import com.acme.assets.v1.StreamDepreciationMetricsRequest;
+import com.acme.assets.v1.StreamDepreciationMetricsResponse;
+import com.acme.assets.v1.WatchFixedAssetsRequest;
+import com.acme.assets.v1.WatchFixedAssetsResponse;
+import com.acme.audit.v1.AuditTrailExportServiceGrpc;
+import com.acme.audit.v1.ListAuditTrailExportsRequest;
+import com.acme.audit.v1.ListAuditTrailExportsResponse;
+import com.acme.common.v1.AuditInfo;
+import com.acme.common.v1.ContactInfo;
+import com.acme.common.v1.OperationResult;
+import com.acme.common.v1.PostalAddress;
+import com.acme.finance.platform.ChannelRegistry;
+import com.acme.finance.platform.DispatchCommand;
+import com.acme.finance.platform.JsonCodec;
+import com.acme.finance.platform.RpcSupport;
+import com.acme.identity.v1.CloneUserRequest;
+import com.acme.identity.v1.CloneUserResponse;
+import com.acme.identity.v1.User;
+import com.acme.identity.v1.UserRef;
+import com.acme.identity.v1.UserServiceGrpc;
+import com.acme.insurance.v1.CoverageReportingServiceGrpc;
+import com.acme.insurance.v1.ScheduleCoverageReportRequest;
+import com.acme.insurance.v1.ScheduleCoverageReportResponse;
+import com.acme.ledger.v1.FiscalPeriodNotificationServiceGrpc;
+import com.acme.ledger.v1.LedgerAccount;
+import com.acme.ledger.v1.LedgerAccountHistoryServiceGrpc;
+import com.acme.ledger.v1.RevertLedgerAccountRequest;
+import com.acme.ledger.v1.RevertLedgerAccountResponse;
+import com.acme.ledger.v1.StreamFiscalPeriodNoticesRequest;
+import com.acme.ledger.v1.StreamFiscalPeriodNoticesResponse;
+import com.google.protobuf.Any;
+import io.grpc.CallOptions;
+import io.grpc.MethodDescriptor;
+import io.grpc.protobuf.ProtoUtils;
+import io.grpc.stub.ClientCalls;
+import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.stereotype.Service;
+
+/**
+ * Maps workflow inputs to downstream contracts. Implementations keep wire construction explicit.
+ */
+public interface DepreciationReportingRequestMapper {
+    GetDepreciationRulesRequest generateDepreciationReportStage1(GenerateDepreciationReportRequest request);
+}

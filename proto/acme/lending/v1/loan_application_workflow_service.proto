@@ -1,0 +1,305 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.lending.v1;
+
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/lending/v1/lending.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Lending.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/lending/v1;lendingv1";
+option java_multiple_files = true;
+option java_outer_classname = "LoanApplicationWorkflowServiceProto";
+option java_package = "com.acme.lending.v1";
+
+// Runs the long-lived workflow that takes a loan application from start to finish.
+service LoanApplicationWorkflowService {
+  // Starts a loan application.
+  rpc StartLoanApplicationWorkflow(StartLoanApplicationWorkflowRequest) returns (StartLoanApplicationWorkflowResponse);
+
+  // Advances a loan application.
+  rpc AdvanceLoanApplicationWorkflow(AdvanceLoanApplicationWorkflowRequest) returns (AdvanceLoanApplicationWorkflowResponse);
+
+  // Cancels a loan application.
+  rpc CancelLoanApplicationWorkflow(CancelLoanApplicationWorkflowRequest) returns (CancelLoanApplicationWorkflowResponse);
+
+  // Retrys a loan application.
+  rpc RetryLoanApplicationWorkflow(RetryLoanApplicationWorkflowRequest) returns (RetryLoanApplicationWorkflowResponse);
+
+  // Pauses a loan application.
+  rpc PauseLoanApplicationWorkflow(PauseLoanApplicationWorkflowRequest) returns (PauseLoanApplicationWorkflowResponse);
+
+  // Resumes a loan application.
+  rpc ResumeLoanApplicationWorkflow(ResumeLoanApplicationWorkflowRequest) returns (ResumeLoanApplicationWorkflowResponse);
+
+  // Returns a loan application.
+  rpc InspectLoanApplicationWorkflow(InspectLoanApplicationWorkflowRequest) returns (InspectLoanApplicationWorkflowResponse);
+
+  // Signals a loan application.
+  rpc SignalLoanApplicationWorkflow(SignalLoanApplicationWorkflowRequest) returns (SignalLoanApplicationWorkflowResponse);
+}
+
+// The request of `StartLoanApplicationWorkflow`.
+message StartLoanApplicationWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string loan_application_id = 2;
+  LoanApplication loan_application = 3;
+  StartLoanApplicationWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `StartLoanApplicationWorkflow`.
+message StartLoanApplicationWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LoanApplication loan_application = 1;
+  StartLoanApplicationWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `AdvanceLoanApplicationWorkflow`.
+message AdvanceLoanApplicationWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string loan_application_id = 2;
+  LoanApplication loan_application = 3;
+  AdvanceLoanApplicationWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `AdvanceLoanApplicationWorkflow`.
+message AdvanceLoanApplicationWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LoanApplication loan_application = 1;
+  AdvanceLoanApplicationWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CancelLoanApplicationWorkflow`.
+message CancelLoanApplicationWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string loan_application_id = 2;
+  LoanApplication loan_application = 3;
+  CancelLoanApplicationWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CancelLoanApplicationWorkflow`.
+message CancelLoanApplicationWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LoanApplication loan_application = 1;
+  CancelLoanApplicationWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RetryLoanApplicationWorkflow`.
+message RetryLoanApplicationWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string loan_application_id = 2;
+  LoanApplication loan_application = 3;
+  RetryLoanApplicationWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RetryLoanApplicationWorkflow`.
+message RetryLoanApplicationWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LoanApplication loan_application = 1;
+  RetryLoanApplicationWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PauseLoanApplicationWorkflow`.
+message PauseLoanApplicationWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string loan_application_id = 2;
+  LoanApplication loan_application = 3;
+  PauseLoanApplicationWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PauseLoanApplicationWorkflow`.
+message PauseLoanApplicationWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LoanApplication loan_application = 1;
+  PauseLoanApplicationWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ResumeLoanApplicationWorkflow`.
+message ResumeLoanApplicationWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string loan_application_id = 2;
+  LoanApplication loan_application = 3;
+  ResumeLoanApplicationWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ResumeLoanApplicationWorkflow`.
+message ResumeLoanApplicationWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LoanApplication loan_application = 1;
+  ResumeLoanApplicationWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `InspectLoanApplicationWorkflow`.
+message InspectLoanApplicationWorkflowRequest {
+  acme.common.v1.RequestContext context = 1;
+  string loan_application_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `InspectLoanApplicationWorkflow`.
+message InspectLoanApplicationWorkflowResponse {
+  LoanApplication loan_application = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `SignalLoanApplicationWorkflow`.
+message SignalLoanApplicationWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string loan_application_id = 2;
+  LoanApplication loan_application = 3;
+  SignalLoanApplicationWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SignalLoanApplicationWorkflow`.
+message SignalLoanApplicationWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LoanApplication loan_application = 1;
+  SignalLoanApplicationWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

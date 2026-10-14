@@ -1,0 +1,305 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.suppliers.v1;
+
+import "acme/common/v1/address.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/money.proto";
+import "acme/common/v1/operation.proto";
+import "acme/suppliers/v1/suppliers.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Suppliers.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/suppliers/v1;suppliersv1";
+option java_multiple_files = true;
+option java_outer_classname = "SupplierRiskValidationServiceProto";
+option java_package = "com.acme.suppliers.v1";
+
+// Checks supplier risks against the rules before anything acts on them.
+service SupplierRiskValidationService {
+  // Validates a supplier risk.
+  rpc ValidateSupplierRisk(ValidateSupplierRiskRequest) returns (ValidateSupplierRiskResponse);
+
+  // Previews a supplier risk.
+  rpc PreviewSupplierRisk(PreviewSupplierRiskRequest) returns (PreviewSupplierRiskResponse);
+
+  // Checks a supplier risk.
+  rpc CheckSupplierRiskEligibility(CheckSupplierRiskEligibilityRequest) returns (CheckSupplierRiskEligibilityResponse);
+
+  // Normalizes a supplier risk.
+  rpc NormalizeSupplierRisk(NormalizeSupplierRiskRequest) returns (NormalizeSupplierRiskResponse);
+
+  // Explains a supplier risk.
+  rpc ExplainSupplierRiskDecision(ExplainSupplierRiskDecisionRequest) returns (ExplainSupplierRiskDecisionResponse);
+
+  // Scores a supplier risk.
+  rpc ScoreSupplierRisk(ScoreSupplierRiskRequest) returns (ScoreSupplierRiskResponse);
+
+  // Lints a supplier risk.
+  rpc LintSupplierRisks(LintSupplierRisksRequest) returns (LintSupplierRisksResponse);
+
+  // Returns a supplier risk.
+  rpc GetSupplierRiskRules(GetSupplierRiskRulesRequest) returns (GetSupplierRiskRulesResponse);
+}
+
+// The request of `ValidateSupplierRisk`.
+message ValidateSupplierRiskRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string supplier_risk_id = 2;
+  SupplierRisk supplier_risk = 3;
+  ValidateSupplierRiskRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ValidateSupplierRisk`.
+message ValidateSupplierRiskResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  SupplierRisk supplier_risk = 1;
+  ValidateSupplierRiskResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PreviewSupplierRisk`.
+message PreviewSupplierRiskRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string supplier_risk_id = 2;
+  SupplierRisk supplier_risk = 3;
+  PreviewSupplierRiskRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PreviewSupplierRisk`.
+message PreviewSupplierRiskResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  SupplierRisk supplier_risk = 1;
+  PreviewSupplierRiskResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CheckSupplierRiskEligibility`.
+message CheckSupplierRiskEligibilityRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string supplier_risk_id = 2;
+  SupplierRisk supplier_risk = 3;
+  CheckSupplierRiskEligibilityRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CheckSupplierRiskEligibility`.
+message CheckSupplierRiskEligibilityResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  SupplierRisk supplier_risk = 1;
+  CheckSupplierRiskEligibilityResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `NormalizeSupplierRisk`.
+message NormalizeSupplierRiskRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string supplier_risk_id = 2;
+  SupplierRisk supplier_risk = 3;
+  NormalizeSupplierRiskRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `NormalizeSupplierRisk`.
+message NormalizeSupplierRiskResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  SupplierRisk supplier_risk = 1;
+  NormalizeSupplierRiskResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExplainSupplierRiskDecision`.
+message ExplainSupplierRiskDecisionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string supplier_risk_id = 2;
+  SupplierRisk supplier_risk = 3;
+  ExplainSupplierRiskDecisionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ExplainSupplierRiskDecision`.
+message ExplainSupplierRiskDecisionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  SupplierRisk supplier_risk = 1;
+  ExplainSupplierRiskDecisionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ScoreSupplierRisk`.
+message ScoreSupplierRiskRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string supplier_risk_id = 2;
+  SupplierRisk supplier_risk = 3;
+  ScoreSupplierRiskRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ScoreSupplierRisk`.
+message ScoreSupplierRiskResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated ScoreSupplierRiskResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  SupplierRisk supplier_risk = 1;
+  ScoreSupplierRiskResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `LintSupplierRisks`.
+message LintSupplierRisksRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string supplier_risk_id = 2;
+  SupplierRisk supplier_risk = 3;
+  LintSupplierRisksRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `LintSupplierRisks`.
+message LintSupplierRisksResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  SupplierRisk supplier_risk = 1;
+  LintSupplierRisksResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetSupplierRiskRules`.
+message GetSupplierRiskRulesRequest {
+  acme.common.v1.RequestContext context = 1;
+  string supplier_risk_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetSupplierRiskRules`.
+message GetSupplierRiskRulesResponse {
+  SupplierRisk supplier_risk = 1;
+  acme.common.v1.OperationResult result = 2;
+}

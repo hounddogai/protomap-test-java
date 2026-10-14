@@ -1,0 +1,304 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.treasury.v1;
+
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/identity/v1/refs.proto";
+import "acme/treasury/v1/treasury.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Treasury.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/treasury/v1;treasuryv1";
+option java_multiple_files = true;
+option java_outer_classname = "LiquidityForecastApprovalServiceProto";
+option java_package = "com.acme.treasury.v1";
+
+// Routes liquidity forecasts through approval, with escalation and delegation.
+service LiquidityForecastApprovalService {
+  // Submits a liquidity forecast.
+  rpc SubmitLiquidityForecast(SubmitLiquidityForecastRequest) returns (SubmitLiquidityForecastResponse);
+
+  // Approves a liquidity forecast.
+  rpc ApproveLiquidityForecast(ApproveLiquidityForecastRequest) returns (ApproveLiquidityForecastResponse);
+
+  // Rejects a liquidity forecast.
+  rpc RejectLiquidityForecast(RejectLiquidityForecastRequest) returns (RejectLiquidityForecastResponse);
+
+  // Escalates a liquidity forecast.
+  rpc EscalateLiquidityForecast(EscalateLiquidityForecastRequest) returns (EscalateLiquidityForecastResponse);
+
+  // Delegates a liquidity forecast.
+  rpc DelegateLiquidityForecastApproval(DelegateLiquidityForecastApprovalRequest) returns (DelegateLiquidityForecastApprovalResponse);
+
+  // Recalls a liquidity forecast.
+  rpc RecallLiquidityForecast(RecallLiquidityForecastRequest) returns (RecallLiquidityForecastResponse);
+
+  // Returns a liquidity forecast.
+  rpc GetLiquidityForecastApprovalStatus(GetLiquidityForecastApprovalStatusRequest) returns (GetLiquidityForecastApprovalStatusResponse);
+
+  // Comments a liquidity forecast.
+  rpc CommentLiquidityForecastApproval(CommentLiquidityForecastApprovalRequest) returns (CommentLiquidityForecastApprovalResponse);
+}
+
+// The request of `SubmitLiquidityForecast`.
+message SubmitLiquidityForecastRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string liquidity_forecast_id = 2;
+  LiquidityForecast liquidity_forecast = 3;
+  SubmitLiquidityForecastRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SubmitLiquidityForecast`.
+message SubmitLiquidityForecastResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LiquidityForecast liquidity_forecast = 1;
+  SubmitLiquidityForecastResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ApproveLiquidityForecast`.
+message ApproveLiquidityForecastRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string liquidity_forecast_id = 2;
+  LiquidityForecast liquidity_forecast = 3;
+  ApproveLiquidityForecastRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ApproveLiquidityForecast`.
+message ApproveLiquidityForecastResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LiquidityForecast liquidity_forecast = 1;
+  ApproveLiquidityForecastResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RejectLiquidityForecast`.
+message RejectLiquidityForecastRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string liquidity_forecast_id = 2;
+  LiquidityForecast liquidity_forecast = 3;
+  RejectLiquidityForecastRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RejectLiquidityForecast`.
+message RejectLiquidityForecastResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LiquidityForecast liquidity_forecast = 1;
+  RejectLiquidityForecastResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `EscalateLiquidityForecast`.
+message EscalateLiquidityForecastRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string liquidity_forecast_id = 2;
+  LiquidityForecast liquidity_forecast = 3;
+  EscalateLiquidityForecastRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `EscalateLiquidityForecast`.
+message EscalateLiquidityForecastResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LiquidityForecast liquidity_forecast = 1;
+  EscalateLiquidityForecastResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `DelegateLiquidityForecastApproval`.
+message DelegateLiquidityForecastApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string liquidity_forecast_id = 2;
+  LiquidityForecast liquidity_forecast = 3;
+  DelegateLiquidityForecastApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `DelegateLiquidityForecastApproval`.
+message DelegateLiquidityForecastApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LiquidityForecast liquidity_forecast = 1;
+  DelegateLiquidityForecastApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RecallLiquidityForecast`.
+message RecallLiquidityForecastRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string liquidity_forecast_id = 2;
+  LiquidityForecast liquidity_forecast = 3;
+  RecallLiquidityForecastRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RecallLiquidityForecast`.
+message RecallLiquidityForecastResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LiquidityForecast liquidity_forecast = 1;
+  RecallLiquidityForecastResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetLiquidityForecastApprovalStatus`.
+message GetLiquidityForecastApprovalStatusRequest {
+  acme.common.v1.RequestContext context = 1;
+  string liquidity_forecast_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetLiquidityForecastApprovalStatus`.
+message GetLiquidityForecastApprovalStatusResponse {
+  LiquidityForecast liquidity_forecast = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `CommentLiquidityForecastApproval`.
+message CommentLiquidityForecastApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string liquidity_forecast_id = 2;
+  LiquidityForecast liquidity_forecast = 3;
+  CommentLiquidityForecastApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CommentLiquidityForecastApproval`.
+message CommentLiquidityForecastApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LiquidityForecast liquidity_forecast = 1;
+  CommentLiquidityForecastApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

@@ -1,0 +1,245 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.suppliers.v1;
+
+import "acme/common/v1/audit.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/suppliers/v1/suppliers.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Suppliers.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/suppliers/v1;suppliersv1";
+option java_multiple_files = true;
+option java_outer_classname = "SupplierContractQueryServiceProto";
+option java_package = "com.acme.suppliers.v1";
+
+// Answers read-only questions about supplier contracts, for screens and reports.
+service SupplierContractQueryService {
+  // Returns a supplier contract.
+  rpc LookupSupplierContract(LookupSupplierContractRequest) returns (LookupSupplierContractResponse);
+
+  // Lists supplier contracts a page at a time.
+  rpc BrowseSupplierContracts(BrowseSupplierContractsRequest) returns (BrowseSupplierContractsResponse);
+
+  // Lists supplier contracts a page at a time.
+  rpc FindSupplierContracts(FindSupplierContractsRequest) returns (FindSupplierContractsResponse);
+
+  // Counts supplier contracts by status.
+  rpc CountSupplierContracts(CountSupplierContractsRequest) returns (CountSupplierContractsResponse);
+
+  // Returns several supplier contracts at once.
+  rpc ResolveSupplierContracts(ResolveSupplierContractsRequest) returns (ResolveSupplierContractsResponse);
+
+  // Streams every matching supplier contract.
+  rpc ExportSupplierContracts(ExportSupplierContractsRequest) returns (stream ExportSupplierContractsResponse);
+
+  // Summarizes a supplier contract.
+  rpc SummarizeSupplierContracts(SummarizeSupplierContractsRequest) returns (SummarizeSupplierContractsResponse);
+
+  // Lists supplier contracts a page at a time.
+  rpc SuggestSupplierContracts(SuggestSupplierContractsRequest) returns (SuggestSupplierContractsResponse);
+
+  // Returns a supplier contract.
+  rpc PeekSupplierContract(PeekSupplierContractRequest) returns (PeekSupplierContractResponse);
+}
+
+// The request of `LookupSupplierContract`.
+message LookupSupplierContractRequest {
+  acme.common.v1.RequestContext context = 1;
+  string supplier_contract_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `LookupSupplierContract`.
+message LookupSupplierContractResponse {
+  SupplierContract supplier_contract = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `BrowseSupplierContracts`.
+message BrowseSupplierContractsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated SupplierContractStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  BrowseSupplierContractsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `BrowseSupplierContracts`.
+message BrowseSupplierContractsResponse {
+  repeated SupplierContract supplier_contracts = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `FindSupplierContracts`.
+message FindSupplierContractsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated SupplierContractStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  FindSupplierContractsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `FindSupplierContracts`.
+message FindSupplierContractsResponse {
+  repeated SupplierContract supplier_contracts = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CountSupplierContracts`.
+message CountSupplierContractsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated SupplierContractStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  CountSupplierContractsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `CountSupplierContracts`.
+message CountSupplierContractsResponse {
+  int64 count = 1;
+  map<string, int64> by_status = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ResolveSupplierContracts`.
+message ResolveSupplierContractsRequest {
+  acme.common.v1.RequestContext context = 1;
+  repeated string supplier_contract_ids = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `ResolveSupplierContracts`.
+message ResolveSupplierContractsResponse {
+  repeated SupplierContract supplier_contracts = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExportSupplierContracts`.
+message ExportSupplierContractsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated SupplierContractStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  ExportSupplierContractsRequest.Filter filter = 2;
+  string format = 3;
+  google.protobuf.FieldMask fields = 4;
+  string destination_uri = 5;
+}
+
+// The response of `ExportSupplierContracts`.
+message ExportSupplierContractsResponse {
+  SupplierContract supplier_contract = 1;
+  string change_type = 2;
+  google.protobuf.Timestamp changed_at = 3;
+  int64 sequence = 4;
+  acme.common.v1.OperationResult result = 5;
+}
+
+// The request of `SummarizeSupplierContracts`.
+message SummarizeSupplierContractsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string format = 1;
+    acme.common.v1.TimeWindow period = 2;
+    repeated string recipient_emails = 3;
+    string cron = 4;
+    map<string, string> filters = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string supplier_contract_id = 2;
+  SummarizeSupplierContractsRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `SummarizeSupplierContracts`.
+message SummarizeSupplierContractsResponse {
+  string report_id = 1;
+  string download_uri = 2;
+  map<string, string> summary = 3;
+  acme.common.v1.TimeWindow period = 4;
+  acme.common.v1.OperationResult result = 5;
+}
+
+// The request of `SuggestSupplierContracts`.
+message SuggestSupplierContractsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated SupplierContractStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  SuggestSupplierContractsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `SuggestSupplierContracts`.
+message SuggestSupplierContractsResponse {
+  repeated SupplierContract supplier_contracts = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PeekSupplierContract`.
+message PeekSupplierContractRequest {
+  acme.common.v1.RequestContext context = 1;
+  string supplier_contract_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `PeekSupplierContract`.
+message PeekSupplierContractResponse {
+  SupplierContract supplier_contract = 1;
+  acme.common.v1.OperationResult result = 2;
+}

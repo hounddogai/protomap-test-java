@@ -1,0 +1,333 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.procurement.v1;
+
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/identity/v1/refs.proto";
+import "acme/procurement/v1/procurement.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Procurement.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/procurement/v1;procurementv1";
+option java_multiple_files = true;
+option java_outer_classname = "RfqApprovalServiceProto";
+option java_package = "com.acme.procurement.v1";
+
+// Routes rfqs through approval, with escalation and delegation.
+service RfqApprovalService {
+  // Submits a rfq.
+  rpc SubmitRfq(SubmitRfqRequest) returns (SubmitRfqResponse);
+
+  // Approves a rfq.
+  rpc ApproveRfq(ApproveRfqRequest) returns (ApproveRfqResponse);
+
+  // Rejects a rfq.
+  rpc RejectRfq(RejectRfqRequest) returns (RejectRfqResponse);
+
+  // Escalates a rfq.
+  rpc EscalateRfq(EscalateRfqRequest) returns (EscalateRfqResponse);
+
+  // Lists rfqs a page at a time.
+  rpc ListPendingRfqs(ListPendingRfqsRequest) returns (ListPendingRfqsResponse);
+
+  // Delegates a rfq.
+  rpc DelegateRfqApproval(DelegateRfqApprovalRequest) returns (DelegateRfqApprovalResponse);
+
+  // Recalls a rfq.
+  rpc RecallRfq(RecallRfqRequest) returns (RecallRfqResponse);
+
+  // Returns a rfq.
+  rpc GetRfqApprovalStatus(GetRfqApprovalStatusRequest) returns (GetRfqApprovalStatusResponse);
+
+  // Comments a rfq.
+  rpc CommentRfqApproval(CommentRfqApprovalRequest) returns (CommentRfqApprovalResponse);
+}
+
+// The request of `SubmitRfq`.
+message SubmitRfqRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string rfq_id = 2;
+  Rfq rfq = 3;
+  SubmitRfqRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SubmitRfq`.
+message SubmitRfqResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Rfq rfq = 1;
+  SubmitRfqResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ApproveRfq`.
+message ApproveRfqRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string rfq_id = 2;
+  Rfq rfq = 3;
+  ApproveRfqRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ApproveRfq`.
+message ApproveRfqResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Rfq rfq = 1;
+  ApproveRfqResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RejectRfq`.
+message RejectRfqRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string rfq_id = 2;
+  Rfq rfq = 3;
+  RejectRfqRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RejectRfq`.
+message RejectRfqResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Rfq rfq = 1;
+  RejectRfqResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `EscalateRfq`.
+message EscalateRfqRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string rfq_id = 2;
+  Rfq rfq = 3;
+  EscalateRfqRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `EscalateRfq`.
+message EscalateRfqResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Rfq rfq = 1;
+  EscalateRfqResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ListPendingRfqs`.
+message ListPendingRfqsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated RfqStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListPendingRfqsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListPendingRfqs`.
+message ListPendingRfqsResponse {
+  repeated Rfq rfqs = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `DelegateRfqApproval`.
+message DelegateRfqApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string rfq_id = 2;
+  Rfq rfq = 3;
+  DelegateRfqApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `DelegateRfqApproval`.
+message DelegateRfqApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Rfq rfq = 1;
+  DelegateRfqApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RecallRfq`.
+message RecallRfqRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string rfq_id = 2;
+  Rfq rfq = 3;
+  RecallRfqRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RecallRfq`.
+message RecallRfqResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Rfq rfq = 1;
+  RecallRfqResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetRfqApprovalStatus`.
+message GetRfqApprovalStatusRequest {
+  acme.common.v1.RequestContext context = 1;
+  string rfq_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetRfqApprovalStatus`.
+message GetRfqApprovalStatusResponse {
+  Rfq rfq = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `CommentRfqApproval`.
+message CommentRfqApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string rfq_id = 2;
+  Rfq rfq = 3;
+  CommentRfqApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CommentRfqApproval`.
+message CommentRfqApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Rfq rfq = 1;
+  CommentRfqApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

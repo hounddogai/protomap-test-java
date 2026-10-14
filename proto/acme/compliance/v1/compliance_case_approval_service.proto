@@ -1,0 +1,333 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.compliance.v1;
+
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/compliance/v1/compliance.proto";
+import "acme/identity/v1/refs.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Compliance.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/compliance/v1;compliancev1";
+option java_multiple_files = true;
+option java_outer_classname = "ComplianceCaseApprovalServiceProto";
+option java_package = "com.acme.compliance.v1";
+
+// Routes compliance cases through approval, with escalation and delegation.
+service ComplianceCaseApprovalService {
+  // Submits a compliance case.
+  rpc SubmitComplianceCase(SubmitComplianceCaseRequest) returns (SubmitComplianceCaseResponse);
+
+  // Approves a compliance case.
+  rpc ApproveComplianceCase(ApproveComplianceCaseRequest) returns (ApproveComplianceCaseResponse);
+
+  // Rejects a compliance case.
+  rpc RejectComplianceCase(RejectComplianceCaseRequest) returns (RejectComplianceCaseResponse);
+
+  // Escalates a compliance case.
+  rpc EscalateComplianceCase(EscalateComplianceCaseRequest) returns (EscalateComplianceCaseResponse);
+
+  // Lists compliance cases a page at a time.
+  rpc ListPendingComplianceCases(ListPendingComplianceCasesRequest) returns (ListPendingComplianceCasesResponse);
+
+  // Delegates a compliance case.
+  rpc DelegateComplianceCaseApproval(DelegateComplianceCaseApprovalRequest) returns (DelegateComplianceCaseApprovalResponse);
+
+  // Recalls a compliance case.
+  rpc RecallComplianceCase(RecallComplianceCaseRequest) returns (RecallComplianceCaseResponse);
+
+  // Returns a compliance case.
+  rpc GetComplianceCaseApprovalStatus(GetComplianceCaseApprovalStatusRequest) returns (GetComplianceCaseApprovalStatusResponse);
+
+  // Comments a compliance case.
+  rpc CommentComplianceCaseApproval(CommentComplianceCaseApprovalRequest) returns (CommentComplianceCaseApprovalResponse);
+}
+
+// The request of `SubmitComplianceCase`.
+message SubmitComplianceCaseRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string compliance_case_id = 2;
+  ComplianceCase compliance_case = 3;
+  SubmitComplianceCaseRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SubmitComplianceCase`.
+message SubmitComplianceCaseResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ComplianceCase compliance_case = 1;
+  SubmitComplianceCaseResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ApproveComplianceCase`.
+message ApproveComplianceCaseRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string compliance_case_id = 2;
+  ComplianceCase compliance_case = 3;
+  ApproveComplianceCaseRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ApproveComplianceCase`.
+message ApproveComplianceCaseResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ComplianceCase compliance_case = 1;
+  ApproveComplianceCaseResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RejectComplianceCase`.
+message RejectComplianceCaseRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string compliance_case_id = 2;
+  ComplianceCase compliance_case = 3;
+  RejectComplianceCaseRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RejectComplianceCase`.
+message RejectComplianceCaseResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ComplianceCase compliance_case = 1;
+  RejectComplianceCaseResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `EscalateComplianceCase`.
+message EscalateComplianceCaseRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string compliance_case_id = 2;
+  ComplianceCase compliance_case = 3;
+  EscalateComplianceCaseRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `EscalateComplianceCase`.
+message EscalateComplianceCaseResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ComplianceCase compliance_case = 1;
+  EscalateComplianceCaseResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ListPendingComplianceCases`.
+message ListPendingComplianceCasesRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated ComplianceCaseStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListPendingComplianceCasesRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListPendingComplianceCases`.
+message ListPendingComplianceCasesResponse {
+  repeated ComplianceCase compliance_cases = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `DelegateComplianceCaseApproval`.
+message DelegateComplianceCaseApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string compliance_case_id = 2;
+  ComplianceCase compliance_case = 3;
+  DelegateComplianceCaseApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `DelegateComplianceCaseApproval`.
+message DelegateComplianceCaseApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ComplianceCase compliance_case = 1;
+  DelegateComplianceCaseApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RecallComplianceCase`.
+message RecallComplianceCaseRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string compliance_case_id = 2;
+  ComplianceCase compliance_case = 3;
+  RecallComplianceCaseRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RecallComplianceCase`.
+message RecallComplianceCaseResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ComplianceCase compliance_case = 1;
+  RecallComplianceCaseResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetComplianceCaseApprovalStatus`.
+message GetComplianceCaseApprovalStatusRequest {
+  acme.common.v1.RequestContext context = 1;
+  string compliance_case_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetComplianceCaseApprovalStatus`.
+message GetComplianceCaseApprovalStatusResponse {
+  ComplianceCase compliance_case = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `CommentComplianceCaseApproval`.
+message CommentComplianceCaseApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string compliance_case_id = 2;
+  ComplianceCase compliance_case = 3;
+  CommentComplianceCaseApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CommentComplianceCaseApproval`.
+message CommentComplianceCaseApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ComplianceCase compliance_case = 1;
+  CommentComplianceCaseApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

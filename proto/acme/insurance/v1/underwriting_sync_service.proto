@@ -1,0 +1,284 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.insurance.v1;
+
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/insurance/v1/insurance.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Insurance.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/insurance/v1;insurancev1";
+option java_multiple_files = true;
+option java_outer_classname = "UnderwritingSyncServiceProto";
+option java_package = "com.acme.insurance.v1";
+
+// Keeps underwritings in step with the systems of record in other regions.
+service UnderwritingSyncService {
+  // Syncs an underwriting.
+  rpc SyncUnderwritings(SyncUnderwritingsRequest) returns (SyncUnderwritingsResponse);
+
+  // Pushs an underwriting.
+  rpc PushUnderwriting(PushUnderwritingRequest) returns (PushUnderwritingResponse);
+
+  // Pulls an underwriting.
+  rpc PullUnderwritings(PullUnderwritingsRequest) returns (PullUnderwritingsResponse);
+
+  // Reconciles an underwriting.
+  rpc ReconcileUnderwritings(ReconcileUnderwritingsRequest) returns (ReconcileUnderwritingsResponse);
+
+  // Exchanges changes of underwritings with a peer.
+  rpc StreamUnderwritingChanges(stream StreamUnderwritingChangesRequest) returns (stream StreamUnderwritingChangesResponse);
+
+  // Resolves an underwriting.
+  rpc ResolveUnderwritingConflict(ResolveUnderwritingConflictRequest) returns (ResolveUnderwritingConflictResponse);
+
+  // Returns an underwriting.
+  rpc GetUnderwritingSyncState(GetUnderwritingSyncStateRequest) returns (GetUnderwritingSyncStateResponse);
+
+  // Lists underwritings a page at a time.
+  rpc ListUnderwritingConflicts(ListUnderwritingConflictsRequest) returns (ListUnderwritingConflictsResponse);
+}
+
+// The request of `SyncUnderwritings`.
+message SyncUnderwritingsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string cursor = 1;
+    bytes payload = 2;
+    string resolution = 3;
+    string peer_region = 4;
+    string checksum = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string underwriting_id = 2;
+  Underwriting underwriting = 3;
+  SyncUnderwritingsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SyncUnderwritings`.
+message SyncUnderwritingsResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Underwriting underwriting = 1;
+  SyncUnderwritingsResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PushUnderwriting`.
+message PushUnderwritingRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string cursor = 1;
+    bytes payload = 2;
+    string resolution = 3;
+    string peer_region = 4;
+    string checksum = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string underwriting_id = 2;
+  Underwriting underwriting = 3;
+  PushUnderwritingRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PushUnderwriting`.
+message PushUnderwritingResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Underwriting underwriting = 1;
+  PushUnderwritingResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PullUnderwritings`.
+message PullUnderwritingsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string cursor = 1;
+    bytes payload = 2;
+    string resolution = 3;
+    string peer_region = 4;
+    string checksum = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string underwriting_id = 2;
+  Underwriting underwriting = 3;
+  PullUnderwritingsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PullUnderwritings`.
+message PullUnderwritingsResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Underwriting underwriting = 1;
+  PullUnderwritingsResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ReconcileUnderwritings`.
+message ReconcileUnderwritingsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string cursor = 1;
+    bytes payload = 2;
+    string resolution = 3;
+    string peer_region = 4;
+    string checksum = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string underwriting_id = 2;
+  Underwriting underwriting = 3;
+  ReconcileUnderwritingsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ReconcileUnderwritings`.
+message ReconcileUnderwritingsResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Underwriting underwriting = 1;
+  ReconcileUnderwritingsResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `StreamUnderwritingChanges`.
+message StreamUnderwritingChangesRequest {
+  // An acknowledgment of a change the peer sent.
+  message ChangeAck {
+    int64 sequence = 1;
+    string status = 2;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  oneof frame {
+    Underwriting change = 2;
+    StreamUnderwritingChangesRequest.ChangeAck ack = 3;
+  }
+  string cursor = 4;
+}
+
+// The response of `StreamUnderwritingChanges`.
+message StreamUnderwritingChangesResponse {
+  Underwriting underwriting = 1;
+  string change_type = 2;
+  google.protobuf.Timestamp changed_at = 3;
+  int64 sequence = 4;
+  acme.common.v1.OperationResult result = 5;
+}
+
+// The request of `ResolveUnderwritingConflict`.
+message ResolveUnderwritingConflictRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string cursor = 1;
+    bytes payload = 2;
+    string resolution = 3;
+    string peer_region = 4;
+    string checksum = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string underwriting_id = 2;
+  Underwriting underwriting = 3;
+  ResolveUnderwritingConflictRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ResolveUnderwritingConflict`.
+message ResolveUnderwritingConflictResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Underwriting underwriting = 1;
+  ResolveUnderwritingConflictResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetUnderwritingSyncState`.
+message GetUnderwritingSyncStateRequest {
+  acme.common.v1.RequestContext context = 1;
+  string underwriting_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetUnderwritingSyncState`.
+message GetUnderwritingSyncStateResponse {
+  Underwriting underwriting = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `ListUnderwritingConflicts`.
+message ListUnderwritingConflictsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated UnderwritingStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListUnderwritingConflictsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListUnderwritingConflicts`.
+message ListUnderwritingConflictsResponse {
+  repeated Underwriting underwritings = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}

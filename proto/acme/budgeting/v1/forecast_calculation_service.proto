@@ -1,0 +1,335 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.budgeting.v1;
+
+import "acme/budgeting/v1/budgeting.proto";
+import "acme/common/v1/address.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/money.proto";
+import "acme/common/v1/operation.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Budgeting.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/budgeting/v1;budgetingv1";
+option java_multiple_files = true;
+option java_outer_classname = "ForecastCalculationServiceProto";
+option java_package = "com.acme.budgeting.v1";
+
+// Computes the figures of a forecast, such as totals, taxes, and estimates.
+service ForecastCalculationService {
+  // Calculates a forecast.
+  rpc CalculateForecast(CalculateForecastRequest) returns (CalculateForecastResponse);
+
+  // Estimates a forecast.
+  rpc EstimateForecast(EstimateForecastRequest) returns (EstimateForecastResponse);
+
+  // Quotes a forecast.
+  rpc QuoteForecast(QuoteForecastRequest) returns (QuoteForecastResponse);
+
+  // Compares a forecast.
+  rpc CompareForecastOptions(CompareForecastOptionsRequest) returns (CompareForecastOptionsResponse);
+
+  // Recalculates a forecast.
+  rpc RecalculateForecasts(RecalculateForecastsRequest) returns (RecalculateForecastsResponse);
+
+  // Simulates a forecast.
+  rpc SimulateForecast(SimulateForecastRequest) returns (SimulateForecastResponse);
+
+  // Explains a forecast.
+  rpc ExplainForecastCalculation(ExplainForecastCalculationRequest) returns (ExplainForecastCalculationResponse);
+
+  // Returns a forecast.
+  rpc GetForecastRates(GetForecastRatesRequest) returns (GetForecastRatesResponse);
+}
+
+// The request of `CalculateForecast`.
+message CalculateForecastRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string forecast_id = 2;
+  Forecast forecast = 3;
+  CalculateForecastRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CalculateForecast`.
+message CalculateForecastResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated CalculateForecastResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Forecast forecast = 1;
+  CalculateForecastResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `EstimateForecast`.
+message EstimateForecastRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string forecast_id = 2;
+  Forecast forecast = 3;
+  EstimateForecastRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `EstimateForecast`.
+message EstimateForecastResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated EstimateForecastResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Forecast forecast = 1;
+  EstimateForecastResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `QuoteForecast`.
+message QuoteForecastRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string forecast_id = 2;
+  Forecast forecast = 3;
+  QuoteForecastRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `QuoteForecast`.
+message QuoteForecastResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated QuoteForecastResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Forecast forecast = 1;
+  QuoteForecastResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CompareForecastOptions`.
+message CompareForecastOptionsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string forecast_id = 2;
+  Forecast forecast = 3;
+  CompareForecastOptionsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CompareForecastOptions`.
+message CompareForecastOptionsResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated CompareForecastOptionsResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Forecast forecast = 1;
+  CompareForecastOptionsResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RecalculateForecasts`.
+message RecalculateForecastsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string forecast_id = 2;
+  Forecast forecast = 3;
+  RecalculateForecastsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RecalculateForecasts`.
+message RecalculateForecastsResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated RecalculateForecastsResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Forecast forecast = 1;
+  RecalculateForecastsResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SimulateForecast`.
+message SimulateForecastRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string forecast_id = 2;
+  Forecast forecast = 3;
+  SimulateForecastRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SimulateForecast`.
+message SimulateForecastResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated SimulateForecastResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Forecast forecast = 1;
+  SimulateForecastResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExplainForecastCalculation`.
+message ExplainForecastCalculationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string forecast_id = 2;
+  Forecast forecast = 3;
+  ExplainForecastCalculationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ExplainForecastCalculation`.
+message ExplainForecastCalculationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Forecast forecast = 1;
+  ExplainForecastCalculationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetForecastRates`.
+message GetForecastRatesRequest {
+  acme.common.v1.RequestContext context = 1;
+  string forecast_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetForecastRates`.
+message GetForecastRatesResponse {
+  Forecast forecast = 1;
+  acme.common.v1.OperationResult result = 2;
+}

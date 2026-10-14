@@ -1,0 +1,334 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.accounting.v1;
+
+import "acme/accounting/v1/accounting.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Accounting.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/accounting/v1;accountingv1";
+option java_multiple_files = true;
+option java_outer_classname = "AllocationWorkflowServiceProto";
+option java_package = "com.acme.accounting.v1";
+
+// Runs the long-lived workflow that takes an allocation from start to finish.
+service AllocationWorkflowService {
+  // Starts an allocation.
+  rpc StartAllocationWorkflow(StartAllocationWorkflowRequest) returns (StartAllocationWorkflowResponse);
+
+  // Advances an allocation.
+  rpc AdvanceAllocationWorkflow(AdvanceAllocationWorkflowRequest) returns (AdvanceAllocationWorkflowResponse);
+
+  // Cancels an allocation.
+  rpc CancelAllocationWorkflow(CancelAllocationWorkflowRequest) returns (CancelAllocationWorkflowResponse);
+
+  // Retrys an allocation.
+  rpc RetryAllocationWorkflow(RetryAllocationWorkflowRequest) returns (RetryAllocationWorkflowResponse);
+
+  // Pauses an allocation.
+  rpc PauseAllocationWorkflow(PauseAllocationWorkflowRequest) returns (PauseAllocationWorkflowResponse);
+
+  // Resumes an allocation.
+  rpc ResumeAllocationWorkflow(ResumeAllocationWorkflowRequest) returns (ResumeAllocationWorkflowResponse);
+
+  // Returns an allocation.
+  rpc InspectAllocationWorkflow(InspectAllocationWorkflowRequest) returns (InspectAllocationWorkflowResponse);
+
+  // Lists allocations a page at a time.
+  rpc ListAllocationWorkflows(ListAllocationWorkflowsRequest) returns (ListAllocationWorkflowsResponse);
+
+  // Signals an allocation.
+  rpc SignalAllocationWorkflow(SignalAllocationWorkflowRequest) returns (SignalAllocationWorkflowResponse);
+}
+
+// The request of `StartAllocationWorkflow`.
+message StartAllocationWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string allocation_id = 2;
+  Allocation allocation = 3;
+  StartAllocationWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `StartAllocationWorkflow`.
+message StartAllocationWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Allocation allocation = 1;
+  StartAllocationWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `AdvanceAllocationWorkflow`.
+message AdvanceAllocationWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string allocation_id = 2;
+  Allocation allocation = 3;
+  AdvanceAllocationWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `AdvanceAllocationWorkflow`.
+message AdvanceAllocationWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Allocation allocation = 1;
+  AdvanceAllocationWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CancelAllocationWorkflow`.
+message CancelAllocationWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string allocation_id = 2;
+  Allocation allocation = 3;
+  CancelAllocationWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CancelAllocationWorkflow`.
+message CancelAllocationWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Allocation allocation = 1;
+  CancelAllocationWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RetryAllocationWorkflow`.
+message RetryAllocationWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string allocation_id = 2;
+  Allocation allocation = 3;
+  RetryAllocationWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RetryAllocationWorkflow`.
+message RetryAllocationWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Allocation allocation = 1;
+  RetryAllocationWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PauseAllocationWorkflow`.
+message PauseAllocationWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string allocation_id = 2;
+  Allocation allocation = 3;
+  PauseAllocationWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PauseAllocationWorkflow`.
+message PauseAllocationWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Allocation allocation = 1;
+  PauseAllocationWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ResumeAllocationWorkflow`.
+message ResumeAllocationWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string allocation_id = 2;
+  Allocation allocation = 3;
+  ResumeAllocationWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ResumeAllocationWorkflow`.
+message ResumeAllocationWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Allocation allocation = 1;
+  ResumeAllocationWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `InspectAllocationWorkflow`.
+message InspectAllocationWorkflowRequest {
+  acme.common.v1.RequestContext context = 1;
+  string allocation_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `InspectAllocationWorkflow`.
+message InspectAllocationWorkflowResponse {
+  Allocation allocation = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `ListAllocationWorkflows`.
+message ListAllocationWorkflowsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated AllocationStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListAllocationWorkflowsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListAllocationWorkflows`.
+message ListAllocationWorkflowsResponse {
+  repeated Allocation allocations = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SignalAllocationWorkflow`.
+message SignalAllocationWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string allocation_id = 2;
+  Allocation allocation = 3;
+  SignalAllocationWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SignalAllocationWorkflow`.
+message SignalAllocationWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Allocation allocation = 1;
+  SignalAllocationWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

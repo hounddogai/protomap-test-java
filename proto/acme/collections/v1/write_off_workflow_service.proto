@@ -1,0 +1,334 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.collections.v1;
+
+import "acme/collections/v1/collections.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Collections.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/collections/v1;collectionsv1";
+option java_multiple_files = true;
+option java_outer_classname = "WriteOffWorkflowServiceProto";
+option java_package = "com.acme.collections.v1";
+
+// Runs the long-lived workflow that takes a write off from start to finish.
+service WriteOffWorkflowService {
+  // Starts a write off.
+  rpc StartWriteOffWorkflow(StartWriteOffWorkflowRequest) returns (StartWriteOffWorkflowResponse);
+
+  // Advances a write off.
+  rpc AdvanceWriteOffWorkflow(AdvanceWriteOffWorkflowRequest) returns (AdvanceWriteOffWorkflowResponse);
+
+  // Cancels a write off.
+  rpc CancelWriteOffWorkflow(CancelWriteOffWorkflowRequest) returns (CancelWriteOffWorkflowResponse);
+
+  // Retrys a write off.
+  rpc RetryWriteOffWorkflow(RetryWriteOffWorkflowRequest) returns (RetryWriteOffWorkflowResponse);
+
+  // Pauses a write off.
+  rpc PauseWriteOffWorkflow(PauseWriteOffWorkflowRequest) returns (PauseWriteOffWorkflowResponse);
+
+  // Resumes a write off.
+  rpc ResumeWriteOffWorkflow(ResumeWriteOffWorkflowRequest) returns (ResumeWriteOffWorkflowResponse);
+
+  // Returns a write off.
+  rpc InspectWriteOffWorkflow(InspectWriteOffWorkflowRequest) returns (InspectWriteOffWorkflowResponse);
+
+  // Lists write offs a page at a time.
+  rpc ListWriteOffWorkflows(ListWriteOffWorkflowsRequest) returns (ListWriteOffWorkflowsResponse);
+
+  // Signals a write off.
+  rpc SignalWriteOffWorkflow(SignalWriteOffWorkflowRequest) returns (SignalWriteOffWorkflowResponse);
+}
+
+// The request of `StartWriteOffWorkflow`.
+message StartWriteOffWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string write_off_id = 2;
+  WriteOff write_off = 3;
+  StartWriteOffWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `StartWriteOffWorkflow`.
+message StartWriteOffWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  WriteOff write_off = 1;
+  StartWriteOffWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `AdvanceWriteOffWorkflow`.
+message AdvanceWriteOffWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string write_off_id = 2;
+  WriteOff write_off = 3;
+  AdvanceWriteOffWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `AdvanceWriteOffWorkflow`.
+message AdvanceWriteOffWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  WriteOff write_off = 1;
+  AdvanceWriteOffWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CancelWriteOffWorkflow`.
+message CancelWriteOffWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string write_off_id = 2;
+  WriteOff write_off = 3;
+  CancelWriteOffWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CancelWriteOffWorkflow`.
+message CancelWriteOffWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  WriteOff write_off = 1;
+  CancelWriteOffWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RetryWriteOffWorkflow`.
+message RetryWriteOffWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string write_off_id = 2;
+  WriteOff write_off = 3;
+  RetryWriteOffWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RetryWriteOffWorkflow`.
+message RetryWriteOffWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  WriteOff write_off = 1;
+  RetryWriteOffWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PauseWriteOffWorkflow`.
+message PauseWriteOffWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string write_off_id = 2;
+  WriteOff write_off = 3;
+  PauseWriteOffWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PauseWriteOffWorkflow`.
+message PauseWriteOffWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  WriteOff write_off = 1;
+  PauseWriteOffWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ResumeWriteOffWorkflow`.
+message ResumeWriteOffWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string write_off_id = 2;
+  WriteOff write_off = 3;
+  ResumeWriteOffWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ResumeWriteOffWorkflow`.
+message ResumeWriteOffWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  WriteOff write_off = 1;
+  ResumeWriteOffWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `InspectWriteOffWorkflow`.
+message InspectWriteOffWorkflowRequest {
+  acme.common.v1.RequestContext context = 1;
+  string write_off_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `InspectWriteOffWorkflow`.
+message InspectWriteOffWorkflowResponse {
+  WriteOff write_off = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `ListWriteOffWorkflows`.
+message ListWriteOffWorkflowsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated WriteOffStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListWriteOffWorkflowsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListWriteOffWorkflows`.
+message ListWriteOffWorkflowsResponse {
+  repeated WriteOff write_offs = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SignalWriteOffWorkflow`.
+message SignalWriteOffWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string write_off_id = 2;
+  WriteOff write_off = 3;
+  SignalWriteOffWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SignalWriteOffWorkflow`.
+message SignalWriteOffWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  WriteOff write_off = 1;
+  SignalWriteOffWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

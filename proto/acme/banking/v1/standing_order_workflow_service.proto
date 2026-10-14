@@ -1,0 +1,334 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.banking.v1;
+
+import "acme/banking/v1/banking.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Banking.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/banking/v1;bankingv1";
+option java_multiple_files = true;
+option java_outer_classname = "StandingOrderWorkflowServiceProto";
+option java_package = "com.acme.banking.v1";
+
+// Runs the long-lived workflow that takes a standing order from start to finish.
+service StandingOrderWorkflowService {
+  // Starts a standing order.
+  rpc StartStandingOrderWorkflow(StartStandingOrderWorkflowRequest) returns (StartStandingOrderWorkflowResponse);
+
+  // Advances a standing order.
+  rpc AdvanceStandingOrderWorkflow(AdvanceStandingOrderWorkflowRequest) returns (AdvanceStandingOrderWorkflowResponse);
+
+  // Cancels a standing order.
+  rpc CancelStandingOrderWorkflow(CancelStandingOrderWorkflowRequest) returns (CancelStandingOrderWorkflowResponse);
+
+  // Retrys a standing order.
+  rpc RetryStandingOrderWorkflow(RetryStandingOrderWorkflowRequest) returns (RetryStandingOrderWorkflowResponse);
+
+  // Pauses a standing order.
+  rpc PauseStandingOrderWorkflow(PauseStandingOrderWorkflowRequest) returns (PauseStandingOrderWorkflowResponse);
+
+  // Resumes a standing order.
+  rpc ResumeStandingOrderWorkflow(ResumeStandingOrderWorkflowRequest) returns (ResumeStandingOrderWorkflowResponse);
+
+  // Returns a standing order.
+  rpc InspectStandingOrderWorkflow(InspectStandingOrderWorkflowRequest) returns (InspectStandingOrderWorkflowResponse);
+
+  // Lists standing orders a page at a time.
+  rpc ListStandingOrderWorkflows(ListStandingOrderWorkflowsRequest) returns (ListStandingOrderWorkflowsResponse);
+
+  // Signals a standing order.
+  rpc SignalStandingOrderWorkflow(SignalStandingOrderWorkflowRequest) returns (SignalStandingOrderWorkflowResponse);
+}
+
+// The request of `StartStandingOrderWorkflow`.
+message StartStandingOrderWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string standing_order_id = 2;
+  StandingOrder standing_order = 3;
+  StartStandingOrderWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `StartStandingOrderWorkflow`.
+message StartStandingOrderWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  StandingOrder standing_order = 1;
+  StartStandingOrderWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `AdvanceStandingOrderWorkflow`.
+message AdvanceStandingOrderWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string standing_order_id = 2;
+  StandingOrder standing_order = 3;
+  AdvanceStandingOrderWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `AdvanceStandingOrderWorkflow`.
+message AdvanceStandingOrderWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  StandingOrder standing_order = 1;
+  AdvanceStandingOrderWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CancelStandingOrderWorkflow`.
+message CancelStandingOrderWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string standing_order_id = 2;
+  StandingOrder standing_order = 3;
+  CancelStandingOrderWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CancelStandingOrderWorkflow`.
+message CancelStandingOrderWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  StandingOrder standing_order = 1;
+  CancelStandingOrderWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RetryStandingOrderWorkflow`.
+message RetryStandingOrderWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string standing_order_id = 2;
+  StandingOrder standing_order = 3;
+  RetryStandingOrderWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RetryStandingOrderWorkflow`.
+message RetryStandingOrderWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  StandingOrder standing_order = 1;
+  RetryStandingOrderWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PauseStandingOrderWorkflow`.
+message PauseStandingOrderWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string standing_order_id = 2;
+  StandingOrder standing_order = 3;
+  PauseStandingOrderWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PauseStandingOrderWorkflow`.
+message PauseStandingOrderWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  StandingOrder standing_order = 1;
+  PauseStandingOrderWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ResumeStandingOrderWorkflow`.
+message ResumeStandingOrderWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string standing_order_id = 2;
+  StandingOrder standing_order = 3;
+  ResumeStandingOrderWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ResumeStandingOrderWorkflow`.
+message ResumeStandingOrderWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  StandingOrder standing_order = 1;
+  ResumeStandingOrderWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `InspectStandingOrderWorkflow`.
+message InspectStandingOrderWorkflowRequest {
+  acme.common.v1.RequestContext context = 1;
+  string standing_order_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `InspectStandingOrderWorkflow`.
+message InspectStandingOrderWorkflowResponse {
+  StandingOrder standing_order = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `ListStandingOrderWorkflows`.
+message ListStandingOrderWorkflowsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated StandingOrderStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListStandingOrderWorkflowsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListStandingOrderWorkflows`.
+message ListStandingOrderWorkflowsResponse {
+  repeated StandingOrder standing_orders = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SignalStandingOrderWorkflow`.
+message SignalStandingOrderWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string standing_order_id = 2;
+  StandingOrder standing_order = 3;
+  SignalStandingOrderWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SignalStandingOrderWorkflow`.
+message SignalStandingOrderWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  StandingOrder standing_order = 1;
+  SignalStandingOrderWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

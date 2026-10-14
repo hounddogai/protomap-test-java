@@ -1,0 +1,295 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.lending.v1;
+
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/identity/v1/refs.proto";
+import "acme/lending/v1/lending.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Lending.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/lending/v1;lendingv1";
+option java_multiple_files = true;
+option java_outer_classname = "LoanApplicationApprovalServiceProto";
+option java_package = "com.acme.lending.v1";
+
+// Routes loan applications through approval, with escalation and delegation.
+service LoanApplicationApprovalService {
+  // Submits a loan application.
+  rpc SubmitLoanApplication(SubmitLoanApplicationRequest) returns (SubmitLoanApplicationResponse);
+
+  // Approves a loan application.
+  rpc ApproveLoanApplication(ApproveLoanApplicationRequest) returns (ApproveLoanApplicationResponse);
+
+  // Rejects a loan application.
+  rpc RejectLoanApplication(RejectLoanApplicationRequest) returns (RejectLoanApplicationResponse);
+
+  // Lists loan applications a page at a time.
+  rpc ListPendingLoanApplications(ListPendingLoanApplicationsRequest) returns (ListPendingLoanApplicationsResponse);
+
+  // Delegates a loan application.
+  rpc DelegateLoanApplicationApproval(DelegateLoanApplicationApprovalRequest) returns (DelegateLoanApplicationApprovalResponse);
+
+  // Recalls a loan application.
+  rpc RecallLoanApplication(RecallLoanApplicationRequest) returns (RecallLoanApplicationResponse);
+
+  // Returns a loan application.
+  rpc GetLoanApplicationApprovalStatus(GetLoanApplicationApprovalStatusRequest) returns (GetLoanApplicationApprovalStatusResponse);
+
+  // Comments a loan application.
+  rpc CommentLoanApplicationApproval(CommentLoanApplicationApprovalRequest) returns (CommentLoanApplicationApprovalResponse);
+}
+
+// The request of `SubmitLoanApplication`.
+message SubmitLoanApplicationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string loan_application_id = 2;
+  LoanApplication loan_application = 3;
+  SubmitLoanApplicationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SubmitLoanApplication`.
+message SubmitLoanApplicationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LoanApplication loan_application = 1;
+  SubmitLoanApplicationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ApproveLoanApplication`.
+message ApproveLoanApplicationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string loan_application_id = 2;
+  LoanApplication loan_application = 3;
+  ApproveLoanApplicationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ApproveLoanApplication`.
+message ApproveLoanApplicationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LoanApplication loan_application = 1;
+  ApproveLoanApplicationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RejectLoanApplication`.
+message RejectLoanApplicationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string loan_application_id = 2;
+  LoanApplication loan_application = 3;
+  RejectLoanApplicationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RejectLoanApplication`.
+message RejectLoanApplicationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LoanApplication loan_application = 1;
+  RejectLoanApplicationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ListPendingLoanApplications`.
+message ListPendingLoanApplicationsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated LoanApplicationStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListPendingLoanApplicationsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListPendingLoanApplications`.
+message ListPendingLoanApplicationsResponse {
+  repeated LoanApplication loan_applications = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `DelegateLoanApplicationApproval`.
+message DelegateLoanApplicationApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string loan_application_id = 2;
+  LoanApplication loan_application = 3;
+  DelegateLoanApplicationApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `DelegateLoanApplicationApproval`.
+message DelegateLoanApplicationApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LoanApplication loan_application = 1;
+  DelegateLoanApplicationApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RecallLoanApplication`.
+message RecallLoanApplicationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string loan_application_id = 2;
+  LoanApplication loan_application = 3;
+  RecallLoanApplicationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RecallLoanApplication`.
+message RecallLoanApplicationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LoanApplication loan_application = 1;
+  RecallLoanApplicationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetLoanApplicationApprovalStatus`.
+message GetLoanApplicationApprovalStatusRequest {
+  acme.common.v1.RequestContext context = 1;
+  string loan_application_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetLoanApplicationApprovalStatus`.
+message GetLoanApplicationApprovalStatusResponse {
+  LoanApplication loan_application = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `CommentLoanApplicationApproval`.
+message CommentLoanApplicationApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string loan_application_id = 2;
+  LoanApplication loan_application = 3;
+  CommentLoanApplicationApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CommentLoanApplicationApproval`.
+message CommentLoanApplicationApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LoanApplication loan_application = 1;
+  CommentLoanApplicationApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

@@ -1,0 +1,268 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.payroll.v1;
+
+import "acme/common/v1/address.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/money.proto";
+import "acme/common/v1/operation.proto";
+import "acme/payroll/v1/payroll.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Payroll.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/payroll/v1;payrollv1";
+option java_multiple_files = true;
+option java_outer_classname = "DeductionValidationServiceProto";
+option java_package = "com.acme.payroll.v1";
+
+// Checks deductions against the rules before anything acts on them.
+service DeductionValidationService {
+  // Validates a deduction.
+  rpc ValidateDeduction(ValidateDeductionRequest) returns (ValidateDeductionResponse);
+
+  // Previews a deduction.
+  rpc PreviewDeduction(PreviewDeductionRequest) returns (PreviewDeductionResponse);
+
+  // Checks a deduction.
+  rpc CheckDeductionEligibility(CheckDeductionEligibilityRequest) returns (CheckDeductionEligibilityResponse);
+
+  // Normalizes a deduction.
+  rpc NormalizeDeduction(NormalizeDeductionRequest) returns (NormalizeDeductionResponse);
+
+  // Scores a deduction.
+  rpc ScoreDeduction(ScoreDeductionRequest) returns (ScoreDeductionResponse);
+
+  // Lints a deduction.
+  rpc LintDeductions(LintDeductionsRequest) returns (LintDeductionsResponse);
+
+  // Returns a deduction.
+  rpc GetDeductionRules(GetDeductionRulesRequest) returns (GetDeductionRulesResponse);
+}
+
+// The request of `ValidateDeduction`.
+message ValidateDeductionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string deduction_id = 2;
+  Deduction deduction = 3;
+  ValidateDeductionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ValidateDeduction`.
+message ValidateDeductionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Deduction deduction = 1;
+  ValidateDeductionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PreviewDeduction`.
+message PreviewDeductionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string deduction_id = 2;
+  Deduction deduction = 3;
+  PreviewDeductionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PreviewDeduction`.
+message PreviewDeductionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Deduction deduction = 1;
+  PreviewDeductionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CheckDeductionEligibility`.
+message CheckDeductionEligibilityRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string deduction_id = 2;
+  Deduction deduction = 3;
+  CheckDeductionEligibilityRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CheckDeductionEligibility`.
+message CheckDeductionEligibilityResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Deduction deduction = 1;
+  CheckDeductionEligibilityResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `NormalizeDeduction`.
+message NormalizeDeductionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string deduction_id = 2;
+  Deduction deduction = 3;
+  NormalizeDeductionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `NormalizeDeduction`.
+message NormalizeDeductionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Deduction deduction = 1;
+  NormalizeDeductionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ScoreDeduction`.
+message ScoreDeductionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string deduction_id = 2;
+  Deduction deduction = 3;
+  ScoreDeductionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ScoreDeduction`.
+message ScoreDeductionResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated ScoreDeductionResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Deduction deduction = 1;
+  ScoreDeductionResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `LintDeductions`.
+message LintDeductionsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string deduction_id = 2;
+  Deduction deduction = 3;
+  LintDeductionsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `LintDeductions`.
+message LintDeductionsResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Deduction deduction = 1;
+  LintDeductionsResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetDeductionRules`.
+message GetDeductionRulesRequest {
+  acme.common.v1.RequestContext context = 1;
+  string deduction_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetDeductionRules`.
+message GetDeductionRulesResponse {
+  Deduction deduction = 1;
+  acme.common.v1.OperationResult result = 2;
+}

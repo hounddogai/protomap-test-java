@@ -1,0 +1,294 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.treasury.v1;
+
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/identity/v1/refs.proto";
+import "acme/treasury/v1/treasury.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Treasury.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/treasury/v1;treasuryv1";
+option java_multiple_files = true;
+option java_outer_classname = "CashPositionLifecycleServiceProto";
+option java_package = "com.acme.treasury.v1";
+
+// Moves a cash position between the states of its lifecycle.
+service CashPositionLifecycleService {
+  // Activates a cash position.
+  rpc ActivateCashPosition(ActivateCashPositionRequest) returns (ActivateCashPositionResponse);
+
+  // Suspends a cash position.
+  rpc SuspendCashPosition(SuspendCashPositionRequest) returns (SuspendCashPositionResponse);
+
+  // Reinstates a cash position.
+  rpc ReinstateCashPosition(ReinstateCashPositionRequest) returns (ReinstateCashPositionResponse);
+
+  // Terminates a cash position.
+  rpc TerminateCashPosition(TerminateCashPositionRequest) returns (TerminateCashPositionResponse);
+
+  // Renews a cash position.
+  rpc RenewCashPosition(RenewCashPositionRequest) returns (RenewCashPositionResponse);
+
+  // Expires a cash position.
+  rpc ExpireCashPosition(ExpireCashPositionRequest) returns (ExpireCashPositionResponse);
+
+  // Returns a cash position.
+  rpc GetCashPositionLifecycle(GetCashPositionLifecycleRequest) returns (GetCashPositionLifecycleResponse);
+
+  // Schedules a cash position.
+  rpc ScheduleCashPositionExpiry(ScheduleCashPositionExpiryRequest) returns (ScheduleCashPositionExpiryResponse);
+}
+
+// The request of `ActivateCashPosition`.
+message ActivateCashPositionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string cash_position_id = 2;
+  ActivateCashPositionRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ActivateCashPosition`.
+message ActivateCashPositionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  CashPosition cash_position = 1;
+  ActivateCashPositionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SuspendCashPosition`.
+message SuspendCashPositionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string cash_position_id = 2;
+  SuspendCashPositionRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `SuspendCashPosition`.
+message SuspendCashPositionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  CashPosition cash_position = 1;
+  SuspendCashPositionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ReinstateCashPosition`.
+message ReinstateCashPositionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string cash_position_id = 2;
+  ReinstateCashPositionRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ReinstateCashPosition`.
+message ReinstateCashPositionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  CashPosition cash_position = 1;
+  ReinstateCashPositionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `TerminateCashPosition`.
+message TerminateCashPositionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string cash_position_id = 2;
+  TerminateCashPositionRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `TerminateCashPosition`.
+message TerminateCashPositionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  CashPosition cash_position = 1;
+  TerminateCashPositionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RenewCashPosition`.
+message RenewCashPositionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string cash_position_id = 2;
+  RenewCashPositionRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `RenewCashPosition`.
+message RenewCashPositionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  CashPosition cash_position = 1;
+  RenewCashPositionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExpireCashPosition`.
+message ExpireCashPositionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string cash_position_id = 2;
+  ExpireCashPositionRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ExpireCashPosition`.
+message ExpireCashPositionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  CashPosition cash_position = 1;
+  ExpireCashPositionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetCashPositionLifecycle`.
+message GetCashPositionLifecycleRequest {
+  acme.common.v1.RequestContext context = 1;
+  string cash_position_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetCashPositionLifecycle`.
+message GetCashPositionLifecycleResponse {
+  CashPosition cash_position = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `ScheduleCashPositionExpiry`.
+message ScheduleCashPositionExpiryRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string cash_position_id = 2;
+  CashPosition cash_position = 3;
+  ScheduleCashPositionExpiryRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ScheduleCashPositionExpiry`.
+message ScheduleCashPositionExpiryResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  CashPosition cash_position = 1;
+  ScheduleCashPositionExpiryResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

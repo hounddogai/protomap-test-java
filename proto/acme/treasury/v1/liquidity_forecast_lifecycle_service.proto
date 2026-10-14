@@ -1,0 +1,294 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.treasury.v1;
+
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/identity/v1/refs.proto";
+import "acme/treasury/v1/treasury.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Treasury.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/treasury/v1;treasuryv1";
+option java_multiple_files = true;
+option java_outer_classname = "LiquidityForecastLifecycleServiceProto";
+option java_package = "com.acme.treasury.v1";
+
+// Moves a liquidity forecast between the states of its lifecycle.
+service LiquidityForecastLifecycleService {
+  // Activates a liquidity forecast.
+  rpc ActivateLiquidityForecast(ActivateLiquidityForecastRequest) returns (ActivateLiquidityForecastResponse);
+
+  // Suspends a liquidity forecast.
+  rpc SuspendLiquidityForecast(SuspendLiquidityForecastRequest) returns (SuspendLiquidityForecastResponse);
+
+  // Reinstates a liquidity forecast.
+  rpc ReinstateLiquidityForecast(ReinstateLiquidityForecastRequest) returns (ReinstateLiquidityForecastResponse);
+
+  // Terminates a liquidity forecast.
+  rpc TerminateLiquidityForecast(TerminateLiquidityForecastRequest) returns (TerminateLiquidityForecastResponse);
+
+  // Renews a liquidity forecast.
+  rpc RenewLiquidityForecast(RenewLiquidityForecastRequest) returns (RenewLiquidityForecastResponse);
+
+  // Expires a liquidity forecast.
+  rpc ExpireLiquidityForecast(ExpireLiquidityForecastRequest) returns (ExpireLiquidityForecastResponse);
+
+  // Returns a liquidity forecast.
+  rpc GetLiquidityForecastLifecycle(GetLiquidityForecastLifecycleRequest) returns (GetLiquidityForecastLifecycleResponse);
+
+  // Schedules a liquidity forecast.
+  rpc ScheduleLiquidityForecastExpiry(ScheduleLiquidityForecastExpiryRequest) returns (ScheduleLiquidityForecastExpiryResponse);
+}
+
+// The request of `ActivateLiquidityForecast`.
+message ActivateLiquidityForecastRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string liquidity_forecast_id = 2;
+  ActivateLiquidityForecastRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ActivateLiquidityForecast`.
+message ActivateLiquidityForecastResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LiquidityForecast liquidity_forecast = 1;
+  ActivateLiquidityForecastResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SuspendLiquidityForecast`.
+message SuspendLiquidityForecastRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string liquidity_forecast_id = 2;
+  SuspendLiquidityForecastRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `SuspendLiquidityForecast`.
+message SuspendLiquidityForecastResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LiquidityForecast liquidity_forecast = 1;
+  SuspendLiquidityForecastResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ReinstateLiquidityForecast`.
+message ReinstateLiquidityForecastRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string liquidity_forecast_id = 2;
+  ReinstateLiquidityForecastRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ReinstateLiquidityForecast`.
+message ReinstateLiquidityForecastResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LiquidityForecast liquidity_forecast = 1;
+  ReinstateLiquidityForecastResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `TerminateLiquidityForecast`.
+message TerminateLiquidityForecastRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string liquidity_forecast_id = 2;
+  TerminateLiquidityForecastRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `TerminateLiquidityForecast`.
+message TerminateLiquidityForecastResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LiquidityForecast liquidity_forecast = 1;
+  TerminateLiquidityForecastResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RenewLiquidityForecast`.
+message RenewLiquidityForecastRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string liquidity_forecast_id = 2;
+  RenewLiquidityForecastRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `RenewLiquidityForecast`.
+message RenewLiquidityForecastResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LiquidityForecast liquidity_forecast = 1;
+  RenewLiquidityForecastResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExpireLiquidityForecast`.
+message ExpireLiquidityForecastRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string liquidity_forecast_id = 2;
+  ExpireLiquidityForecastRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ExpireLiquidityForecast`.
+message ExpireLiquidityForecastResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LiquidityForecast liquidity_forecast = 1;
+  ExpireLiquidityForecastResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetLiquidityForecastLifecycle`.
+message GetLiquidityForecastLifecycleRequest {
+  acme.common.v1.RequestContext context = 1;
+  string liquidity_forecast_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetLiquidityForecastLifecycle`.
+message GetLiquidityForecastLifecycleResponse {
+  LiquidityForecast liquidity_forecast = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `ScheduleLiquidityForecastExpiry`.
+message ScheduleLiquidityForecastExpiryRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string liquidity_forecast_id = 2;
+  LiquidityForecast liquidity_forecast = 3;
+  ScheduleLiquidityForecastExpiryRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ScheduleLiquidityForecastExpiry`.
+message ScheduleLiquidityForecastExpiryResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LiquidityForecast liquidity_forecast = 1;
+  ScheduleLiquidityForecastExpiryResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

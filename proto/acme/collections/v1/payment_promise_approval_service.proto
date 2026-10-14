@@ -1,0 +1,295 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.collections.v1;
+
+import "acme/collections/v1/collections.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/identity/v1/refs.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Collections.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/collections/v1;collectionsv1";
+option java_multiple_files = true;
+option java_outer_classname = "PaymentPromiseApprovalServiceProto";
+option java_package = "com.acme.collections.v1";
+
+// Routes payment promises through approval, with escalation and delegation.
+service PaymentPromiseApprovalService {
+  // Submits a payment promise.
+  rpc SubmitPaymentPromise(SubmitPaymentPromiseRequest) returns (SubmitPaymentPromiseResponse);
+
+  // Approves a payment promise.
+  rpc ApprovePaymentPromise(ApprovePaymentPromiseRequest) returns (ApprovePaymentPromiseResponse);
+
+  // Rejects a payment promise.
+  rpc RejectPaymentPromise(RejectPaymentPromiseRequest) returns (RejectPaymentPromiseResponse);
+
+  // Escalates a payment promise.
+  rpc EscalatePaymentPromise(EscalatePaymentPromiseRequest) returns (EscalatePaymentPromiseResponse);
+
+  // Lists payment promises a page at a time.
+  rpc ListPendingPaymentPromises(ListPendingPaymentPromisesRequest) returns (ListPendingPaymentPromisesResponse);
+
+  // Recalls a payment promise.
+  rpc RecallPaymentPromise(RecallPaymentPromiseRequest) returns (RecallPaymentPromiseResponse);
+
+  // Returns a payment promise.
+  rpc GetPaymentPromiseApprovalStatus(GetPaymentPromiseApprovalStatusRequest) returns (GetPaymentPromiseApprovalStatusResponse);
+
+  // Comments a payment promise.
+  rpc CommentPaymentPromiseApproval(CommentPaymentPromiseApprovalRequest) returns (CommentPaymentPromiseApprovalResponse);
+}
+
+// The request of `SubmitPaymentPromise`.
+message SubmitPaymentPromiseRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string payment_promise_id = 2;
+  PaymentPromise payment_promise = 3;
+  SubmitPaymentPromiseRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SubmitPaymentPromise`.
+message SubmitPaymentPromiseResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PaymentPromise payment_promise = 1;
+  SubmitPaymentPromiseResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ApprovePaymentPromise`.
+message ApprovePaymentPromiseRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string payment_promise_id = 2;
+  PaymentPromise payment_promise = 3;
+  ApprovePaymentPromiseRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ApprovePaymentPromise`.
+message ApprovePaymentPromiseResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PaymentPromise payment_promise = 1;
+  ApprovePaymentPromiseResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RejectPaymentPromise`.
+message RejectPaymentPromiseRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string payment_promise_id = 2;
+  PaymentPromise payment_promise = 3;
+  RejectPaymentPromiseRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RejectPaymentPromise`.
+message RejectPaymentPromiseResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PaymentPromise payment_promise = 1;
+  RejectPaymentPromiseResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `EscalatePaymentPromise`.
+message EscalatePaymentPromiseRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string payment_promise_id = 2;
+  PaymentPromise payment_promise = 3;
+  EscalatePaymentPromiseRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `EscalatePaymentPromise`.
+message EscalatePaymentPromiseResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PaymentPromise payment_promise = 1;
+  EscalatePaymentPromiseResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ListPendingPaymentPromises`.
+message ListPendingPaymentPromisesRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated PaymentPromiseStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListPendingPaymentPromisesRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListPendingPaymentPromises`.
+message ListPendingPaymentPromisesResponse {
+  repeated PaymentPromise payment_promises = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RecallPaymentPromise`.
+message RecallPaymentPromiseRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string payment_promise_id = 2;
+  PaymentPromise payment_promise = 3;
+  RecallPaymentPromiseRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RecallPaymentPromise`.
+message RecallPaymentPromiseResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PaymentPromise payment_promise = 1;
+  RecallPaymentPromiseResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetPaymentPromiseApprovalStatus`.
+message GetPaymentPromiseApprovalStatusRequest {
+  acme.common.v1.RequestContext context = 1;
+  string payment_promise_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetPaymentPromiseApprovalStatus`.
+message GetPaymentPromiseApprovalStatusResponse {
+  PaymentPromise payment_promise = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `CommentPaymentPromiseApproval`.
+message CommentPaymentPromiseApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string payment_promise_id = 2;
+  PaymentPromise payment_promise = 3;
+  CommentPaymentPromiseApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CommentPaymentPromiseApproval`.
+message CommentPaymentPromiseApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PaymentPromise payment_promise = 1;
+  CommentPaymentPromiseApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

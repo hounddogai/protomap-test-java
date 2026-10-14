@@ -1,0 +1,266 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.compliance.v1;
+
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/compliance/v1/compliance.proto";
+import "acme/identity/v1/refs.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Compliance.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/compliance/v1;compliancev1";
+option java_multiple_files = true;
+option java_outer_classname = "AttestationApprovalServiceProto";
+option java_package = "com.acme.compliance.v1";
+
+// Routes attestations through approval, with escalation and delegation.
+service AttestationApprovalService {
+  // Submits an attestation.
+  rpc SubmitAttestation(SubmitAttestationRequest) returns (SubmitAttestationResponse);
+
+  // Approves an attestation.
+  rpc ApproveAttestation(ApproveAttestationRequest) returns (ApproveAttestationResponse);
+
+  // Rejects an attestation.
+  rpc RejectAttestation(RejectAttestationRequest) returns (RejectAttestationResponse);
+
+  // Escalates an attestation.
+  rpc EscalateAttestation(EscalateAttestationRequest) returns (EscalateAttestationResponse);
+
+  // Delegates an attestation.
+  rpc DelegateAttestationApproval(DelegateAttestationApprovalRequest) returns (DelegateAttestationApprovalResponse);
+
+  // Returns an attestation.
+  rpc GetAttestationApprovalStatus(GetAttestationApprovalStatusRequest) returns (GetAttestationApprovalStatusResponse);
+
+  // Comments an attestation.
+  rpc CommentAttestationApproval(CommentAttestationApprovalRequest) returns (CommentAttestationApprovalResponse);
+}
+
+// The request of `SubmitAttestation`.
+message SubmitAttestationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string attestation_id = 2;
+  Attestation attestation = 3;
+  SubmitAttestationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SubmitAttestation`.
+message SubmitAttestationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Attestation attestation = 1;
+  SubmitAttestationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ApproveAttestation`.
+message ApproveAttestationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string attestation_id = 2;
+  Attestation attestation = 3;
+  ApproveAttestationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ApproveAttestation`.
+message ApproveAttestationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Attestation attestation = 1;
+  ApproveAttestationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RejectAttestation`.
+message RejectAttestationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string attestation_id = 2;
+  Attestation attestation = 3;
+  RejectAttestationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RejectAttestation`.
+message RejectAttestationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Attestation attestation = 1;
+  RejectAttestationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `EscalateAttestation`.
+message EscalateAttestationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string attestation_id = 2;
+  Attestation attestation = 3;
+  EscalateAttestationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `EscalateAttestation`.
+message EscalateAttestationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Attestation attestation = 1;
+  EscalateAttestationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `DelegateAttestationApproval`.
+message DelegateAttestationApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string attestation_id = 2;
+  Attestation attestation = 3;
+  DelegateAttestationApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `DelegateAttestationApproval`.
+message DelegateAttestationApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Attestation attestation = 1;
+  DelegateAttestationApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetAttestationApprovalStatus`.
+message GetAttestationApprovalStatusRequest {
+  acme.common.v1.RequestContext context = 1;
+  string attestation_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetAttestationApprovalStatus`.
+message GetAttestationApprovalStatusResponse {
+  Attestation attestation = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `CommentAttestationApproval`.
+message CommentAttestationApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string attestation_id = 2;
+  Attestation attestation = 3;
+  CommentAttestationApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CommentAttestationApproval`.
+message CommentAttestationApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Attestation attestation = 1;
+  CommentAttestationApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

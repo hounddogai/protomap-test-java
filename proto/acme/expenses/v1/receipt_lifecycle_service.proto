@@ -1,0 +1,294 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.expenses.v1;
+
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/expenses/v1/expenses.proto";
+import "acme/identity/v1/refs.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Expenses.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/expenses/v1;expensesv1";
+option java_multiple_files = true;
+option java_outer_classname = "ReceiptLifecycleServiceProto";
+option java_package = "com.acme.expenses.v1";
+
+// Moves a receipt between the states of its lifecycle.
+service ReceiptLifecycleService {
+  // Activates a receipt.
+  rpc ActivateReceipt(ActivateReceiptRequest) returns (ActivateReceiptResponse);
+
+  // Suspends a receipt.
+  rpc SuspendReceipt(SuspendReceiptRequest) returns (SuspendReceiptResponse);
+
+  // Reinstates a receipt.
+  rpc ReinstateReceipt(ReinstateReceiptRequest) returns (ReinstateReceiptResponse);
+
+  // Terminates a receipt.
+  rpc TerminateReceipt(TerminateReceiptRequest) returns (TerminateReceiptResponse);
+
+  // Renews a receipt.
+  rpc RenewReceipt(RenewReceiptRequest) returns (RenewReceiptResponse);
+
+  // Expires a receipt.
+  rpc ExpireReceipt(ExpireReceiptRequest) returns (ExpireReceiptResponse);
+
+  // Returns a receipt.
+  rpc GetReceiptLifecycle(GetReceiptLifecycleRequest) returns (GetReceiptLifecycleResponse);
+
+  // Schedules a receipt.
+  rpc ScheduleReceiptExpiry(ScheduleReceiptExpiryRequest) returns (ScheduleReceiptExpiryResponse);
+}
+
+// The request of `ActivateReceipt`.
+message ActivateReceiptRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string receipt_id = 2;
+  ActivateReceiptRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ActivateReceipt`.
+message ActivateReceiptResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Receipt receipt = 1;
+  ActivateReceiptResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SuspendReceipt`.
+message SuspendReceiptRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string receipt_id = 2;
+  SuspendReceiptRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `SuspendReceipt`.
+message SuspendReceiptResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Receipt receipt = 1;
+  SuspendReceiptResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ReinstateReceipt`.
+message ReinstateReceiptRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string receipt_id = 2;
+  ReinstateReceiptRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ReinstateReceipt`.
+message ReinstateReceiptResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Receipt receipt = 1;
+  ReinstateReceiptResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `TerminateReceipt`.
+message TerminateReceiptRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string receipt_id = 2;
+  TerminateReceiptRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `TerminateReceipt`.
+message TerminateReceiptResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Receipt receipt = 1;
+  TerminateReceiptResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RenewReceipt`.
+message RenewReceiptRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string receipt_id = 2;
+  RenewReceiptRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `RenewReceipt`.
+message RenewReceiptResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Receipt receipt = 1;
+  RenewReceiptResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExpireReceipt`.
+message ExpireReceiptRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string receipt_id = 2;
+  ExpireReceiptRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ExpireReceipt`.
+message ExpireReceiptResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Receipt receipt = 1;
+  ExpireReceiptResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetReceiptLifecycle`.
+message GetReceiptLifecycleRequest {
+  acme.common.v1.RequestContext context = 1;
+  string receipt_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetReceiptLifecycle`.
+message GetReceiptLifecycleResponse {
+  Receipt receipt = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `ScheduleReceiptExpiry`.
+message ScheduleReceiptExpiryRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string receipt_id = 2;
+  Receipt receipt = 3;
+  ScheduleReceiptExpiryRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ScheduleReceiptExpiry`.
+message ScheduleReceiptExpiryResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Receipt receipt = 1;
+  ScheduleReceiptExpiryResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

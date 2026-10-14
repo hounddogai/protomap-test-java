@@ -1,0 +1,316 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.risk.v1;
+
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/identity/v1/refs.proto";
+import "acme/risk/v1/risk.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Risk.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/risk/v1;riskv1";
+option java_multiple_files = true;
+option java_outer_classname = "RiskScenarioApprovalServiceProto";
+option java_package = "com.acme.risk.v1";
+
+// Routes risk scenarios through approval, with escalation and delegation.
+service RiskScenarioApprovalService {
+  // Submits a risk scenario.
+  rpc SubmitRiskScenario(SubmitRiskScenarioRequest) returns (SubmitRiskScenarioResponse);
+
+  // Approves a risk scenario.
+  rpc ApproveRiskScenario(ApproveRiskScenarioRequest) returns (ApproveRiskScenarioResponse);
+
+  // Rejects a risk scenario.
+  rpc RejectRiskScenario(RejectRiskScenarioRequest) returns (RejectRiskScenarioResponse);
+
+  // Escalates a risk scenario.
+  rpc EscalateRiskScenario(EscalateRiskScenarioRequest) returns (EscalateRiskScenarioResponse);
+
+  // Lists risk scenarios a page at a time.
+  rpc ListPendingRiskScenarios(ListPendingRiskScenariosRequest) returns (ListPendingRiskScenariosResponse);
+
+  // Delegates a risk scenario.
+  rpc DelegateRiskScenarioApproval(DelegateRiskScenarioApprovalRequest) returns (DelegateRiskScenarioApprovalResponse);
+
+  // Recalls a risk scenario.
+  rpc RecallRiskScenario(RecallRiskScenarioRequest) returns (RecallRiskScenarioResponse);
+
+  // Comments a risk scenario.
+  rpc CommentRiskScenarioApproval(CommentRiskScenarioApprovalRequest) returns (CommentRiskScenarioApprovalResponse);
+}
+
+// The request of `SubmitRiskScenario`.
+message SubmitRiskScenarioRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string risk_scenario_id = 2;
+  RiskScenario risk_scenario = 3;
+  SubmitRiskScenarioRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SubmitRiskScenario`.
+message SubmitRiskScenarioResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RiskScenario risk_scenario = 1;
+  SubmitRiskScenarioResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ApproveRiskScenario`.
+message ApproveRiskScenarioRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string risk_scenario_id = 2;
+  RiskScenario risk_scenario = 3;
+  ApproveRiskScenarioRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ApproveRiskScenario`.
+message ApproveRiskScenarioResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RiskScenario risk_scenario = 1;
+  ApproveRiskScenarioResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RejectRiskScenario`.
+message RejectRiskScenarioRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string risk_scenario_id = 2;
+  RiskScenario risk_scenario = 3;
+  RejectRiskScenarioRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RejectRiskScenario`.
+message RejectRiskScenarioResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RiskScenario risk_scenario = 1;
+  RejectRiskScenarioResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `EscalateRiskScenario`.
+message EscalateRiskScenarioRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string risk_scenario_id = 2;
+  RiskScenario risk_scenario = 3;
+  EscalateRiskScenarioRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `EscalateRiskScenario`.
+message EscalateRiskScenarioResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RiskScenario risk_scenario = 1;
+  EscalateRiskScenarioResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ListPendingRiskScenarios`.
+message ListPendingRiskScenariosRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated RiskScenarioStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListPendingRiskScenariosRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListPendingRiskScenarios`.
+message ListPendingRiskScenariosResponse {
+  repeated RiskScenario risk_scenarios = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `DelegateRiskScenarioApproval`.
+message DelegateRiskScenarioApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string risk_scenario_id = 2;
+  RiskScenario risk_scenario = 3;
+  DelegateRiskScenarioApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `DelegateRiskScenarioApproval`.
+message DelegateRiskScenarioApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RiskScenario risk_scenario = 1;
+  DelegateRiskScenarioApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RecallRiskScenario`.
+message RecallRiskScenarioRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string risk_scenario_id = 2;
+  RiskScenario risk_scenario = 3;
+  RecallRiskScenarioRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RecallRiskScenario`.
+message RecallRiskScenarioResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RiskScenario risk_scenario = 1;
+  RecallRiskScenarioResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CommentRiskScenarioApproval`.
+message CommentRiskScenarioApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string risk_scenario_id = 2;
+  RiskScenario risk_scenario = 3;
+  CommentRiskScenarioApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CommentRiskScenarioApproval`.
+message CommentRiskScenarioApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RiskScenario risk_scenario = 1;
+  CommentRiskScenarioApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

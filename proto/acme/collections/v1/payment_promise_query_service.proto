@@ -1,0 +1,214 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.collections.v1;
+
+import "acme/collections/v1/collections.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Collections.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/collections/v1;collectionsv1";
+option java_multiple_files = true;
+option java_outer_classname = "PaymentPromiseQueryServiceProto";
+option java_package = "com.acme.collections.v1";
+
+// Answers read-only questions about payment promises, for screens and reports.
+service PaymentPromiseQueryService {
+  // Returns a payment promise.
+  rpc LookupPaymentPromise(LookupPaymentPromiseRequest) returns (LookupPaymentPromiseResponse);
+
+  // Lists payment promises a page at a time.
+  rpc BrowsePaymentPromises(BrowsePaymentPromisesRequest) returns (BrowsePaymentPromisesResponse);
+
+  // Lists payment promises a page at a time.
+  rpc FindPaymentPromises(FindPaymentPromisesRequest) returns (FindPaymentPromisesResponse);
+
+  // Counts payment promises by status.
+  rpc CountPaymentPromises(CountPaymentPromisesRequest) returns (CountPaymentPromisesResponse);
+
+  // Returns several payment promises at once.
+  rpc ResolvePaymentPromises(ResolvePaymentPromisesRequest) returns (ResolvePaymentPromisesResponse);
+
+  // Streams every matching payment promise.
+  rpc ExportPaymentPromises(ExportPaymentPromisesRequest) returns (stream ExportPaymentPromisesResponse);
+
+  // Lists payment promises a page at a time.
+  rpc SuggestPaymentPromises(SuggestPaymentPromisesRequest) returns (SuggestPaymentPromisesResponse);
+
+  // Returns a payment promise.
+  rpc PeekPaymentPromise(PeekPaymentPromiseRequest) returns (PeekPaymentPromiseResponse);
+}
+
+// The request of `LookupPaymentPromise`.
+message LookupPaymentPromiseRequest {
+  acme.common.v1.RequestContext context = 1;
+  string payment_promise_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `LookupPaymentPromise`.
+message LookupPaymentPromiseResponse {
+  PaymentPromise payment_promise = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `BrowsePaymentPromises`.
+message BrowsePaymentPromisesRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated PaymentPromiseStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  BrowsePaymentPromisesRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `BrowsePaymentPromises`.
+message BrowsePaymentPromisesResponse {
+  repeated PaymentPromise payment_promises = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `FindPaymentPromises`.
+message FindPaymentPromisesRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated PaymentPromiseStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  FindPaymentPromisesRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `FindPaymentPromises`.
+message FindPaymentPromisesResponse {
+  repeated PaymentPromise payment_promises = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CountPaymentPromises`.
+message CountPaymentPromisesRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated PaymentPromiseStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  CountPaymentPromisesRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `CountPaymentPromises`.
+message CountPaymentPromisesResponse {
+  int64 count = 1;
+  map<string, int64> by_status = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ResolvePaymentPromises`.
+message ResolvePaymentPromisesRequest {
+  acme.common.v1.RequestContext context = 1;
+  repeated string payment_promise_ids = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `ResolvePaymentPromises`.
+message ResolvePaymentPromisesResponse {
+  repeated PaymentPromise payment_promises = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExportPaymentPromises`.
+message ExportPaymentPromisesRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated PaymentPromiseStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  ExportPaymentPromisesRequest.Filter filter = 2;
+  string format = 3;
+  google.protobuf.FieldMask fields = 4;
+  string destination_uri = 5;
+}
+
+// The response of `ExportPaymentPromises`.
+message ExportPaymentPromisesResponse {
+  PaymentPromise payment_promise = 1;
+  string change_type = 2;
+  google.protobuf.Timestamp changed_at = 3;
+  int64 sequence = 4;
+  acme.common.v1.OperationResult result = 5;
+}
+
+// The request of `SuggestPaymentPromises`.
+message SuggestPaymentPromisesRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated PaymentPromiseStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  SuggestPaymentPromisesRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `SuggestPaymentPromises`.
+message SuggestPaymentPromisesResponse {
+  repeated PaymentPromise payment_promises = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PeekPaymentPromise`.
+message PeekPaymentPromiseRequest {
+  acme.common.v1.RequestContext context = 1;
+  string payment_promise_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `PeekPaymentPromise`.
+message PeekPaymentPromiseResponse {
+  PaymentPromise payment_promise = 1;
+  acme.common.v1.OperationResult result = 2;
+}

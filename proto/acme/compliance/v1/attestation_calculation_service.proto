@@ -1,0 +1,335 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.compliance.v1;
+
+import "acme/common/v1/address.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/money.proto";
+import "acme/common/v1/operation.proto";
+import "acme/compliance/v1/compliance.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Compliance.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/compliance/v1;compliancev1";
+option java_multiple_files = true;
+option java_outer_classname = "AttestationCalculationServiceProto";
+option java_package = "com.acme.compliance.v1";
+
+// Computes the figures of an attestation, such as totals, taxes, and estimates.
+service AttestationCalculationService {
+  // Calculates an attestation.
+  rpc CalculateAttestation(CalculateAttestationRequest) returns (CalculateAttestationResponse);
+
+  // Estimates an attestation.
+  rpc EstimateAttestation(EstimateAttestationRequest) returns (EstimateAttestationResponse);
+
+  // Quotes an attestation.
+  rpc QuoteAttestation(QuoteAttestationRequest) returns (QuoteAttestationResponse);
+
+  // Compares an attestation.
+  rpc CompareAttestationOptions(CompareAttestationOptionsRequest) returns (CompareAttestationOptionsResponse);
+
+  // Recalculates an attestation.
+  rpc RecalculateAttestations(RecalculateAttestationsRequest) returns (RecalculateAttestationsResponse);
+
+  // Simulates an attestation.
+  rpc SimulateAttestation(SimulateAttestationRequest) returns (SimulateAttestationResponse);
+
+  // Explains an attestation.
+  rpc ExplainAttestationCalculation(ExplainAttestationCalculationRequest) returns (ExplainAttestationCalculationResponse);
+
+  // Returns an attestation.
+  rpc GetAttestationRates(GetAttestationRatesRequest) returns (GetAttestationRatesResponse);
+}
+
+// The request of `CalculateAttestation`.
+message CalculateAttestationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string attestation_id = 2;
+  Attestation attestation = 3;
+  CalculateAttestationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CalculateAttestation`.
+message CalculateAttestationResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated CalculateAttestationResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Attestation attestation = 1;
+  CalculateAttestationResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `EstimateAttestation`.
+message EstimateAttestationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string attestation_id = 2;
+  Attestation attestation = 3;
+  EstimateAttestationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `EstimateAttestation`.
+message EstimateAttestationResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated EstimateAttestationResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Attestation attestation = 1;
+  EstimateAttestationResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `QuoteAttestation`.
+message QuoteAttestationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string attestation_id = 2;
+  Attestation attestation = 3;
+  QuoteAttestationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `QuoteAttestation`.
+message QuoteAttestationResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated QuoteAttestationResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Attestation attestation = 1;
+  QuoteAttestationResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CompareAttestationOptions`.
+message CompareAttestationOptionsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string attestation_id = 2;
+  Attestation attestation = 3;
+  CompareAttestationOptionsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CompareAttestationOptions`.
+message CompareAttestationOptionsResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated CompareAttestationOptionsResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Attestation attestation = 1;
+  CompareAttestationOptionsResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RecalculateAttestations`.
+message RecalculateAttestationsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string attestation_id = 2;
+  Attestation attestation = 3;
+  RecalculateAttestationsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RecalculateAttestations`.
+message RecalculateAttestationsResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated RecalculateAttestationsResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Attestation attestation = 1;
+  RecalculateAttestationsResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SimulateAttestation`.
+message SimulateAttestationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string attestation_id = 2;
+  Attestation attestation = 3;
+  SimulateAttestationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SimulateAttestation`.
+message SimulateAttestationResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated SimulateAttestationResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Attestation attestation = 1;
+  SimulateAttestationResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExplainAttestationCalculation`.
+message ExplainAttestationCalculationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string attestation_id = 2;
+  Attestation attestation = 3;
+  ExplainAttestationCalculationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ExplainAttestationCalculation`.
+message ExplainAttestationCalculationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Attestation attestation = 1;
+  ExplainAttestationCalculationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetAttestationRates`.
+message GetAttestationRatesRequest {
+  acme.common.v1.RequestContext context = 1;
+  string attestation_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetAttestationRates`.
+message GetAttestationRatesResponse {
+  Attestation attestation = 1;
+  acme.common.v1.OperationResult result = 2;
+}

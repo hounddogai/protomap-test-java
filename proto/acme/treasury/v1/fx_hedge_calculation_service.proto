@@ -1,0 +1,292 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.treasury.v1;
+
+import "acme/common/v1/address.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/money.proto";
+import "acme/common/v1/operation.proto";
+import "acme/treasury/v1/treasury.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Treasury.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/treasury/v1;treasuryv1";
+option java_multiple_files = true;
+option java_outer_classname = "FxHedgeCalculationServiceProto";
+option java_package = "com.acme.treasury.v1";
+
+// Computes the figures of a fx hedge, such as totals, taxes, and estimates.
+service FxHedgeCalculationService {
+  // Calculates a fx hedge.
+  rpc CalculateFxHedge(CalculateFxHedgeRequest) returns (CalculateFxHedgeResponse);
+
+  // Estimates a fx hedge.
+  rpc EstimateFxHedge(EstimateFxHedgeRequest) returns (EstimateFxHedgeResponse);
+
+  // Compares a fx hedge.
+  rpc CompareFxHedgeOptions(CompareFxHedgeOptionsRequest) returns (CompareFxHedgeOptionsResponse);
+
+  // Recalculates a fx hedge.
+  rpc RecalculateFxHedges(RecalculateFxHedgesRequest) returns (RecalculateFxHedgesResponse);
+
+  // Simulates a fx hedge.
+  rpc SimulateFxHedge(SimulateFxHedgeRequest) returns (SimulateFxHedgeResponse);
+
+  // Explains a fx hedge.
+  rpc ExplainFxHedgeCalculation(ExplainFxHedgeCalculationRequest) returns (ExplainFxHedgeCalculationResponse);
+
+  // Returns a fx hedge.
+  rpc GetFxHedgeRates(GetFxHedgeRatesRequest) returns (GetFxHedgeRatesResponse);
+}
+
+// The request of `CalculateFxHedge`.
+message CalculateFxHedgeRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string fx_hedge_id = 2;
+  FxHedge fx_hedge = 3;
+  CalculateFxHedgeRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CalculateFxHedge`.
+message CalculateFxHedgeResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated CalculateFxHedgeResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  FxHedge fx_hedge = 1;
+  CalculateFxHedgeResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `EstimateFxHedge`.
+message EstimateFxHedgeRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string fx_hedge_id = 2;
+  FxHedge fx_hedge = 3;
+  EstimateFxHedgeRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `EstimateFxHedge`.
+message EstimateFxHedgeResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated EstimateFxHedgeResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  FxHedge fx_hedge = 1;
+  EstimateFxHedgeResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CompareFxHedgeOptions`.
+message CompareFxHedgeOptionsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string fx_hedge_id = 2;
+  FxHedge fx_hedge = 3;
+  CompareFxHedgeOptionsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CompareFxHedgeOptions`.
+message CompareFxHedgeOptionsResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated CompareFxHedgeOptionsResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  FxHedge fx_hedge = 1;
+  CompareFxHedgeOptionsResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RecalculateFxHedges`.
+message RecalculateFxHedgesRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string fx_hedge_id = 2;
+  FxHedge fx_hedge = 3;
+  RecalculateFxHedgesRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RecalculateFxHedges`.
+message RecalculateFxHedgesResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated RecalculateFxHedgesResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  FxHedge fx_hedge = 1;
+  RecalculateFxHedgesResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SimulateFxHedge`.
+message SimulateFxHedgeRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string fx_hedge_id = 2;
+  FxHedge fx_hedge = 3;
+  SimulateFxHedgeRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SimulateFxHedge`.
+message SimulateFxHedgeResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated SimulateFxHedgeResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  FxHedge fx_hedge = 1;
+  SimulateFxHedgeResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExplainFxHedgeCalculation`.
+message ExplainFxHedgeCalculationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string fx_hedge_id = 2;
+  FxHedge fx_hedge = 3;
+  ExplainFxHedgeCalculationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ExplainFxHedgeCalculation`.
+message ExplainFxHedgeCalculationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FxHedge fx_hedge = 1;
+  ExplainFxHedgeCalculationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetFxHedgeRates`.
+message GetFxHedgeRatesRequest {
+  acme.common.v1.RequestContext context = 1;
+  string fx_hedge_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetFxHedgeRates`.
+message GetFxHedgeRatesResponse {
+  FxHedge fx_hedge = 1;
+  acme.common.v1.OperationResult result = 2;
+}

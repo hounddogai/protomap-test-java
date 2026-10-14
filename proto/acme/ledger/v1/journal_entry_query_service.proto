@@ -1,0 +1,186 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.ledger.v1;
+
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/ledger/v1/ledger.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Ledger.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/ledger/v1;ledgerv1";
+option java_multiple_files = true;
+option java_outer_classname = "JournalEntryQueryServiceProto";
+option java_package = "com.acme.ledger.v1";
+
+// Answers read-only questions about journal entries, for screens and reports.
+service JournalEntryQueryService {
+  // Returns a journal entry.
+  rpc LookupJournalEntry(LookupJournalEntryRequest) returns (LookupJournalEntryResponse);
+
+  // Lists journal entries a page at a time.
+  rpc BrowseJournalEntries(BrowseJournalEntriesRequest) returns (BrowseJournalEntriesResponse);
+
+  // Lists journal entries a page at a time.
+  rpc FindJournalEntries(FindJournalEntriesRequest) returns (FindJournalEntriesResponse);
+
+  // Returns several journal entries at once.
+  rpc ResolveJournalEntries(ResolveJournalEntriesRequest) returns (ResolveJournalEntriesResponse);
+
+  // Streams every matching journal entry.
+  rpc ExportJournalEntries(ExportJournalEntriesRequest) returns (stream ExportJournalEntriesResponse);
+
+  // Lists journal entries a page at a time.
+  rpc SuggestJournalEntries(SuggestJournalEntriesRequest) returns (SuggestJournalEntriesResponse);
+
+  // Returns a journal entry.
+  rpc PeekJournalEntry(PeekJournalEntryRequest) returns (PeekJournalEntryResponse);
+}
+
+// The request of `LookupJournalEntry`.
+message LookupJournalEntryRequest {
+  acme.common.v1.RequestContext context = 1;
+  string journal_entry_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `LookupJournalEntry`.
+message LookupJournalEntryResponse {
+  JournalEntry journal_entry = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `BrowseJournalEntries`.
+message BrowseJournalEntriesRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated JournalEntryStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  BrowseJournalEntriesRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `BrowseJournalEntries`.
+message BrowseJournalEntriesResponse {
+  repeated JournalEntry journal_entries = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `FindJournalEntries`.
+message FindJournalEntriesRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated JournalEntryStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  FindJournalEntriesRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `FindJournalEntries`.
+message FindJournalEntriesResponse {
+  repeated JournalEntry journal_entries = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ResolveJournalEntries`.
+message ResolveJournalEntriesRequest {
+  acme.common.v1.RequestContext context = 1;
+  repeated string journal_entry_ids = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `ResolveJournalEntries`.
+message ResolveJournalEntriesResponse {
+  repeated JournalEntry journal_entries = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExportJournalEntries`.
+message ExportJournalEntriesRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated JournalEntryStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  ExportJournalEntriesRequest.Filter filter = 2;
+  string format = 3;
+  google.protobuf.FieldMask fields = 4;
+  string destination_uri = 5;
+}
+
+// The response of `ExportJournalEntries`.
+message ExportJournalEntriesResponse {
+  JournalEntry journal_entry = 1;
+  string change_type = 2;
+  google.protobuf.Timestamp changed_at = 3;
+  int64 sequence = 4;
+  acme.common.v1.OperationResult result = 5;
+}
+
+// The request of `SuggestJournalEntries`.
+message SuggestJournalEntriesRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated JournalEntryStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  SuggestJournalEntriesRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `SuggestJournalEntries`.
+message SuggestJournalEntriesResponse {
+  repeated JournalEntry journal_entries = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PeekJournalEntry`.
+message PeekJournalEntryRequest {
+  acme.common.v1.RequestContext context = 1;
+  string journal_entry_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `PeekJournalEntry`.
+message PeekJournalEntryResponse {
+  JournalEntry journal_entry = 1;
+  acme.common.v1.OperationResult result = 2;
+}

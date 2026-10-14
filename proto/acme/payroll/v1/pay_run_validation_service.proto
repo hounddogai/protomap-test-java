@@ -1,0 +1,223 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.payroll.v1;
+
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/payroll/v1/payroll.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Payroll.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/payroll/v1;payrollv1";
+option java_multiple_files = true;
+option java_outer_classname = "PayRunValidationServiceProto";
+option java_package = "com.acme.payroll.v1";
+
+// Checks pay runs against the rules before anything acts on them.
+service PayRunValidationService {
+  // Validates a pay run.
+  rpc ValidatePayRun(ValidatePayRunRequest) returns (ValidatePayRunResponse);
+
+  // Previews a pay run.
+  rpc PreviewPayRun(PreviewPayRunRequest) returns (PreviewPayRunResponse);
+
+  // Checks a pay run.
+  rpc CheckPayRunEligibility(CheckPayRunEligibilityRequest) returns (CheckPayRunEligibilityResponse);
+
+  // Explains a pay run.
+  rpc ExplainPayRunDecision(ExplainPayRunDecisionRequest) returns (ExplainPayRunDecisionResponse);
+
+  // Lints a pay run.
+  rpc LintPayRuns(LintPayRunsRequest) returns (LintPayRunsResponse);
+
+  // Returns a pay run.
+  rpc GetPayRunRules(GetPayRunRulesRequest) returns (GetPayRunRulesResponse);
+}
+
+// The request of `ValidatePayRun`.
+message ValidatePayRunRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string pay_run_id = 2;
+  PayRun pay_run = 3;
+  ValidatePayRunRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ValidatePayRun`.
+message ValidatePayRunResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PayRun pay_run = 1;
+  ValidatePayRunResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PreviewPayRun`.
+message PreviewPayRunRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string pay_run_id = 2;
+  PayRun pay_run = 3;
+  PreviewPayRunRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PreviewPayRun`.
+message PreviewPayRunResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PayRun pay_run = 1;
+  PreviewPayRunResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CheckPayRunEligibility`.
+message CheckPayRunEligibilityRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string pay_run_id = 2;
+  PayRun pay_run = 3;
+  CheckPayRunEligibilityRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CheckPayRunEligibility`.
+message CheckPayRunEligibilityResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PayRun pay_run = 1;
+  CheckPayRunEligibilityResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExplainPayRunDecision`.
+message ExplainPayRunDecisionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string pay_run_id = 2;
+  PayRun pay_run = 3;
+  ExplainPayRunDecisionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ExplainPayRunDecision`.
+message ExplainPayRunDecisionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PayRun pay_run = 1;
+  ExplainPayRunDecisionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `LintPayRuns`.
+message LintPayRunsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string pay_run_id = 2;
+  PayRun pay_run = 3;
+  LintPayRunsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `LintPayRuns`.
+message LintPayRunsResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PayRun pay_run = 1;
+  LintPayRunsResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetPayRunRules`.
+message GetPayRunRulesRequest {
+  acme.common.v1.RequestContext context = 1;
+  string pay_run_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetPayRunRules`.
+message GetPayRunRulesResponse {
+  PayRun pay_run = 1;
+  acme.common.v1.OperationResult result = 2;
+}

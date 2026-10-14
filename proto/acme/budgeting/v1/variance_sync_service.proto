@@ -1,0 +1,284 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.budgeting.v1;
+
+import "acme/budgeting/v1/budgeting.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Budgeting.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/budgeting/v1;budgetingv1";
+option java_multiple_files = true;
+option java_outer_classname = "VarianceSyncServiceProto";
+option java_package = "com.acme.budgeting.v1";
+
+// Keeps variances in step with the systems of record in other regions.
+service VarianceSyncService {
+  // Syncs a variance.
+  rpc SyncVariances(SyncVariancesRequest) returns (SyncVariancesResponse);
+
+  // Pushs a variance.
+  rpc PushVariance(PushVarianceRequest) returns (PushVarianceResponse);
+
+  // Pulls a variance.
+  rpc PullVariances(PullVariancesRequest) returns (PullVariancesResponse);
+
+  // Reconciles a variance.
+  rpc ReconcileVariances(ReconcileVariancesRequest) returns (ReconcileVariancesResponse);
+
+  // Exchanges changes of variances with a peer.
+  rpc StreamVarianceChanges(stream StreamVarianceChangesRequest) returns (stream StreamVarianceChangesResponse);
+
+  // Resolves a variance.
+  rpc ResolveVarianceConflict(ResolveVarianceConflictRequest) returns (ResolveVarianceConflictResponse);
+
+  // Returns a variance.
+  rpc GetVarianceSyncState(GetVarianceSyncStateRequest) returns (GetVarianceSyncStateResponse);
+
+  // Lists variances a page at a time.
+  rpc ListVarianceConflicts(ListVarianceConflictsRequest) returns (ListVarianceConflictsResponse);
+}
+
+// The request of `SyncVariances`.
+message SyncVariancesRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string cursor = 1;
+    bytes payload = 2;
+    string resolution = 3;
+    string peer_region = 4;
+    string checksum = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string variance_id = 2;
+  Variance variance = 3;
+  SyncVariancesRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SyncVariances`.
+message SyncVariancesResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Variance variance = 1;
+  SyncVariancesResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PushVariance`.
+message PushVarianceRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string cursor = 1;
+    bytes payload = 2;
+    string resolution = 3;
+    string peer_region = 4;
+    string checksum = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string variance_id = 2;
+  Variance variance = 3;
+  PushVarianceRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PushVariance`.
+message PushVarianceResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Variance variance = 1;
+  PushVarianceResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PullVariances`.
+message PullVariancesRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string cursor = 1;
+    bytes payload = 2;
+    string resolution = 3;
+    string peer_region = 4;
+    string checksum = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string variance_id = 2;
+  Variance variance = 3;
+  PullVariancesRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PullVariances`.
+message PullVariancesResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Variance variance = 1;
+  PullVariancesResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ReconcileVariances`.
+message ReconcileVariancesRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string cursor = 1;
+    bytes payload = 2;
+    string resolution = 3;
+    string peer_region = 4;
+    string checksum = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string variance_id = 2;
+  Variance variance = 3;
+  ReconcileVariancesRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ReconcileVariances`.
+message ReconcileVariancesResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Variance variance = 1;
+  ReconcileVariancesResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `StreamVarianceChanges`.
+message StreamVarianceChangesRequest {
+  // An acknowledgment of a change the peer sent.
+  message ChangeAck {
+    int64 sequence = 1;
+    string status = 2;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  oneof frame {
+    Variance change = 2;
+    StreamVarianceChangesRequest.ChangeAck ack = 3;
+  }
+  string cursor = 4;
+}
+
+// The response of `StreamVarianceChanges`.
+message StreamVarianceChangesResponse {
+  Variance variance = 1;
+  string change_type = 2;
+  google.protobuf.Timestamp changed_at = 3;
+  int64 sequence = 4;
+  acme.common.v1.OperationResult result = 5;
+}
+
+// The request of `ResolveVarianceConflict`.
+message ResolveVarianceConflictRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string cursor = 1;
+    bytes payload = 2;
+    string resolution = 3;
+    string peer_region = 4;
+    string checksum = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string variance_id = 2;
+  Variance variance = 3;
+  ResolveVarianceConflictRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ResolveVarianceConflict`.
+message ResolveVarianceConflictResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Variance variance = 1;
+  ResolveVarianceConflictResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetVarianceSyncState`.
+message GetVarianceSyncStateRequest {
+  acme.common.v1.RequestContext context = 1;
+  string variance_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetVarianceSyncState`.
+message GetVarianceSyncStateResponse {
+  Variance variance = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `ListVarianceConflicts`.
+message ListVarianceConflictsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated VarianceStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListVarianceConflictsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListVarianceConflicts`.
+message ListVarianceConflictsResponse {
+  repeated Variance variances = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}

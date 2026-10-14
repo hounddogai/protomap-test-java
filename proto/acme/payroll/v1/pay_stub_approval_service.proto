@@ -1,0 +1,333 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.payroll.v1;
+
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/identity/v1/refs.proto";
+import "acme/payroll/v1/payroll.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Payroll.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/payroll/v1;payrollv1";
+option java_multiple_files = true;
+option java_outer_classname = "PayStubApprovalServiceProto";
+option java_package = "com.acme.payroll.v1";
+
+// Routes pay stubs through approval, with escalation and delegation.
+service PayStubApprovalService {
+  // Submits a pay stub.
+  rpc SubmitPayStub(SubmitPayStubRequest) returns (SubmitPayStubResponse);
+
+  // Approves a pay stub.
+  rpc ApprovePayStub(ApprovePayStubRequest) returns (ApprovePayStubResponse);
+
+  // Rejects a pay stub.
+  rpc RejectPayStub(RejectPayStubRequest) returns (RejectPayStubResponse);
+
+  // Escalates a pay stub.
+  rpc EscalatePayStub(EscalatePayStubRequest) returns (EscalatePayStubResponse);
+
+  // Lists pay stubs a page at a time.
+  rpc ListPendingPayStubs(ListPendingPayStubsRequest) returns (ListPendingPayStubsResponse);
+
+  // Delegates a pay stub.
+  rpc DelegatePayStubApproval(DelegatePayStubApprovalRequest) returns (DelegatePayStubApprovalResponse);
+
+  // Recalls a pay stub.
+  rpc RecallPayStub(RecallPayStubRequest) returns (RecallPayStubResponse);
+
+  // Returns a pay stub.
+  rpc GetPayStubApprovalStatus(GetPayStubApprovalStatusRequest) returns (GetPayStubApprovalStatusResponse);
+
+  // Comments a pay stub.
+  rpc CommentPayStubApproval(CommentPayStubApprovalRequest) returns (CommentPayStubApprovalResponse);
+}
+
+// The request of `SubmitPayStub`.
+message SubmitPayStubRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string pay_stub_id = 2;
+  PayStub pay_stub = 3;
+  SubmitPayStubRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SubmitPayStub`.
+message SubmitPayStubResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PayStub pay_stub = 1;
+  SubmitPayStubResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ApprovePayStub`.
+message ApprovePayStubRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string pay_stub_id = 2;
+  PayStub pay_stub = 3;
+  ApprovePayStubRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ApprovePayStub`.
+message ApprovePayStubResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PayStub pay_stub = 1;
+  ApprovePayStubResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RejectPayStub`.
+message RejectPayStubRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string pay_stub_id = 2;
+  PayStub pay_stub = 3;
+  RejectPayStubRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RejectPayStub`.
+message RejectPayStubResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PayStub pay_stub = 1;
+  RejectPayStubResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `EscalatePayStub`.
+message EscalatePayStubRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string pay_stub_id = 2;
+  PayStub pay_stub = 3;
+  EscalatePayStubRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `EscalatePayStub`.
+message EscalatePayStubResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PayStub pay_stub = 1;
+  EscalatePayStubResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ListPendingPayStubs`.
+message ListPendingPayStubsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated PayStubStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListPendingPayStubsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListPendingPayStubs`.
+message ListPendingPayStubsResponse {
+  repeated PayStub pay_stubs = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `DelegatePayStubApproval`.
+message DelegatePayStubApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string pay_stub_id = 2;
+  PayStub pay_stub = 3;
+  DelegatePayStubApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `DelegatePayStubApproval`.
+message DelegatePayStubApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PayStub pay_stub = 1;
+  DelegatePayStubApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RecallPayStub`.
+message RecallPayStubRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string pay_stub_id = 2;
+  PayStub pay_stub = 3;
+  RecallPayStubRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RecallPayStub`.
+message RecallPayStubResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PayStub pay_stub = 1;
+  RecallPayStubResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetPayStubApprovalStatus`.
+message GetPayStubApprovalStatusRequest {
+  acme.common.v1.RequestContext context = 1;
+  string pay_stub_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetPayStubApprovalStatus`.
+message GetPayStubApprovalStatusResponse {
+  PayStub pay_stub = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `CommentPayStubApproval`.
+message CommentPayStubApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string pay_stub_id = 2;
+  PayStub pay_stub = 3;
+  CommentPayStubApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CommentPayStubApproval`.
+message CommentPayStubApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PayStub pay_stub = 1;
+  CommentPayStubApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

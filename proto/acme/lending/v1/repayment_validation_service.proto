@@ -1,0 +1,305 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.lending.v1;
+
+import "acme/common/v1/address.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/money.proto";
+import "acme/common/v1/operation.proto";
+import "acme/lending/v1/lending.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Lending.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/lending/v1;lendingv1";
+option java_multiple_files = true;
+option java_outer_classname = "RepaymentValidationServiceProto";
+option java_package = "com.acme.lending.v1";
+
+// Checks repayments against the rules before anything acts on them.
+service RepaymentValidationService {
+  // Validates a repayment.
+  rpc ValidateRepayment(ValidateRepaymentRequest) returns (ValidateRepaymentResponse);
+
+  // Previews a repayment.
+  rpc PreviewRepayment(PreviewRepaymentRequest) returns (PreviewRepaymentResponse);
+
+  // Checks a repayment.
+  rpc CheckRepaymentEligibility(CheckRepaymentEligibilityRequest) returns (CheckRepaymentEligibilityResponse);
+
+  // Normalizes a repayment.
+  rpc NormalizeRepayment(NormalizeRepaymentRequest) returns (NormalizeRepaymentResponse);
+
+  // Explains a repayment.
+  rpc ExplainRepaymentDecision(ExplainRepaymentDecisionRequest) returns (ExplainRepaymentDecisionResponse);
+
+  // Scores a repayment.
+  rpc ScoreRepayment(ScoreRepaymentRequest) returns (ScoreRepaymentResponse);
+
+  // Lints a repayment.
+  rpc LintRepayments(LintRepaymentsRequest) returns (LintRepaymentsResponse);
+
+  // Returns a repayment.
+  rpc GetRepaymentRules(GetRepaymentRulesRequest) returns (GetRepaymentRulesResponse);
+}
+
+// The request of `ValidateRepayment`.
+message ValidateRepaymentRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string repayment_id = 2;
+  Repayment repayment = 3;
+  ValidateRepaymentRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ValidateRepayment`.
+message ValidateRepaymentResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Repayment repayment = 1;
+  ValidateRepaymentResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PreviewRepayment`.
+message PreviewRepaymentRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string repayment_id = 2;
+  Repayment repayment = 3;
+  PreviewRepaymentRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PreviewRepayment`.
+message PreviewRepaymentResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Repayment repayment = 1;
+  PreviewRepaymentResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CheckRepaymentEligibility`.
+message CheckRepaymentEligibilityRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string repayment_id = 2;
+  Repayment repayment = 3;
+  CheckRepaymentEligibilityRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CheckRepaymentEligibility`.
+message CheckRepaymentEligibilityResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Repayment repayment = 1;
+  CheckRepaymentEligibilityResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `NormalizeRepayment`.
+message NormalizeRepaymentRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string repayment_id = 2;
+  Repayment repayment = 3;
+  NormalizeRepaymentRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `NormalizeRepayment`.
+message NormalizeRepaymentResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Repayment repayment = 1;
+  NormalizeRepaymentResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExplainRepaymentDecision`.
+message ExplainRepaymentDecisionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string repayment_id = 2;
+  Repayment repayment = 3;
+  ExplainRepaymentDecisionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ExplainRepaymentDecision`.
+message ExplainRepaymentDecisionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Repayment repayment = 1;
+  ExplainRepaymentDecisionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ScoreRepayment`.
+message ScoreRepaymentRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string repayment_id = 2;
+  Repayment repayment = 3;
+  ScoreRepaymentRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ScoreRepayment`.
+message ScoreRepaymentResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated ScoreRepaymentResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Repayment repayment = 1;
+  ScoreRepaymentResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `LintRepayments`.
+message LintRepaymentsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string repayment_id = 2;
+  Repayment repayment = 3;
+  LintRepaymentsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `LintRepayments`.
+message LintRepaymentsResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Repayment repayment = 1;
+  LintRepaymentsResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetRepaymentRules`.
+message GetRepaymentRulesRequest {
+  acme.common.v1.RequestContext context = 1;
+  string repayment_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetRepaymentRules`.
+message GetRepaymentRulesResponse {
+  Repayment repayment = 1;
+  acme.common.v1.OperationResult result = 2;
+}

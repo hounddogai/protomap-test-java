@@ -1,0 +1,292 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.expenses.v1;
+
+import "acme/common/v1/address.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/money.proto";
+import "acme/common/v1/operation.proto";
+import "acme/expenses/v1/expenses.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Expenses.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/expenses/v1;expensesv1";
+option java_multiple_files = true;
+option java_outer_classname = "ReceiptCalculationServiceProto";
+option java_package = "com.acme.expenses.v1";
+
+// Computes the figures of a receipt, such as totals, taxes, and estimates.
+service ReceiptCalculationService {
+  // Calculates a receipt.
+  rpc CalculateReceipt(CalculateReceiptRequest) returns (CalculateReceiptResponse);
+
+  // Estimates a receipt.
+  rpc EstimateReceipt(EstimateReceiptRequest) returns (EstimateReceiptResponse);
+
+  // Compares a receipt.
+  rpc CompareReceiptOptions(CompareReceiptOptionsRequest) returns (CompareReceiptOptionsResponse);
+
+  // Recalculates a receipt.
+  rpc RecalculateReceipts(RecalculateReceiptsRequest) returns (RecalculateReceiptsResponse);
+
+  // Simulates a receipt.
+  rpc SimulateReceipt(SimulateReceiptRequest) returns (SimulateReceiptResponse);
+
+  // Explains a receipt.
+  rpc ExplainReceiptCalculation(ExplainReceiptCalculationRequest) returns (ExplainReceiptCalculationResponse);
+
+  // Returns a receipt.
+  rpc GetReceiptRates(GetReceiptRatesRequest) returns (GetReceiptRatesResponse);
+}
+
+// The request of `CalculateReceipt`.
+message CalculateReceiptRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string receipt_id = 2;
+  Receipt receipt = 3;
+  CalculateReceiptRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CalculateReceipt`.
+message CalculateReceiptResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated CalculateReceiptResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Receipt receipt = 1;
+  CalculateReceiptResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `EstimateReceipt`.
+message EstimateReceiptRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string receipt_id = 2;
+  Receipt receipt = 3;
+  EstimateReceiptRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `EstimateReceipt`.
+message EstimateReceiptResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated EstimateReceiptResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Receipt receipt = 1;
+  EstimateReceiptResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CompareReceiptOptions`.
+message CompareReceiptOptionsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string receipt_id = 2;
+  Receipt receipt = 3;
+  CompareReceiptOptionsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CompareReceiptOptions`.
+message CompareReceiptOptionsResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated CompareReceiptOptionsResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Receipt receipt = 1;
+  CompareReceiptOptionsResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RecalculateReceipts`.
+message RecalculateReceiptsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string receipt_id = 2;
+  Receipt receipt = 3;
+  RecalculateReceiptsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RecalculateReceipts`.
+message RecalculateReceiptsResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated RecalculateReceiptsResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Receipt receipt = 1;
+  RecalculateReceiptsResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SimulateReceipt`.
+message SimulateReceiptRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string receipt_id = 2;
+  Receipt receipt = 3;
+  SimulateReceiptRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SimulateReceipt`.
+message SimulateReceiptResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated SimulateReceiptResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Receipt receipt = 1;
+  SimulateReceiptResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExplainReceiptCalculation`.
+message ExplainReceiptCalculationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string receipt_id = 2;
+  Receipt receipt = 3;
+  ExplainReceiptCalculationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ExplainReceiptCalculation`.
+message ExplainReceiptCalculationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Receipt receipt = 1;
+  ExplainReceiptCalculationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetReceiptRates`.
+message GetReceiptRatesRequest {
+  acme.common.v1.RequestContext context = 1;
+  string receipt_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetReceiptRates`.
+message GetReceiptRatesResponse {
+  Receipt receipt = 1;
+  acme.common.v1.OperationResult result = 2;
+}

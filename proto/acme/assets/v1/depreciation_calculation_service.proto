@@ -1,0 +1,335 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.assets.v1;
+
+import "acme/assets/v1/assets.proto";
+import "acme/common/v1/address.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/money.proto";
+import "acme/common/v1/operation.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Assets.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/assets/v1;assetsv1";
+option java_multiple_files = true;
+option java_outer_classname = "DepreciationCalculationServiceProto";
+option java_package = "com.acme.assets.v1";
+
+// Computes the figures of a depreciation, such as totals, taxes, and estimates.
+service DepreciationCalculationService {
+  // Calculates a depreciation.
+  rpc CalculateDepreciation(CalculateDepreciationRequest) returns (CalculateDepreciationResponse);
+
+  // Estimates a depreciation.
+  rpc EstimateDepreciation(EstimateDepreciationRequest) returns (EstimateDepreciationResponse);
+
+  // Quotes a depreciation.
+  rpc QuoteDepreciation(QuoteDepreciationRequest) returns (QuoteDepreciationResponse);
+
+  // Compares a depreciation.
+  rpc CompareDepreciationOptions(CompareDepreciationOptionsRequest) returns (CompareDepreciationOptionsResponse);
+
+  // Recalculates a depreciation.
+  rpc RecalculateDepreciations(RecalculateDepreciationsRequest) returns (RecalculateDepreciationsResponse);
+
+  // Simulates a depreciation.
+  rpc SimulateDepreciation(SimulateDepreciationRequest) returns (SimulateDepreciationResponse);
+
+  // Explains a depreciation.
+  rpc ExplainDepreciationCalculation(ExplainDepreciationCalculationRequest) returns (ExplainDepreciationCalculationResponse);
+
+  // Returns a depreciation.
+  rpc GetDepreciationRates(GetDepreciationRatesRequest) returns (GetDepreciationRatesResponse);
+}
+
+// The request of `CalculateDepreciation`.
+message CalculateDepreciationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string depreciation_id = 2;
+  Depreciation depreciation = 3;
+  CalculateDepreciationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CalculateDepreciation`.
+message CalculateDepreciationResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated CalculateDepreciationResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Depreciation depreciation = 1;
+  CalculateDepreciationResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `EstimateDepreciation`.
+message EstimateDepreciationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string depreciation_id = 2;
+  Depreciation depreciation = 3;
+  EstimateDepreciationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `EstimateDepreciation`.
+message EstimateDepreciationResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated EstimateDepreciationResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Depreciation depreciation = 1;
+  EstimateDepreciationResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `QuoteDepreciation`.
+message QuoteDepreciationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string depreciation_id = 2;
+  Depreciation depreciation = 3;
+  QuoteDepreciationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `QuoteDepreciation`.
+message QuoteDepreciationResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated QuoteDepreciationResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Depreciation depreciation = 1;
+  QuoteDepreciationResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CompareDepreciationOptions`.
+message CompareDepreciationOptionsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string depreciation_id = 2;
+  Depreciation depreciation = 3;
+  CompareDepreciationOptionsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CompareDepreciationOptions`.
+message CompareDepreciationOptionsResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated CompareDepreciationOptionsResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Depreciation depreciation = 1;
+  CompareDepreciationOptionsResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RecalculateDepreciations`.
+message RecalculateDepreciationsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string depreciation_id = 2;
+  Depreciation depreciation = 3;
+  RecalculateDepreciationsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RecalculateDepreciations`.
+message RecalculateDepreciationsResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated RecalculateDepreciationsResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Depreciation depreciation = 1;
+  RecalculateDepreciationsResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SimulateDepreciation`.
+message SimulateDepreciationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string depreciation_id = 2;
+  Depreciation depreciation = 3;
+  SimulateDepreciationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SimulateDepreciation`.
+message SimulateDepreciationResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated SimulateDepreciationResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Depreciation depreciation = 1;
+  SimulateDepreciationResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExplainDepreciationCalculation`.
+message ExplainDepreciationCalculationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string depreciation_id = 2;
+  Depreciation depreciation = 3;
+  ExplainDepreciationCalculationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ExplainDepreciationCalculation`.
+message ExplainDepreciationCalculationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Depreciation depreciation = 1;
+  ExplainDepreciationCalculationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetDepreciationRates`.
+message GetDepreciationRatesRequest {
+  acme.common.v1.RequestContext context = 1;
+  string depreciation_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetDepreciationRates`.
+message GetDepreciationRatesResponse {
+  Depreciation depreciation = 1;
+  acme.common.v1.OperationResult result = 2;
+}

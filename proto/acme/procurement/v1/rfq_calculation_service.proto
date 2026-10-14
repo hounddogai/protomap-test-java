@@ -1,0 +1,275 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.procurement.v1;
+
+import "acme/common/v1/address.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/money.proto";
+import "acme/common/v1/operation.proto";
+import "acme/procurement/v1/procurement.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Procurement.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/procurement/v1;procurementv1";
+option java_multiple_files = true;
+option java_outer_classname = "RfqCalculationServiceProto";
+option java_package = "com.acme.procurement.v1";
+
+// Computes the figures of a rfq, such as totals, taxes, and estimates.
+service RfqCalculationService {
+  // Calculates a rfq.
+  rpc CalculateRfq(CalculateRfqRequest) returns (CalculateRfqResponse);
+
+  // Estimates a rfq.
+  rpc EstimateRfq(EstimateRfqRequest) returns (EstimateRfqResponse);
+
+  // Quotes a rfq.
+  rpc QuoteRfq(QuoteRfqRequest) returns (QuoteRfqResponse);
+
+  // Compares a rfq.
+  rpc CompareRfqOptions(CompareRfqOptionsRequest) returns (CompareRfqOptionsResponse);
+
+  // Simulates a rfq.
+  rpc SimulateRfq(SimulateRfqRequest) returns (SimulateRfqResponse);
+
+  // Explains a rfq.
+  rpc ExplainRfqCalculation(ExplainRfqCalculationRequest) returns (ExplainRfqCalculationResponse);
+}
+
+// The request of `CalculateRfq`.
+message CalculateRfqRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string rfq_id = 2;
+  Rfq rfq = 3;
+  CalculateRfqRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CalculateRfq`.
+message CalculateRfqResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated CalculateRfqResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Rfq rfq = 1;
+  CalculateRfqResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `EstimateRfq`.
+message EstimateRfqRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string rfq_id = 2;
+  Rfq rfq = 3;
+  EstimateRfqRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `EstimateRfq`.
+message EstimateRfqResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated EstimateRfqResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Rfq rfq = 1;
+  EstimateRfqResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `QuoteRfq`.
+message QuoteRfqRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string rfq_id = 2;
+  Rfq rfq = 3;
+  QuoteRfqRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `QuoteRfq`.
+message QuoteRfqResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated QuoteRfqResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Rfq rfq = 1;
+  QuoteRfqResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CompareRfqOptions`.
+message CompareRfqOptionsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string rfq_id = 2;
+  Rfq rfq = 3;
+  CompareRfqOptionsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CompareRfqOptions`.
+message CompareRfqOptionsResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated CompareRfqOptionsResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Rfq rfq = 1;
+  CompareRfqOptionsResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SimulateRfq`.
+message SimulateRfqRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string rfq_id = 2;
+  Rfq rfq = 3;
+  SimulateRfqRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SimulateRfq`.
+message SimulateRfqResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated SimulateRfqResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Rfq rfq = 1;
+  SimulateRfqResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExplainRfqCalculation`.
+message ExplainRfqCalculationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string rfq_id = 2;
+  Rfq rfq = 3;
+  ExplainRfqCalculationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ExplainRfqCalculation`.
+message ExplainRfqCalculationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Rfq rfq = 1;
+  ExplainRfqCalculationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

@@ -1,0 +1,295 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.assets.v1;
+
+import "acme/assets/v1/assets.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/identity/v1/refs.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Assets.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/assets/v1;assetsv1";
+option java_multiple_files = true;
+option java_outer_classname = "DepreciationApprovalServiceProto";
+option java_package = "com.acme.assets.v1";
+
+// Routes depreciations through approval, with escalation and delegation.
+service DepreciationApprovalService {
+  // Submits a depreciation.
+  rpc SubmitDepreciation(SubmitDepreciationRequest) returns (SubmitDepreciationResponse);
+
+  // Approves a depreciation.
+  rpc ApproveDepreciation(ApproveDepreciationRequest) returns (ApproveDepreciationResponse);
+
+  // Rejects a depreciation.
+  rpc RejectDepreciation(RejectDepreciationRequest) returns (RejectDepreciationResponse);
+
+  // Escalates a depreciation.
+  rpc EscalateDepreciation(EscalateDepreciationRequest) returns (EscalateDepreciationResponse);
+
+  // Lists depreciations a page at a time.
+  rpc ListPendingDepreciations(ListPendingDepreciationsRequest) returns (ListPendingDepreciationsResponse);
+
+  // Delegates a depreciation.
+  rpc DelegateDepreciationApproval(DelegateDepreciationApprovalRequest) returns (DelegateDepreciationApprovalResponse);
+
+  // Recalls a depreciation.
+  rpc RecallDepreciation(RecallDepreciationRequest) returns (RecallDepreciationResponse);
+
+  // Returns a depreciation.
+  rpc GetDepreciationApprovalStatus(GetDepreciationApprovalStatusRequest) returns (GetDepreciationApprovalStatusResponse);
+}
+
+// The request of `SubmitDepreciation`.
+message SubmitDepreciationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string depreciation_id = 2;
+  Depreciation depreciation = 3;
+  SubmitDepreciationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SubmitDepreciation`.
+message SubmitDepreciationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Depreciation depreciation = 1;
+  SubmitDepreciationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ApproveDepreciation`.
+message ApproveDepreciationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string depreciation_id = 2;
+  Depreciation depreciation = 3;
+  ApproveDepreciationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ApproveDepreciation`.
+message ApproveDepreciationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Depreciation depreciation = 1;
+  ApproveDepreciationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RejectDepreciation`.
+message RejectDepreciationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string depreciation_id = 2;
+  Depreciation depreciation = 3;
+  RejectDepreciationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RejectDepreciation`.
+message RejectDepreciationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Depreciation depreciation = 1;
+  RejectDepreciationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `EscalateDepreciation`.
+message EscalateDepreciationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string depreciation_id = 2;
+  Depreciation depreciation = 3;
+  EscalateDepreciationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `EscalateDepreciation`.
+message EscalateDepreciationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Depreciation depreciation = 1;
+  EscalateDepreciationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ListPendingDepreciations`.
+message ListPendingDepreciationsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated DepreciationStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListPendingDepreciationsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListPendingDepreciations`.
+message ListPendingDepreciationsResponse {
+  repeated Depreciation depreciations = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `DelegateDepreciationApproval`.
+message DelegateDepreciationApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string depreciation_id = 2;
+  Depreciation depreciation = 3;
+  DelegateDepreciationApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `DelegateDepreciationApproval`.
+message DelegateDepreciationApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Depreciation depreciation = 1;
+  DelegateDepreciationApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RecallDepreciation`.
+message RecallDepreciationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string depreciation_id = 2;
+  Depreciation depreciation = 3;
+  RecallDepreciationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RecallDepreciation`.
+message RecallDepreciationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Depreciation depreciation = 1;
+  RecallDepreciationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetDepreciationApprovalStatus`.
+message GetDepreciationApprovalStatusRequest {
+  acme.common.v1.RequestContext context = 1;
+  string depreciation_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetDepreciationApprovalStatus`.
+message GetDepreciationApprovalStatusResponse {
+  Depreciation depreciation = 1;
+  acme.common.v1.OperationResult result = 2;
+}

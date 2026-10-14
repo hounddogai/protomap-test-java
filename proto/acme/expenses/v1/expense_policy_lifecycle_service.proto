@@ -1,0 +1,258 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.expenses.v1;
+
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/expenses/v1/expenses.proto";
+import "acme/identity/v1/refs.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Expenses.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/expenses/v1;expensesv1";
+option java_multiple_files = true;
+option java_outer_classname = "ExpensePolicyLifecycleServiceProto";
+option java_package = "com.acme.expenses.v1";
+
+// Moves an expense policy between the states of its lifecycle.
+service ExpensePolicyLifecycleService {
+  // Activates an expense policy.
+  rpc ActivateExpensePolicy(ActivateExpensePolicyRequest) returns (ActivateExpensePolicyResponse);
+
+  // Suspends an expense policy.
+  rpc SuspendExpensePolicy(SuspendExpensePolicyRequest) returns (SuspendExpensePolicyResponse);
+
+  // Reinstates an expense policy.
+  rpc ReinstateExpensePolicy(ReinstateExpensePolicyRequest) returns (ReinstateExpensePolicyResponse);
+
+  // Renews an expense policy.
+  rpc RenewExpensePolicy(RenewExpensePolicyRequest) returns (RenewExpensePolicyResponse);
+
+  // Expires an expense policy.
+  rpc ExpireExpensePolicy(ExpireExpensePolicyRequest) returns (ExpireExpensePolicyResponse);
+
+  // Returns an expense policy.
+  rpc GetExpensePolicyLifecycle(GetExpensePolicyLifecycleRequest) returns (GetExpensePolicyLifecycleResponse);
+
+  // Schedules an expense policy.
+  rpc ScheduleExpensePolicyExpiry(ScheduleExpensePolicyExpiryRequest) returns (ScheduleExpensePolicyExpiryResponse);
+}
+
+// The request of `ActivateExpensePolicy`.
+message ActivateExpensePolicyRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string expense_policy_id = 2;
+  ActivateExpensePolicyRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ActivateExpensePolicy`.
+message ActivateExpensePolicyResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ExpensePolicy expense_policy = 1;
+  ActivateExpensePolicyResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SuspendExpensePolicy`.
+message SuspendExpensePolicyRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string expense_policy_id = 2;
+  SuspendExpensePolicyRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `SuspendExpensePolicy`.
+message SuspendExpensePolicyResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ExpensePolicy expense_policy = 1;
+  SuspendExpensePolicyResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ReinstateExpensePolicy`.
+message ReinstateExpensePolicyRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string expense_policy_id = 2;
+  ReinstateExpensePolicyRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ReinstateExpensePolicy`.
+message ReinstateExpensePolicyResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ExpensePolicy expense_policy = 1;
+  ReinstateExpensePolicyResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RenewExpensePolicy`.
+message RenewExpensePolicyRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string expense_policy_id = 2;
+  RenewExpensePolicyRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `RenewExpensePolicy`.
+message RenewExpensePolicyResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ExpensePolicy expense_policy = 1;
+  RenewExpensePolicyResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExpireExpensePolicy`.
+message ExpireExpensePolicyRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string expense_policy_id = 2;
+  ExpireExpensePolicyRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ExpireExpensePolicy`.
+message ExpireExpensePolicyResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ExpensePolicy expense_policy = 1;
+  ExpireExpensePolicyResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetExpensePolicyLifecycle`.
+message GetExpensePolicyLifecycleRequest {
+  acme.common.v1.RequestContext context = 1;
+  string expense_policy_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetExpensePolicyLifecycle`.
+message GetExpensePolicyLifecycleResponse {
+  ExpensePolicy expense_policy = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `ScheduleExpensePolicyExpiry`.
+message ScheduleExpensePolicyExpiryRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string expense_policy_id = 2;
+  ExpensePolicy expense_policy = 3;
+  ScheduleExpensePolicyExpiryRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ScheduleExpensePolicyExpiry`.
+message ScheduleExpensePolicyExpiryResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ExpensePolicy expense_policy = 1;
+  ScheduleExpensePolicyExpiryResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

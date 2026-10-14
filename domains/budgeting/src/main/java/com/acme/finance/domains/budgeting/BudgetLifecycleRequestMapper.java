@@ -1,0 +1,83 @@
+package com.acme.finance.domains.budgeting;
+
+import com.acme.assets.v1.AssetTransfer;
+import com.acme.assets.v1.AssetTransferSyncServiceGrpc;
+import com.acme.assets.v1.FixedAssetRef;
+import com.acme.assets.v1.FixedAssetWorkflowServiceGrpc;
+import com.acme.assets.v1.ReconcileAssetTransfersRequest;
+import com.acme.assets.v1.ReconcileAssetTransfersResponse;
+import com.acme.assets.v1.SignalFixedAssetWorkflowRequest;
+import com.acme.assets.v1.SignalFixedAssetWorkflowResponse;
+import com.acme.audit.v1.AuditEventNotificationServiceGrpc;
+import com.acme.audit.v1.SubscribeAuditEventUpdatesRequest;
+import com.acme.audit.v1.SubscribeAuditEventUpdatesResponse;
+import com.acme.budgeting.v1.ActivateBudgetRequest;
+import com.acme.budgeting.v1.ActivateBudgetResponse;
+import com.acme.budgeting.v1.Budget;
+import com.acme.budgeting.v1.BudgetLine;
+import com.acme.budgeting.v1.BudgetLineValidationServiceGrpc;
+import com.acme.budgeting.v1.BudgetRef;
+import com.acme.budgeting.v1.ExpireBudgetRequest;
+import com.acme.budgeting.v1.ExpireBudgetResponse;
+import com.acme.budgeting.v1.Forecast;
+import com.acme.budgeting.v1.ForecastRef;
+import com.acme.budgeting.v1.ForecastSyncServiceGrpc;
+import com.acme.budgeting.v1.GetBudgetLifecycleRequest;
+import com.acme.budgeting.v1.GetBudgetLifecycleResponse;
+import com.acme.budgeting.v1.GetBudgetRatesRequest;
+import com.acme.budgeting.v1.GetBudgetRatesResponse;
+import com.acme.budgeting.v1.NormalizeBudgetLineRequest;
+import com.acme.budgeting.v1.NormalizeBudgetLineResponse;
+import com.acme.budgeting.v1.PullForecastsRequest;
+import com.acme.budgeting.v1.PullForecastsResponse;
+import com.acme.budgeting.v1.ReinstateBudgetRequest;
+import com.acme.budgeting.v1.ReinstateBudgetResponse;
+import com.acme.budgeting.v1.RenewBudgetRequest;
+import com.acme.budgeting.v1.RenewBudgetResponse;
+import com.acme.budgeting.v1.ScheduleBudgetExpiryRequest;
+import com.acme.budgeting.v1.ScheduleBudgetExpiryResponse;
+import com.acme.budgeting.v1.ScoreBudgetLineRequest;
+import com.acme.budgeting.v1.ScoreBudgetLineResponse;
+import com.acme.budgeting.v1.SuspendBudgetRequest;
+import com.acme.budgeting.v1.SuspendBudgetResponse;
+import com.acme.budgeting.v1.TerminateBudgetRequest;
+import com.acme.budgeting.v1.TerminateBudgetResponse;
+import com.acme.common.v1.AuditInfo;
+import com.acme.common.v1.ContactInfo;
+import com.acme.common.v1.OperationResult;
+import com.acme.common.v1.PostalAddress;
+import com.acme.featureflags.v1.CloneFeatureFlagRequest;
+import com.acme.featureflags.v1.CloneFeatureFlagResponse;
+import com.acme.featureflags.v1.FeatureFlag;
+import com.acme.featureflags.v1.FeatureFlagServiceGrpc;
+import com.acme.finance.platform.BeanCopies;
+import com.acme.finance.platform.ChannelRegistry;
+import com.acme.finance.platform.JsonCodec;
+import com.acme.finance.platform.RpcPort;
+import com.acme.finance.platform.RpcSupport;
+import com.acme.identity.v1.UserRef;
+import com.acme.suppliers.v1.SupplierRating;
+import com.acme.suppliers.v1.SupplierRatingValidationServiceGrpc;
+import com.acme.suppliers.v1.SupplierRef;
+import com.acme.suppliers.v1.SupplierServiceGrpc;
+import com.acme.suppliers.v1.ValidateSupplierRatingRequest;
+import com.acme.suppliers.v1.ValidateSupplierRatingResponse;
+import com.acme.suppliers.v1.WatchSuppliersRequest;
+import com.acme.suppliers.v1.WatchSuppliersResponse;
+import com.google.protobuf.Any;
+import io.grpc.CallOptions;
+import io.grpc.MethodDescriptor;
+import io.grpc.protobuf.ProtoUtils;
+import io.grpc.stub.ClientCalls;
+import java.util.concurrent.TimeUnit;
+import java.util.function.Function;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+
+/**
+ * Maps workflow inputs to downstream contracts. Implementations keep wire construction explicit.
+ */
+public interface BudgetLifecycleRequestMapper {
+    SubscribeAuditEventUpdatesRequest renewBudgetStage1(RenewBudgetRequest request);
+}

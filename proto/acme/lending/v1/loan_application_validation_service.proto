@@ -1,0 +1,260 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.lending.v1;
+
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/lending/v1/lending.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Lending.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/lending/v1;lendingv1";
+option java_multiple_files = true;
+option java_outer_classname = "LoanApplicationValidationServiceProto";
+option java_package = "com.acme.lending.v1";
+
+// Checks loan applications against the rules before anything acts on them.
+service LoanApplicationValidationService {
+  // Validates a loan application.
+  rpc ValidateLoanApplication(ValidateLoanApplicationRequest) returns (ValidateLoanApplicationResponse);
+
+  // Previews a loan application.
+  rpc PreviewLoanApplication(PreviewLoanApplicationRequest) returns (PreviewLoanApplicationResponse);
+
+  // Checks a loan application.
+  rpc CheckLoanApplicationEligibility(CheckLoanApplicationEligibilityRequest) returns (CheckLoanApplicationEligibilityResponse);
+
+  // Normalizes a loan application.
+  rpc NormalizeLoanApplication(NormalizeLoanApplicationRequest) returns (NormalizeLoanApplicationResponse);
+
+  // Explains a loan application.
+  rpc ExplainLoanApplicationDecision(ExplainLoanApplicationDecisionRequest) returns (ExplainLoanApplicationDecisionResponse);
+
+  // Lints a loan application.
+  rpc LintLoanApplications(LintLoanApplicationsRequest) returns (LintLoanApplicationsResponse);
+
+  // Returns a loan application.
+  rpc GetLoanApplicationRules(GetLoanApplicationRulesRequest) returns (GetLoanApplicationRulesResponse);
+}
+
+// The request of `ValidateLoanApplication`.
+message ValidateLoanApplicationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string loan_application_id = 2;
+  LoanApplication loan_application = 3;
+  ValidateLoanApplicationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ValidateLoanApplication`.
+message ValidateLoanApplicationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LoanApplication loan_application = 1;
+  ValidateLoanApplicationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PreviewLoanApplication`.
+message PreviewLoanApplicationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string loan_application_id = 2;
+  LoanApplication loan_application = 3;
+  PreviewLoanApplicationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PreviewLoanApplication`.
+message PreviewLoanApplicationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LoanApplication loan_application = 1;
+  PreviewLoanApplicationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CheckLoanApplicationEligibility`.
+message CheckLoanApplicationEligibilityRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string loan_application_id = 2;
+  LoanApplication loan_application = 3;
+  CheckLoanApplicationEligibilityRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CheckLoanApplicationEligibility`.
+message CheckLoanApplicationEligibilityResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LoanApplication loan_application = 1;
+  CheckLoanApplicationEligibilityResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `NormalizeLoanApplication`.
+message NormalizeLoanApplicationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string loan_application_id = 2;
+  LoanApplication loan_application = 3;
+  NormalizeLoanApplicationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `NormalizeLoanApplication`.
+message NormalizeLoanApplicationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LoanApplication loan_application = 1;
+  NormalizeLoanApplicationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExplainLoanApplicationDecision`.
+message ExplainLoanApplicationDecisionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string loan_application_id = 2;
+  LoanApplication loan_application = 3;
+  ExplainLoanApplicationDecisionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ExplainLoanApplicationDecision`.
+message ExplainLoanApplicationDecisionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LoanApplication loan_application = 1;
+  ExplainLoanApplicationDecisionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `LintLoanApplications`.
+message LintLoanApplicationsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string loan_application_id = 2;
+  LoanApplication loan_application = 3;
+  LintLoanApplicationsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `LintLoanApplications`.
+message LintLoanApplicationsResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LoanApplication loan_application = 1;
+  LintLoanApplicationsResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetLoanApplicationRules`.
+message GetLoanApplicationRulesRequest {
+  acme.common.v1.RequestContext context = 1;
+  string loan_application_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetLoanApplicationRules`.
+message GetLoanApplicationRulesResponse {
+  LoanApplication loan_application = 1;
+  acme.common.v1.OperationResult result = 2;
+}

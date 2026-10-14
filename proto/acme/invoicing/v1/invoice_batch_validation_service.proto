@@ -1,0 +1,288 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.invoicing.v1;
+
+import "acme/common/v1/address.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/money.proto";
+import "acme/common/v1/operation.proto";
+import "acme/invoicing/v1/invoicing.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Invoicing.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/invoicing/v1;invoicingv1";
+option java_multiple_files = true;
+option java_outer_classname = "InvoiceBatchValidationServiceProto";
+option java_package = "com.acme.invoicing.v1";
+
+// Checks invoice batches against the rules before anything acts on them.
+service InvoiceBatchValidationService {
+  // Validates an invoice batch.
+  rpc ValidateInvoiceBatch(ValidateInvoiceBatchRequest) returns (ValidateInvoiceBatchResponse);
+
+  // Previews an invoice batch.
+  rpc PreviewInvoiceBatch(PreviewInvoiceBatchRequest) returns (PreviewInvoiceBatchResponse);
+
+  // Checks an invoice batch.
+  rpc CheckInvoiceBatchEligibility(CheckInvoiceBatchEligibilityRequest) returns (CheckInvoiceBatchEligibilityResponse);
+
+  // Normalizes an invoice batch.
+  rpc NormalizeInvoiceBatch(NormalizeInvoiceBatchRequest) returns (NormalizeInvoiceBatchResponse);
+
+  // Explains an invoice batch.
+  rpc ExplainInvoiceBatchDecision(ExplainInvoiceBatchDecisionRequest) returns (ExplainInvoiceBatchDecisionResponse);
+
+  // Scores an invoice batch.
+  rpc ScoreInvoiceBatch(ScoreInvoiceBatchRequest) returns (ScoreInvoiceBatchResponse);
+
+  // Lints an invoice batch.
+  rpc LintInvoiceBatches(LintInvoiceBatchesRequest) returns (LintInvoiceBatchesResponse);
+}
+
+// The request of `ValidateInvoiceBatch`.
+message ValidateInvoiceBatchRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string invoice_batch_id = 2;
+  InvoiceBatch invoice_batch = 3;
+  ValidateInvoiceBatchRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ValidateInvoiceBatch`.
+message ValidateInvoiceBatchResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  InvoiceBatch invoice_batch = 1;
+  ValidateInvoiceBatchResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PreviewInvoiceBatch`.
+message PreviewInvoiceBatchRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string invoice_batch_id = 2;
+  InvoiceBatch invoice_batch = 3;
+  PreviewInvoiceBatchRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PreviewInvoiceBatch`.
+message PreviewInvoiceBatchResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  InvoiceBatch invoice_batch = 1;
+  PreviewInvoiceBatchResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CheckInvoiceBatchEligibility`.
+message CheckInvoiceBatchEligibilityRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string invoice_batch_id = 2;
+  InvoiceBatch invoice_batch = 3;
+  CheckInvoiceBatchEligibilityRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CheckInvoiceBatchEligibility`.
+message CheckInvoiceBatchEligibilityResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  InvoiceBatch invoice_batch = 1;
+  CheckInvoiceBatchEligibilityResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `NormalizeInvoiceBatch`.
+message NormalizeInvoiceBatchRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string invoice_batch_id = 2;
+  InvoiceBatch invoice_batch = 3;
+  NormalizeInvoiceBatchRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `NormalizeInvoiceBatch`.
+message NormalizeInvoiceBatchResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  InvoiceBatch invoice_batch = 1;
+  NormalizeInvoiceBatchResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExplainInvoiceBatchDecision`.
+message ExplainInvoiceBatchDecisionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string invoice_batch_id = 2;
+  InvoiceBatch invoice_batch = 3;
+  ExplainInvoiceBatchDecisionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ExplainInvoiceBatchDecision`.
+message ExplainInvoiceBatchDecisionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  InvoiceBatch invoice_batch = 1;
+  ExplainInvoiceBatchDecisionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ScoreInvoiceBatch`.
+message ScoreInvoiceBatchRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string invoice_batch_id = 2;
+  InvoiceBatch invoice_batch = 3;
+  ScoreInvoiceBatchRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ScoreInvoiceBatch`.
+message ScoreInvoiceBatchResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated ScoreInvoiceBatchResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  InvoiceBatch invoice_batch = 1;
+  ScoreInvoiceBatchResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `LintInvoiceBatches`.
+message LintInvoiceBatchesRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string invoice_batch_id = 2;
+  InvoiceBatch invoice_batch = 3;
+  LintInvoiceBatchesRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `LintInvoiceBatches`.
+message LintInvoiceBatchesResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  InvoiceBatch invoice_batch = 1;
+  LintInvoiceBatchesResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

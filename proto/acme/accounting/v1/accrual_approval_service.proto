@@ -1,0 +1,266 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.accounting.v1;
+
+import "acme/accounting/v1/accounting.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/identity/v1/refs.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Accounting.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/accounting/v1;accountingv1";
+option java_multiple_files = true;
+option java_outer_classname = "AccrualApprovalServiceProto";
+option java_package = "com.acme.accounting.v1";
+
+// Routes accruals through approval, with escalation and delegation.
+service AccrualApprovalService {
+  // Submits an accrual.
+  rpc SubmitAccrual(SubmitAccrualRequest) returns (SubmitAccrualResponse);
+
+  // Approves an accrual.
+  rpc ApproveAccrual(ApproveAccrualRequest) returns (ApproveAccrualResponse);
+
+  // Escalates an accrual.
+  rpc EscalateAccrual(EscalateAccrualRequest) returns (EscalateAccrualResponse);
+
+  // Delegates an accrual.
+  rpc DelegateAccrualApproval(DelegateAccrualApprovalRequest) returns (DelegateAccrualApprovalResponse);
+
+  // Recalls an accrual.
+  rpc RecallAccrual(RecallAccrualRequest) returns (RecallAccrualResponse);
+
+  // Returns an accrual.
+  rpc GetAccrualApprovalStatus(GetAccrualApprovalStatusRequest) returns (GetAccrualApprovalStatusResponse);
+
+  // Comments an accrual.
+  rpc CommentAccrualApproval(CommentAccrualApprovalRequest) returns (CommentAccrualApprovalResponse);
+}
+
+// The request of `SubmitAccrual`.
+message SubmitAccrualRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string accrual_id = 2;
+  Accrual accrual = 3;
+  SubmitAccrualRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SubmitAccrual`.
+message SubmitAccrualResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Accrual accrual = 1;
+  SubmitAccrualResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ApproveAccrual`.
+message ApproveAccrualRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string accrual_id = 2;
+  Accrual accrual = 3;
+  ApproveAccrualRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ApproveAccrual`.
+message ApproveAccrualResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Accrual accrual = 1;
+  ApproveAccrualResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `EscalateAccrual`.
+message EscalateAccrualRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string accrual_id = 2;
+  Accrual accrual = 3;
+  EscalateAccrualRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `EscalateAccrual`.
+message EscalateAccrualResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Accrual accrual = 1;
+  EscalateAccrualResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `DelegateAccrualApproval`.
+message DelegateAccrualApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string accrual_id = 2;
+  Accrual accrual = 3;
+  DelegateAccrualApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `DelegateAccrualApproval`.
+message DelegateAccrualApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Accrual accrual = 1;
+  DelegateAccrualApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RecallAccrual`.
+message RecallAccrualRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string accrual_id = 2;
+  Accrual accrual = 3;
+  RecallAccrualRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RecallAccrual`.
+message RecallAccrualResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Accrual accrual = 1;
+  RecallAccrualResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetAccrualApprovalStatus`.
+message GetAccrualApprovalStatusRequest {
+  acme.common.v1.RequestContext context = 1;
+  string accrual_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetAccrualApprovalStatus`.
+message GetAccrualApprovalStatusResponse {
+  Accrual accrual = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `CommentAccrualApproval`.
+message CommentAccrualApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string accrual_id = 2;
+  Accrual accrual = 3;
+  CommentAccrualApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CommentAccrualApproval`.
+message CommentAccrualApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Accrual accrual = 1;
+  CommentAccrualApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

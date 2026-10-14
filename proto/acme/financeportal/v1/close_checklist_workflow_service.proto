@@ -1,0 +1,334 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.financeportal.v1;
+
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/financeportal/v1/financeportal.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Financeportal.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/financeportal/v1;financeportalv1";
+option java_multiple_files = true;
+option java_outer_classname = "CloseChecklistWorkflowServiceProto";
+option java_package = "com.acme.financeportal.v1";
+
+// Runs the long-lived workflow that takes a close checklist from start to finish.
+service CloseChecklistWorkflowService {
+  // Starts a close checklist.
+  rpc StartCloseChecklistWorkflow(StartCloseChecklistWorkflowRequest) returns (StartCloseChecklistWorkflowResponse);
+
+  // Advances a close checklist.
+  rpc AdvanceCloseChecklistWorkflow(AdvanceCloseChecklistWorkflowRequest) returns (AdvanceCloseChecklistWorkflowResponse);
+
+  // Cancels a close checklist.
+  rpc CancelCloseChecklistWorkflow(CancelCloseChecklistWorkflowRequest) returns (CancelCloseChecklistWorkflowResponse);
+
+  // Retrys a close checklist.
+  rpc RetryCloseChecklistWorkflow(RetryCloseChecklistWorkflowRequest) returns (RetryCloseChecklistWorkflowResponse);
+
+  // Pauses a close checklist.
+  rpc PauseCloseChecklistWorkflow(PauseCloseChecklistWorkflowRequest) returns (PauseCloseChecklistWorkflowResponse);
+
+  // Resumes a close checklist.
+  rpc ResumeCloseChecklistWorkflow(ResumeCloseChecklistWorkflowRequest) returns (ResumeCloseChecklistWorkflowResponse);
+
+  // Returns a close checklist.
+  rpc InspectCloseChecklistWorkflow(InspectCloseChecklistWorkflowRequest) returns (InspectCloseChecklistWorkflowResponse);
+
+  // Lists close checklists a page at a time.
+  rpc ListCloseChecklistWorkflows(ListCloseChecklistWorkflowsRequest) returns (ListCloseChecklistWorkflowsResponse);
+
+  // Signals a close checklist.
+  rpc SignalCloseChecklistWorkflow(SignalCloseChecklistWorkflowRequest) returns (SignalCloseChecklistWorkflowResponse);
+}
+
+// The request of `StartCloseChecklistWorkflow`.
+message StartCloseChecklistWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string close_checklist_id = 2;
+  CloseChecklist close_checklist = 3;
+  StartCloseChecklistWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `StartCloseChecklistWorkflow`.
+message StartCloseChecklistWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  CloseChecklist close_checklist = 1;
+  StartCloseChecklistWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `AdvanceCloseChecklistWorkflow`.
+message AdvanceCloseChecklistWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string close_checklist_id = 2;
+  CloseChecklist close_checklist = 3;
+  AdvanceCloseChecklistWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `AdvanceCloseChecklistWorkflow`.
+message AdvanceCloseChecklistWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  CloseChecklist close_checklist = 1;
+  AdvanceCloseChecklistWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CancelCloseChecklistWorkflow`.
+message CancelCloseChecklistWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string close_checklist_id = 2;
+  CloseChecklist close_checklist = 3;
+  CancelCloseChecklistWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CancelCloseChecklistWorkflow`.
+message CancelCloseChecklistWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  CloseChecklist close_checklist = 1;
+  CancelCloseChecklistWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RetryCloseChecklistWorkflow`.
+message RetryCloseChecklistWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string close_checklist_id = 2;
+  CloseChecklist close_checklist = 3;
+  RetryCloseChecklistWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RetryCloseChecklistWorkflow`.
+message RetryCloseChecklistWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  CloseChecklist close_checklist = 1;
+  RetryCloseChecklistWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PauseCloseChecklistWorkflow`.
+message PauseCloseChecklistWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string close_checklist_id = 2;
+  CloseChecklist close_checklist = 3;
+  PauseCloseChecklistWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PauseCloseChecklistWorkflow`.
+message PauseCloseChecklistWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  CloseChecklist close_checklist = 1;
+  PauseCloseChecklistWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ResumeCloseChecklistWorkflow`.
+message ResumeCloseChecklistWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string close_checklist_id = 2;
+  CloseChecklist close_checklist = 3;
+  ResumeCloseChecklistWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ResumeCloseChecklistWorkflow`.
+message ResumeCloseChecklistWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  CloseChecklist close_checklist = 1;
+  ResumeCloseChecklistWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `InspectCloseChecklistWorkflow`.
+message InspectCloseChecklistWorkflowRequest {
+  acme.common.v1.RequestContext context = 1;
+  string close_checklist_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `InspectCloseChecklistWorkflow`.
+message InspectCloseChecklistWorkflowResponse {
+  CloseChecklist close_checklist = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `ListCloseChecklistWorkflows`.
+message ListCloseChecklistWorkflowsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated CloseChecklistStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListCloseChecklistWorkflowsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListCloseChecklistWorkflows`.
+message ListCloseChecklistWorkflowsResponse {
+  repeated CloseChecklist close_checklists = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SignalCloseChecklistWorkflow`.
+message SignalCloseChecklistWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string close_checklist_id = 2;
+  CloseChecklist close_checklist = 3;
+  SignalCloseChecklistWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SignalCloseChecklistWorkflow`.
+message SignalCloseChecklistWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  CloseChecklist close_checklist = 1;
+  SignalCloseChecklistWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

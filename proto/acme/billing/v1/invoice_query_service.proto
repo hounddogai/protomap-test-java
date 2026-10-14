@@ -1,0 +1,214 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.billing.v1;
+
+import "acme/billing/v1/billing.proto";
+import "acme/common/v1/audit.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Billing.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/billing/v1;billingv1";
+option java_multiple_files = true;
+option java_outer_classname = "InvoiceQueryServiceProto";
+option java_package = "com.acme.billing.v1";
+
+// Answers read-only questions about invoices, for screens and reports.
+service InvoiceQueryService {
+  // Returns an invoice.
+  rpc LookupInvoice(LookupInvoiceRequest) returns (LookupInvoiceResponse);
+
+  // Lists invoices a page at a time.
+  rpc BrowseInvoices(BrowseInvoicesRequest) returns (BrowseInvoicesResponse);
+
+  // Lists invoices a page at a time.
+  rpc FindInvoices(FindInvoicesRequest) returns (FindInvoicesResponse);
+
+  // Counts invoices by status.
+  rpc CountInvoices(CountInvoicesRequest) returns (CountInvoicesResponse);
+
+  // Returns several invoices at once.
+  rpc ResolveInvoices(ResolveInvoicesRequest) returns (ResolveInvoicesResponse);
+
+  // Summarizes an invoice.
+  rpc SummarizeInvoices(SummarizeInvoicesRequest) returns (SummarizeInvoicesResponse);
+
+  // Lists invoices a page at a time.
+  rpc SuggestInvoices(SuggestInvoicesRequest) returns (SuggestInvoicesResponse);
+
+  // Returns an invoice.
+  rpc PeekInvoice(PeekInvoiceRequest) returns (PeekInvoiceResponse);
+}
+
+// The request of `LookupInvoice`.
+message LookupInvoiceRequest {
+  acme.common.v1.RequestContext context = 1;
+  string invoice_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `LookupInvoice`.
+message LookupInvoiceResponse {
+  Invoice invoice = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `BrowseInvoices`.
+message BrowseInvoicesRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated InvoiceStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  BrowseInvoicesRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `BrowseInvoices`.
+message BrowseInvoicesResponse {
+  repeated Invoice invoices = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `FindInvoices`.
+message FindInvoicesRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated InvoiceStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  FindInvoicesRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `FindInvoices`.
+message FindInvoicesResponse {
+  repeated Invoice invoices = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CountInvoices`.
+message CountInvoicesRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated InvoiceStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  CountInvoicesRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `CountInvoices`.
+message CountInvoicesResponse {
+  int64 count = 1;
+  map<string, int64> by_status = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ResolveInvoices`.
+message ResolveInvoicesRequest {
+  acme.common.v1.RequestContext context = 1;
+  repeated string invoice_ids = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `ResolveInvoices`.
+message ResolveInvoicesResponse {
+  repeated Invoice invoices = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SummarizeInvoices`.
+message SummarizeInvoicesRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string format = 1;
+    acme.common.v1.TimeWindow period = 2;
+    repeated string recipient_emails = 3;
+    string cron = 4;
+    map<string, string> filters = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string invoice_id = 2;
+  SummarizeInvoicesRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `SummarizeInvoices`.
+message SummarizeInvoicesResponse {
+  string report_id = 1;
+  string download_uri = 2;
+  map<string, string> summary = 3;
+  acme.common.v1.TimeWindow period = 4;
+  acme.common.v1.OperationResult result = 5;
+}
+
+// The request of `SuggestInvoices`.
+message SuggestInvoicesRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated InvoiceStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  SuggestInvoicesRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `SuggestInvoices`.
+message SuggestInvoicesResponse {
+  repeated Invoice invoices = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PeekInvoice`.
+message PeekInvoiceRequest {
+  acme.common.v1.RequestContext context = 1;
+  string invoice_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `PeekInvoice`.
+message PeekInvoiceResponse {
+  Invoice invoice = 1;
+  acme.common.v1.OperationResult result = 2;
+}

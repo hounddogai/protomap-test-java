@@ -1,0 +1,287 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.invoicing.v1;
+
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/identity/v1/refs.proto";
+import "acme/invoicing/v1/invoicing.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Invoicing.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/invoicing/v1;invoicingv1";
+option java_multiple_files = true;
+option java_outer_classname = "InvoiceBatchApprovalServiceProto";
+option java_package = "com.acme.invoicing.v1";
+
+// Routes invoice batches through approval, with escalation and delegation.
+service InvoiceBatchApprovalService {
+  // Submits an invoice batch.
+  rpc SubmitInvoiceBatch(SubmitInvoiceBatchRequest) returns (SubmitInvoiceBatchResponse);
+
+  // Approves an invoice batch.
+  rpc ApproveInvoiceBatch(ApproveInvoiceBatchRequest) returns (ApproveInvoiceBatchResponse);
+
+  // Rejects an invoice batch.
+  rpc RejectInvoiceBatch(RejectInvoiceBatchRequest) returns (RejectInvoiceBatchResponse);
+
+  // Escalates an invoice batch.
+  rpc EscalateInvoiceBatch(EscalateInvoiceBatchRequest) returns (EscalateInvoiceBatchResponse);
+
+  // Delegates an invoice batch.
+  rpc DelegateInvoiceBatchApproval(DelegateInvoiceBatchApprovalRequest) returns (DelegateInvoiceBatchApprovalResponse);
+
+  // Recalls an invoice batch.
+  rpc RecallInvoiceBatch(RecallInvoiceBatchRequest) returns (RecallInvoiceBatchResponse);
+
+  // Comments an invoice batch.
+  rpc CommentInvoiceBatchApproval(CommentInvoiceBatchApprovalRequest) returns (CommentInvoiceBatchApprovalResponse);
+}
+
+// The request of `SubmitInvoiceBatch`.
+message SubmitInvoiceBatchRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string invoice_batch_id = 2;
+  InvoiceBatch invoice_batch = 3;
+  SubmitInvoiceBatchRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SubmitInvoiceBatch`.
+message SubmitInvoiceBatchResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  InvoiceBatch invoice_batch = 1;
+  SubmitInvoiceBatchResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ApproveInvoiceBatch`.
+message ApproveInvoiceBatchRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string invoice_batch_id = 2;
+  InvoiceBatch invoice_batch = 3;
+  ApproveInvoiceBatchRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ApproveInvoiceBatch`.
+message ApproveInvoiceBatchResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  InvoiceBatch invoice_batch = 1;
+  ApproveInvoiceBatchResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RejectInvoiceBatch`.
+message RejectInvoiceBatchRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string invoice_batch_id = 2;
+  InvoiceBatch invoice_batch = 3;
+  RejectInvoiceBatchRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RejectInvoiceBatch`.
+message RejectInvoiceBatchResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  InvoiceBatch invoice_batch = 1;
+  RejectInvoiceBatchResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `EscalateInvoiceBatch`.
+message EscalateInvoiceBatchRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string invoice_batch_id = 2;
+  InvoiceBatch invoice_batch = 3;
+  EscalateInvoiceBatchRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `EscalateInvoiceBatch`.
+message EscalateInvoiceBatchResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  InvoiceBatch invoice_batch = 1;
+  EscalateInvoiceBatchResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `DelegateInvoiceBatchApproval`.
+message DelegateInvoiceBatchApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string invoice_batch_id = 2;
+  InvoiceBatch invoice_batch = 3;
+  DelegateInvoiceBatchApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `DelegateInvoiceBatchApproval`.
+message DelegateInvoiceBatchApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  InvoiceBatch invoice_batch = 1;
+  DelegateInvoiceBatchApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RecallInvoiceBatch`.
+message RecallInvoiceBatchRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string invoice_batch_id = 2;
+  InvoiceBatch invoice_batch = 3;
+  RecallInvoiceBatchRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RecallInvoiceBatch`.
+message RecallInvoiceBatchResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  InvoiceBatch invoice_batch = 1;
+  RecallInvoiceBatchResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CommentInvoiceBatchApproval`.
+message CommentInvoiceBatchApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string invoice_batch_id = 2;
+  InvoiceBatch invoice_batch = 3;
+  CommentInvoiceBatchApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CommentInvoiceBatchApproval`.
+message CommentInvoiceBatchApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  InvoiceBatch invoice_batch = 1;
+  CommentInvoiceBatchApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

@@ -1,0 +1,232 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.audit.v1;
+
+import "acme/audit/v1/audit.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Audit.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/audit/v1;auditv1";
+option java_multiple_files = true;
+option java_outer_classname = "AuditEventHistoryServiceProto";
+option java_package = "com.acme.audit.v1";
+
+// Keeps every version of an audit event and restores earlier ones.
+service AuditEventHistoryService {
+  // Records an audit event.
+  rpc RecordAuditEventVersion(RecordAuditEventVersionRequest) returns (RecordAuditEventVersionResponse);
+
+  // Lists audit events a page at a time.
+  rpc ListAuditEventVersions(ListAuditEventVersionsRequest) returns (ListAuditEventVersionsResponse);
+
+  // Returns an audit event.
+  rpc GetAuditEventVersion(GetAuditEventVersionRequest) returns (GetAuditEventVersionResponse);
+
+  // Compares an audit event.
+  rpc CompareAuditEventVersions(CompareAuditEventVersionsRequest) returns (CompareAuditEventVersionsResponse);
+
+  // Reverts an audit event.
+  rpc RevertAuditEvent(RevertAuditEventRequest) returns (RevertAuditEventResponse);
+
+  // Annotates an audit event.
+  rpc AnnotateAuditEventVersion(AnnotateAuditEventVersionRequest) returns (AnnotateAuditEventVersionResponse);
+
+  // Deletes an audit event.
+  rpc PruneAuditEventVersions(PruneAuditEventVersionsRequest) returns (PruneAuditEventVersionsResponse);
+}
+
+// The request of `RecordAuditEventVersion`.
+message RecordAuditEventVersionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    int64 version = 1;
+    int64 other_version = 2;
+    bytes snapshot = 3;
+    string author_email = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string audit_event_id = 2;
+  AuditEvent audit_event = 3;
+  RecordAuditEventVersionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RecordAuditEventVersion`.
+message RecordAuditEventVersionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  AuditEvent audit_event = 1;
+  RecordAuditEventVersionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ListAuditEventVersions`.
+message ListAuditEventVersionsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated AuditEventStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListAuditEventVersionsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListAuditEventVersions`.
+message ListAuditEventVersionsResponse {
+  repeated AuditEvent audit_events = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetAuditEventVersion`.
+message GetAuditEventVersionRequest {
+  acme.common.v1.RequestContext context = 1;
+  string audit_event_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetAuditEventVersion`.
+message GetAuditEventVersionResponse {
+  AuditEvent audit_event = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `CompareAuditEventVersions`.
+message CompareAuditEventVersionsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    int64 version = 1;
+    int64 other_version = 2;
+    bytes snapshot = 3;
+    string author_email = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string audit_event_id = 2;
+  AuditEvent audit_event = 3;
+  CompareAuditEventVersionsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CompareAuditEventVersions`.
+message CompareAuditEventVersionsResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  AuditEvent audit_event = 1;
+  CompareAuditEventVersionsResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RevertAuditEvent`.
+message RevertAuditEventRequest {
+  // What the operation needs besides the record.
+  message Details {
+    int64 version = 1;
+    int64 other_version = 2;
+    bytes snapshot = 3;
+    string author_email = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string audit_event_id = 2;
+  AuditEvent audit_event = 3;
+  RevertAuditEventRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RevertAuditEvent`.
+message RevertAuditEventResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  AuditEvent audit_event = 1;
+  RevertAuditEventResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `AnnotateAuditEventVersion`.
+message AnnotateAuditEventVersionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    int64 version = 1;
+    int64 other_version = 2;
+    bytes snapshot = 3;
+    string author_email = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string audit_event_id = 2;
+  AuditEvent audit_event = 3;
+  AnnotateAuditEventVersionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `AnnotateAuditEventVersion`.
+message AnnotateAuditEventVersionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  AuditEvent audit_event = 1;
+  AnnotateAuditEventVersionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PruneAuditEventVersions`.
+message PruneAuditEventVersionsRequest {
+  acme.common.v1.RequestContext context = 1;
+  string audit_event_id = 2;
+  string reason = 3;
+  string etag = 4;
+  bool force = 5;
+}
+
+// The response of `PruneAuditEventVersions`.
+message PruneAuditEventVersionsResponse {
+  acme.common.v1.OperationResult result = 1;
+  google.protobuf.Timestamp effective_at = 2;
+}

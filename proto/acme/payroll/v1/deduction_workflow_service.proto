@@ -1,0 +1,334 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.payroll.v1;
+
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/payroll/v1/payroll.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Payroll.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/payroll/v1;payrollv1";
+option java_multiple_files = true;
+option java_outer_classname = "DeductionWorkflowServiceProto";
+option java_package = "com.acme.payroll.v1";
+
+// Runs the long-lived workflow that takes a deduction from start to finish.
+service DeductionWorkflowService {
+  // Starts a deduction.
+  rpc StartDeductionWorkflow(StartDeductionWorkflowRequest) returns (StartDeductionWorkflowResponse);
+
+  // Advances a deduction.
+  rpc AdvanceDeductionWorkflow(AdvanceDeductionWorkflowRequest) returns (AdvanceDeductionWorkflowResponse);
+
+  // Cancels a deduction.
+  rpc CancelDeductionWorkflow(CancelDeductionWorkflowRequest) returns (CancelDeductionWorkflowResponse);
+
+  // Retrys a deduction.
+  rpc RetryDeductionWorkflow(RetryDeductionWorkflowRequest) returns (RetryDeductionWorkflowResponse);
+
+  // Pauses a deduction.
+  rpc PauseDeductionWorkflow(PauseDeductionWorkflowRequest) returns (PauseDeductionWorkflowResponse);
+
+  // Resumes a deduction.
+  rpc ResumeDeductionWorkflow(ResumeDeductionWorkflowRequest) returns (ResumeDeductionWorkflowResponse);
+
+  // Returns a deduction.
+  rpc InspectDeductionWorkflow(InspectDeductionWorkflowRequest) returns (InspectDeductionWorkflowResponse);
+
+  // Lists deductions a page at a time.
+  rpc ListDeductionWorkflows(ListDeductionWorkflowsRequest) returns (ListDeductionWorkflowsResponse);
+
+  // Signals a deduction.
+  rpc SignalDeductionWorkflow(SignalDeductionWorkflowRequest) returns (SignalDeductionWorkflowResponse);
+}
+
+// The request of `StartDeductionWorkflow`.
+message StartDeductionWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string deduction_id = 2;
+  Deduction deduction = 3;
+  StartDeductionWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `StartDeductionWorkflow`.
+message StartDeductionWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Deduction deduction = 1;
+  StartDeductionWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `AdvanceDeductionWorkflow`.
+message AdvanceDeductionWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string deduction_id = 2;
+  Deduction deduction = 3;
+  AdvanceDeductionWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `AdvanceDeductionWorkflow`.
+message AdvanceDeductionWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Deduction deduction = 1;
+  AdvanceDeductionWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CancelDeductionWorkflow`.
+message CancelDeductionWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string deduction_id = 2;
+  Deduction deduction = 3;
+  CancelDeductionWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CancelDeductionWorkflow`.
+message CancelDeductionWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Deduction deduction = 1;
+  CancelDeductionWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RetryDeductionWorkflow`.
+message RetryDeductionWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string deduction_id = 2;
+  Deduction deduction = 3;
+  RetryDeductionWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RetryDeductionWorkflow`.
+message RetryDeductionWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Deduction deduction = 1;
+  RetryDeductionWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PauseDeductionWorkflow`.
+message PauseDeductionWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string deduction_id = 2;
+  Deduction deduction = 3;
+  PauseDeductionWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PauseDeductionWorkflow`.
+message PauseDeductionWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Deduction deduction = 1;
+  PauseDeductionWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ResumeDeductionWorkflow`.
+message ResumeDeductionWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string deduction_id = 2;
+  Deduction deduction = 3;
+  ResumeDeductionWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ResumeDeductionWorkflow`.
+message ResumeDeductionWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Deduction deduction = 1;
+  ResumeDeductionWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `InspectDeductionWorkflow`.
+message InspectDeductionWorkflowRequest {
+  acme.common.v1.RequestContext context = 1;
+  string deduction_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `InspectDeductionWorkflow`.
+message InspectDeductionWorkflowResponse {
+  Deduction deduction = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `ListDeductionWorkflows`.
+message ListDeductionWorkflowsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated DeductionStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListDeductionWorkflowsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListDeductionWorkflows`.
+message ListDeductionWorkflowsResponse {
+  repeated Deduction deductions = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SignalDeductionWorkflow`.
+message SignalDeductionWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string deduction_id = 2;
+  Deduction deduction = 3;
+  SignalDeductionWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SignalDeductionWorkflow`.
+message SignalDeductionWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Deduction deduction = 1;
+  SignalDeductionWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

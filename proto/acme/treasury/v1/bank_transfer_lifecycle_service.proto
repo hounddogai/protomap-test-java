@@ -1,0 +1,294 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.treasury.v1;
+
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/identity/v1/refs.proto";
+import "acme/treasury/v1/treasury.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Treasury.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/treasury/v1;treasuryv1";
+option java_multiple_files = true;
+option java_outer_classname = "BankTransferLifecycleServiceProto";
+option java_package = "com.acme.treasury.v1";
+
+// Moves a bank transfer between the states of its lifecycle.
+service BankTransferLifecycleService {
+  // Activates a bank transfer.
+  rpc ActivateBankTransfer(ActivateBankTransferRequest) returns (ActivateBankTransferResponse);
+
+  // Suspends a bank transfer.
+  rpc SuspendBankTransfer(SuspendBankTransferRequest) returns (SuspendBankTransferResponse);
+
+  // Reinstates a bank transfer.
+  rpc ReinstateBankTransfer(ReinstateBankTransferRequest) returns (ReinstateBankTransferResponse);
+
+  // Terminates a bank transfer.
+  rpc TerminateBankTransfer(TerminateBankTransferRequest) returns (TerminateBankTransferResponse);
+
+  // Renews a bank transfer.
+  rpc RenewBankTransfer(RenewBankTransferRequest) returns (RenewBankTransferResponse);
+
+  // Expires a bank transfer.
+  rpc ExpireBankTransfer(ExpireBankTransferRequest) returns (ExpireBankTransferResponse);
+
+  // Returns a bank transfer.
+  rpc GetBankTransferLifecycle(GetBankTransferLifecycleRequest) returns (GetBankTransferLifecycleResponse);
+
+  // Schedules a bank transfer.
+  rpc ScheduleBankTransferExpiry(ScheduleBankTransferExpiryRequest) returns (ScheduleBankTransferExpiryResponse);
+}
+
+// The request of `ActivateBankTransfer`.
+message ActivateBankTransferRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string bank_transfer_id = 2;
+  ActivateBankTransferRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ActivateBankTransfer`.
+message ActivateBankTransferResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  BankTransfer bank_transfer = 1;
+  ActivateBankTransferResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SuspendBankTransfer`.
+message SuspendBankTransferRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string bank_transfer_id = 2;
+  SuspendBankTransferRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `SuspendBankTransfer`.
+message SuspendBankTransferResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  BankTransfer bank_transfer = 1;
+  SuspendBankTransferResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ReinstateBankTransfer`.
+message ReinstateBankTransferRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string bank_transfer_id = 2;
+  ReinstateBankTransferRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ReinstateBankTransfer`.
+message ReinstateBankTransferResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  BankTransfer bank_transfer = 1;
+  ReinstateBankTransferResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `TerminateBankTransfer`.
+message TerminateBankTransferRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string bank_transfer_id = 2;
+  TerminateBankTransferRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `TerminateBankTransfer`.
+message TerminateBankTransferResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  BankTransfer bank_transfer = 1;
+  TerminateBankTransferResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RenewBankTransfer`.
+message RenewBankTransferRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string bank_transfer_id = 2;
+  RenewBankTransferRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `RenewBankTransfer`.
+message RenewBankTransferResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  BankTransfer bank_transfer = 1;
+  RenewBankTransferResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExpireBankTransfer`.
+message ExpireBankTransferRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string bank_transfer_id = 2;
+  ExpireBankTransferRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ExpireBankTransfer`.
+message ExpireBankTransferResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  BankTransfer bank_transfer = 1;
+  ExpireBankTransferResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetBankTransferLifecycle`.
+message GetBankTransferLifecycleRequest {
+  acme.common.v1.RequestContext context = 1;
+  string bank_transfer_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetBankTransferLifecycle`.
+message GetBankTransferLifecycleResponse {
+  BankTransfer bank_transfer = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `ScheduleBankTransferExpiry`.
+message ScheduleBankTransferExpiryRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string bank_transfer_id = 2;
+  BankTransfer bank_transfer = 3;
+  ScheduleBankTransferExpiryRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ScheduleBankTransferExpiry`.
+message ScheduleBankTransferExpiryResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  BankTransfer bank_transfer = 1;
+  ScheduleBankTransferExpiryResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

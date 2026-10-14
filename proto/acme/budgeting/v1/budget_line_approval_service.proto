@@ -1,0 +1,333 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.budgeting.v1;
+
+import "acme/budgeting/v1/budgeting.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/identity/v1/refs.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Budgeting.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/budgeting/v1;budgetingv1";
+option java_multiple_files = true;
+option java_outer_classname = "BudgetLineApprovalServiceProto";
+option java_package = "com.acme.budgeting.v1";
+
+// Routes budget lines through approval, with escalation and delegation.
+service BudgetLineApprovalService {
+  // Submits a budget line.
+  rpc SubmitBudgetLine(SubmitBudgetLineRequest) returns (SubmitBudgetLineResponse);
+
+  // Approves a budget line.
+  rpc ApproveBudgetLine(ApproveBudgetLineRequest) returns (ApproveBudgetLineResponse);
+
+  // Rejects a budget line.
+  rpc RejectBudgetLine(RejectBudgetLineRequest) returns (RejectBudgetLineResponse);
+
+  // Escalates a budget line.
+  rpc EscalateBudgetLine(EscalateBudgetLineRequest) returns (EscalateBudgetLineResponse);
+
+  // Lists budget lines a page at a time.
+  rpc ListPendingBudgetLines(ListPendingBudgetLinesRequest) returns (ListPendingBudgetLinesResponse);
+
+  // Delegates a budget line.
+  rpc DelegateBudgetLineApproval(DelegateBudgetLineApprovalRequest) returns (DelegateBudgetLineApprovalResponse);
+
+  // Recalls a budget line.
+  rpc RecallBudgetLine(RecallBudgetLineRequest) returns (RecallBudgetLineResponse);
+
+  // Returns a budget line.
+  rpc GetBudgetLineApprovalStatus(GetBudgetLineApprovalStatusRequest) returns (GetBudgetLineApprovalStatusResponse);
+
+  // Comments a budget line.
+  rpc CommentBudgetLineApproval(CommentBudgetLineApprovalRequest) returns (CommentBudgetLineApprovalResponse);
+}
+
+// The request of `SubmitBudgetLine`.
+message SubmitBudgetLineRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string budget_line_id = 2;
+  BudgetLine budget_line = 3;
+  SubmitBudgetLineRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SubmitBudgetLine`.
+message SubmitBudgetLineResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  BudgetLine budget_line = 1;
+  SubmitBudgetLineResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ApproveBudgetLine`.
+message ApproveBudgetLineRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string budget_line_id = 2;
+  BudgetLine budget_line = 3;
+  ApproveBudgetLineRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ApproveBudgetLine`.
+message ApproveBudgetLineResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  BudgetLine budget_line = 1;
+  ApproveBudgetLineResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RejectBudgetLine`.
+message RejectBudgetLineRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string budget_line_id = 2;
+  BudgetLine budget_line = 3;
+  RejectBudgetLineRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RejectBudgetLine`.
+message RejectBudgetLineResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  BudgetLine budget_line = 1;
+  RejectBudgetLineResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `EscalateBudgetLine`.
+message EscalateBudgetLineRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string budget_line_id = 2;
+  BudgetLine budget_line = 3;
+  EscalateBudgetLineRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `EscalateBudgetLine`.
+message EscalateBudgetLineResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  BudgetLine budget_line = 1;
+  EscalateBudgetLineResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ListPendingBudgetLines`.
+message ListPendingBudgetLinesRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated BudgetLineStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListPendingBudgetLinesRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListPendingBudgetLines`.
+message ListPendingBudgetLinesResponse {
+  repeated BudgetLine budget_lines = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `DelegateBudgetLineApproval`.
+message DelegateBudgetLineApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string budget_line_id = 2;
+  BudgetLine budget_line = 3;
+  DelegateBudgetLineApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `DelegateBudgetLineApproval`.
+message DelegateBudgetLineApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  BudgetLine budget_line = 1;
+  DelegateBudgetLineApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RecallBudgetLine`.
+message RecallBudgetLineRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string budget_line_id = 2;
+  BudgetLine budget_line = 3;
+  RecallBudgetLineRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RecallBudgetLine`.
+message RecallBudgetLineResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  BudgetLine budget_line = 1;
+  RecallBudgetLineResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetBudgetLineApprovalStatus`.
+message GetBudgetLineApprovalStatusRequest {
+  acme.common.v1.RequestContext context = 1;
+  string budget_line_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetBudgetLineApprovalStatus`.
+message GetBudgetLineApprovalStatusResponse {
+  BudgetLine budget_line = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `CommentBudgetLineApproval`.
+message CommentBudgetLineApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string budget_line_id = 2;
+  BudgetLine budget_line = 3;
+  CommentBudgetLineApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CommentBudgetLineApproval`.
+message CommentBudgetLineApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  BudgetLine budget_line = 1;
+  CommentBudgetLineApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

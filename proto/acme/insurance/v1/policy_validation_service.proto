@@ -1,0 +1,260 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.insurance.v1;
+
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/insurance/v1/insurance.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Insurance.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/insurance/v1;insurancev1";
+option java_multiple_files = true;
+option java_outer_classname = "PolicyValidationServiceProto";
+option java_package = "com.acme.insurance.v1";
+
+// Checks policies against the rules before anything acts on them.
+service PolicyValidationService {
+  // Validates a policy.
+  rpc ValidatePolicy(ValidatePolicyRequest) returns (ValidatePolicyResponse);
+
+  // Previews a policy.
+  rpc PreviewPolicy(PreviewPolicyRequest) returns (PreviewPolicyResponse);
+
+  // Checks a policy.
+  rpc CheckPolicyEligibility(CheckPolicyEligibilityRequest) returns (CheckPolicyEligibilityResponse);
+
+  // Normalizes a policy.
+  rpc NormalizePolicy(NormalizePolicyRequest) returns (NormalizePolicyResponse);
+
+  // Explains a policy.
+  rpc ExplainPolicyDecision(ExplainPolicyDecisionRequest) returns (ExplainPolicyDecisionResponse);
+
+  // Lints a policy.
+  rpc LintPolicies(LintPoliciesRequest) returns (LintPoliciesResponse);
+
+  // Returns a policy.
+  rpc GetPolicyRules(GetPolicyRulesRequest) returns (GetPolicyRulesResponse);
+}
+
+// The request of `ValidatePolicy`.
+message ValidatePolicyRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string policy_id = 2;
+  Policy policy = 3;
+  ValidatePolicyRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ValidatePolicy`.
+message ValidatePolicyResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Policy policy = 1;
+  ValidatePolicyResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PreviewPolicy`.
+message PreviewPolicyRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string policy_id = 2;
+  Policy policy = 3;
+  PreviewPolicyRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PreviewPolicy`.
+message PreviewPolicyResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Policy policy = 1;
+  PreviewPolicyResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CheckPolicyEligibility`.
+message CheckPolicyEligibilityRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string policy_id = 2;
+  Policy policy = 3;
+  CheckPolicyEligibilityRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CheckPolicyEligibility`.
+message CheckPolicyEligibilityResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Policy policy = 1;
+  CheckPolicyEligibilityResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `NormalizePolicy`.
+message NormalizePolicyRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string policy_id = 2;
+  Policy policy = 3;
+  NormalizePolicyRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `NormalizePolicy`.
+message NormalizePolicyResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Policy policy = 1;
+  NormalizePolicyResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExplainPolicyDecision`.
+message ExplainPolicyDecisionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string policy_id = 2;
+  Policy policy = 3;
+  ExplainPolicyDecisionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ExplainPolicyDecision`.
+message ExplainPolicyDecisionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Policy policy = 1;
+  ExplainPolicyDecisionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `LintPolicies`.
+message LintPoliciesRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string policy_id = 2;
+  Policy policy = 3;
+  LintPoliciesRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `LintPolicies`.
+message LintPoliciesResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Policy policy = 1;
+  LintPoliciesResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetPolicyRules`.
+message GetPolicyRulesRequest {
+  acme.common.v1.RequestContext context = 1;
+  string policy_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetPolicyRules`.
+message GetPolicyRulesResponse {
+  Policy policy = 1;
+  acme.common.v1.OperationResult result = 2;
+}

@@ -1,0 +1,305 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.procurement.v1;
+
+import "acme/common/v1/address.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/money.proto";
+import "acme/common/v1/operation.proto";
+import "acme/procurement/v1/procurement.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Procurement.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/procurement/v1;procurementv1";
+option java_multiple_files = true;
+option java_outer_classname = "RfqValidationServiceProto";
+option java_package = "com.acme.procurement.v1";
+
+// Checks rfqs against the rules before anything acts on them.
+service RfqValidationService {
+  // Validates a rfq.
+  rpc ValidateRfq(ValidateRfqRequest) returns (ValidateRfqResponse);
+
+  // Previews a rfq.
+  rpc PreviewRfq(PreviewRfqRequest) returns (PreviewRfqResponse);
+
+  // Checks a rfq.
+  rpc CheckRfqEligibility(CheckRfqEligibilityRequest) returns (CheckRfqEligibilityResponse);
+
+  // Normalizes a rfq.
+  rpc NormalizeRfq(NormalizeRfqRequest) returns (NormalizeRfqResponse);
+
+  // Explains a rfq.
+  rpc ExplainRfqDecision(ExplainRfqDecisionRequest) returns (ExplainRfqDecisionResponse);
+
+  // Scores a rfq.
+  rpc ScoreRfq(ScoreRfqRequest) returns (ScoreRfqResponse);
+
+  // Lints a rfq.
+  rpc LintRfqs(LintRfqsRequest) returns (LintRfqsResponse);
+
+  // Returns a rfq.
+  rpc GetRfqRules(GetRfqRulesRequest) returns (GetRfqRulesResponse);
+}
+
+// The request of `ValidateRfq`.
+message ValidateRfqRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string rfq_id = 2;
+  Rfq rfq = 3;
+  ValidateRfqRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ValidateRfq`.
+message ValidateRfqResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Rfq rfq = 1;
+  ValidateRfqResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PreviewRfq`.
+message PreviewRfqRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string rfq_id = 2;
+  Rfq rfq = 3;
+  PreviewRfqRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PreviewRfq`.
+message PreviewRfqResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Rfq rfq = 1;
+  PreviewRfqResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CheckRfqEligibility`.
+message CheckRfqEligibilityRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string rfq_id = 2;
+  Rfq rfq = 3;
+  CheckRfqEligibilityRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CheckRfqEligibility`.
+message CheckRfqEligibilityResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Rfq rfq = 1;
+  CheckRfqEligibilityResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `NormalizeRfq`.
+message NormalizeRfqRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string rfq_id = 2;
+  Rfq rfq = 3;
+  NormalizeRfqRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `NormalizeRfq`.
+message NormalizeRfqResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Rfq rfq = 1;
+  NormalizeRfqResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExplainRfqDecision`.
+message ExplainRfqDecisionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string rfq_id = 2;
+  Rfq rfq = 3;
+  ExplainRfqDecisionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ExplainRfqDecision`.
+message ExplainRfqDecisionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Rfq rfq = 1;
+  ExplainRfqDecisionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ScoreRfq`.
+message ScoreRfqRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string rfq_id = 2;
+  Rfq rfq = 3;
+  ScoreRfqRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ScoreRfq`.
+message ScoreRfqResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated ScoreRfqResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Rfq rfq = 1;
+  ScoreRfqResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `LintRfqs`.
+message LintRfqsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string rfq_id = 2;
+  Rfq rfq = 3;
+  LintRfqsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `LintRfqs`.
+message LintRfqsResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Rfq rfq = 1;
+  LintRfqsResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetRfqRules`.
+message GetRfqRulesRequest {
+  acme.common.v1.RequestContext context = 1;
+  string rfq_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetRfqRules`.
+message GetRfqRulesResponse {
+  Rfq rfq = 1;
+  acme.common.v1.OperationResult result = 2;
+}

@@ -1,0 +1,223 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.ledger.v1;
+
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/ledger/v1/ledger.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Ledger.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/ledger/v1;ledgerv1";
+option java_multiple_files = true;
+option java_outer_classname = "JournalEntryValidationServiceProto";
+option java_package = "com.acme.ledger.v1";
+
+// Checks journal entries against the rules before anything acts on them.
+service JournalEntryValidationService {
+  // Validates a journal entry.
+  rpc ValidateJournalEntry(ValidateJournalEntryRequest) returns (ValidateJournalEntryResponse);
+
+  // Previews a journal entry.
+  rpc PreviewJournalEntry(PreviewJournalEntryRequest) returns (PreviewJournalEntryResponse);
+
+  // Normalizes a journal entry.
+  rpc NormalizeJournalEntry(NormalizeJournalEntryRequest) returns (NormalizeJournalEntryResponse);
+
+  // Explains a journal entry.
+  rpc ExplainJournalEntryDecision(ExplainJournalEntryDecisionRequest) returns (ExplainJournalEntryDecisionResponse);
+
+  // Lints a journal entry.
+  rpc LintJournalEntries(LintJournalEntriesRequest) returns (LintJournalEntriesResponse);
+
+  // Returns a journal entry.
+  rpc GetJournalEntryRules(GetJournalEntryRulesRequest) returns (GetJournalEntryRulesResponse);
+}
+
+// The request of `ValidateJournalEntry`.
+message ValidateJournalEntryRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string journal_entry_id = 2;
+  JournalEntry journal_entry = 3;
+  ValidateJournalEntryRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ValidateJournalEntry`.
+message ValidateJournalEntryResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  JournalEntry journal_entry = 1;
+  ValidateJournalEntryResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PreviewJournalEntry`.
+message PreviewJournalEntryRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string journal_entry_id = 2;
+  JournalEntry journal_entry = 3;
+  PreviewJournalEntryRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PreviewJournalEntry`.
+message PreviewJournalEntryResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  JournalEntry journal_entry = 1;
+  PreviewJournalEntryResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `NormalizeJournalEntry`.
+message NormalizeJournalEntryRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string journal_entry_id = 2;
+  JournalEntry journal_entry = 3;
+  NormalizeJournalEntryRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `NormalizeJournalEntry`.
+message NormalizeJournalEntryResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  JournalEntry journal_entry = 1;
+  NormalizeJournalEntryResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExplainJournalEntryDecision`.
+message ExplainJournalEntryDecisionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string journal_entry_id = 2;
+  JournalEntry journal_entry = 3;
+  ExplainJournalEntryDecisionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ExplainJournalEntryDecision`.
+message ExplainJournalEntryDecisionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  JournalEntry journal_entry = 1;
+  ExplainJournalEntryDecisionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `LintJournalEntries`.
+message LintJournalEntriesRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string journal_entry_id = 2;
+  JournalEntry journal_entry = 3;
+  LintJournalEntriesRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `LintJournalEntries`.
+message LintJournalEntriesResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  JournalEntry journal_entry = 1;
+  LintJournalEntriesResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetJournalEntryRules`.
+message GetJournalEntryRulesRequest {
+  acme.common.v1.RequestContext context = 1;
+  string journal_entry_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetJournalEntryRules`.
+message GetJournalEntryRulesResponse {
+  JournalEntry journal_entry = 1;
+  acme.common.v1.OperationResult result = 2;
+}

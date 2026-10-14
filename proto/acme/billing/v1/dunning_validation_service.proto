@@ -1,0 +1,305 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.billing.v1;
+
+import "acme/billing/v1/billing.proto";
+import "acme/common/v1/address.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/money.proto";
+import "acme/common/v1/operation.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Billing.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/billing/v1;billingv1";
+option java_multiple_files = true;
+option java_outer_classname = "DunningValidationServiceProto";
+option java_package = "com.acme.billing.v1";
+
+// Checks dunnings against the rules before anything acts on them.
+service DunningValidationService {
+  // Validates a dunning.
+  rpc ValidateDunning(ValidateDunningRequest) returns (ValidateDunningResponse);
+
+  // Previews a dunning.
+  rpc PreviewDunning(PreviewDunningRequest) returns (PreviewDunningResponse);
+
+  // Checks a dunning.
+  rpc CheckDunningEligibility(CheckDunningEligibilityRequest) returns (CheckDunningEligibilityResponse);
+
+  // Normalizes a dunning.
+  rpc NormalizeDunning(NormalizeDunningRequest) returns (NormalizeDunningResponse);
+
+  // Explains a dunning.
+  rpc ExplainDunningDecision(ExplainDunningDecisionRequest) returns (ExplainDunningDecisionResponse);
+
+  // Scores a dunning.
+  rpc ScoreDunning(ScoreDunningRequest) returns (ScoreDunningResponse);
+
+  // Lints a dunning.
+  rpc LintDunnings(LintDunningsRequest) returns (LintDunningsResponse);
+
+  // Returns a dunning.
+  rpc GetDunningRules(GetDunningRulesRequest) returns (GetDunningRulesResponse);
+}
+
+// The request of `ValidateDunning`.
+message ValidateDunningRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string dunning_id = 2;
+  Dunning dunning = 3;
+  ValidateDunningRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ValidateDunning`.
+message ValidateDunningResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Dunning dunning = 1;
+  ValidateDunningResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PreviewDunning`.
+message PreviewDunningRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string dunning_id = 2;
+  Dunning dunning = 3;
+  PreviewDunningRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PreviewDunning`.
+message PreviewDunningResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Dunning dunning = 1;
+  PreviewDunningResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CheckDunningEligibility`.
+message CheckDunningEligibilityRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string dunning_id = 2;
+  Dunning dunning = 3;
+  CheckDunningEligibilityRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CheckDunningEligibility`.
+message CheckDunningEligibilityResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Dunning dunning = 1;
+  CheckDunningEligibilityResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `NormalizeDunning`.
+message NormalizeDunningRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string dunning_id = 2;
+  Dunning dunning = 3;
+  NormalizeDunningRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `NormalizeDunning`.
+message NormalizeDunningResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Dunning dunning = 1;
+  NormalizeDunningResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExplainDunningDecision`.
+message ExplainDunningDecisionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string dunning_id = 2;
+  Dunning dunning = 3;
+  ExplainDunningDecisionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ExplainDunningDecision`.
+message ExplainDunningDecisionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Dunning dunning = 1;
+  ExplainDunningDecisionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ScoreDunning`.
+message ScoreDunningRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string dunning_id = 2;
+  Dunning dunning = 3;
+  ScoreDunningRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ScoreDunning`.
+message ScoreDunningResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated ScoreDunningResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Dunning dunning = 1;
+  ScoreDunningResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `LintDunnings`.
+message LintDunningsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string dunning_id = 2;
+  Dunning dunning = 3;
+  LintDunningsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `LintDunnings`.
+message LintDunningsResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Dunning dunning = 1;
+  LintDunningsResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetDunningRules`.
+message GetDunningRulesRequest {
+  acme.common.v1.RequestContext context = 1;
+  string dunning_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetDunningRules`.
+message GetDunningRulesResponse {
+  Dunning dunning = 1;
+  acme.common.v1.OperationResult result = 2;
+}
